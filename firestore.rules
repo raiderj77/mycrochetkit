@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ========================================
+    // User Documents
+    // ========================================
+    match /users/{uid} {
+      // Users can read their own document
+      allow read: if request.auth != null && request.auth.uid == uid;
+      
+      // Users can only write to their own profile, but NOT sensitive billing/entitlement fields
+      allow write: if request.auth != null && request.auth.uid == uid
+                    && !request.resource.data.diff(resource.data).affectedKeys()
+                        .hasAny(['plan', 'tier', 'subscriptionTier', 'subscriptionStatus', 'bonusStorageGB', 'lifetimePurchaseId', 'stripeCustomerId', 'stripeSubscriptionId']);
+    }
+    
+    // ========================================
+    // App Configuration (billing, etc.)
+    // ========================================
+    match /appConfig/{docId} {
+      // Anyone can read app config (for pricing page, spots remaining, etc.)
+      allow read: if true;
+      // Only admins can write
+      allow write: if request.auth != null && request.auth.token.admin == true;
+    }
+    
+    // ========================================
+    // Referral Program
+    // ========================================
+    
+    // Referral records - created by Cloud Functions only
+    match /referrals/{id} {
+      // Referrer can read their own referrals
+      allow read: if request.auth != null && resource.data.referrerUid == request.auth.uid;
+      // No client writes - only Cloud Functions (Admin SDK)
+      allow write: if false;
+    }
+    
+    // Referral rewards - admin only
+    match /referralRewards/{id} {
+      // Only admins can read and write reward records
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+    
+    // ========================================
+    // Projects (user-owned content)
+    // ========================================
+    match /projects/{projectId} {
+      // Owner can read/write
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      // Allow create if setting self as owner
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    // ========================================
+    // Patterns (user-owned content)
+    // ========================================
+    match /patterns/{patternId} {
+      // Owner can read/write
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      // Allow create if setting self as owner
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    // ========================================
+    // Shared Projects (public read)
+    // ========================================
+    match /sharedProjects/{shareId} {
+      // Anyone can read shared projects (they have unique IDs)
+      allow read: if true;
+      // Only owner can create/update/delete
+      allow write: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    // ========================================
+    // Default: Deny all other access
+    // ========================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,495 @@
+import { useState, useEffect, useCallback } from 'react';
+
+import { useParams, useNavigate } from 'react-router-dom';
+
+import { ArrowLeft, Plus, Camera } from 'lucide-react';
+
+import { useProjectStore } from '@/stores/projectStore';
+
+import { useCounterStore, loadCountersFromProjects } from '@/stores/counterStore';
+
+import { Counter } from '@/components/Counter';
+
+import { AddCounterDialog } from '@/components/AddCounterDialog';
+
+import { VoiceControlButton } from '@/components/VoiceControlButton';
+
+import { AddProgressPhotoDialog } from '@/components/AddProgressPhotoDialog';
+
+import { ProgressTimeline } from '@/components/ProgressTimeline';
+
+
+
+export default function ProjectDetail() {
+
+  const { id } = useParams<{ id: string }>();
+
+  const navigate = useNavigate();
+
+  
+
+  const projects = useProjectStore((state) => state.projects);
+
+  const updateProject = useProjectStore((state) => state.updateProject);
+
+  const increment = useCounterStore((state) => state.increment);
+
+  const decrement = useCounterStore((state) => state.decrement);
+
+  const undo = useCounterStore((state) => state.undo);
+
+  const reset = useCounterStore((state) => state.reset);
+
+  
+
+  const [showAddCounterDialog, setShowAddCounterDialog] = useState(false);
+
+  const [showAddPhotoDialog, setShowAddPhotoDialog] = useState(false);
+
+  const [voiceCommand, setVoiceCommand] = useState<string | null>(null);
+
+  const [activeCounterId, setActiveCounterId] = useState<string | null>(null);
+
+  const [activeTab, setActiveTab] = useState<'counters' | 'progress'>('counters');
+
+  
+
+  const project = projects.find((p) => p.id === id);
+
+  
+
+  // Load counters on mount
+
+  useEffect(() => {
+
+    loadCountersFromProjects();
+
+  }, []);
+
+  
+
+  // Auto-select first counter when project loads
+
+  useEffect(() => {
+
+    if (project && project.counters.length > 0 && !activeCounterId) {
+
+      setActiveCounterId(project.counters[0].id);
+
+    }
+
+  }, [project, activeCounterId]);
+
+  
+
+  // Clear voice command feedback after 2 seconds
+
+  useEffect(() => {
+
+    if (voiceCommand) {
+
+      const timer = setTimeout(() => setVoiceCommand(null), 2000);
+
+      return () => clearTimeout(timer);
+
+    }
+
+  }, [voiceCommand]);
+
+  
+
+  if (!project) {
+
+    return (
+
+      <div className="container mx-auto p-6">
+
+        <div className="card text-center">
+
+          <h2 className="mb-2 text-xl font-semibold text-neutral-900 dark:text-neutral-50">
+
+            Project Not Found
+
+          </h2>
+
+          <p className="mb-4 text-neutral-600 dark:text-neutral-400">
+
+            The project you're looking for doesn't exist.
+
+          </p>
+
+          <button onClick={() => navigate('/projects')} className="btn-primary">
+
+            Back to Projects
+
+          </button>
+
+        </div>
+
+      </div>
+
+    );
+
+  }
+
+  
+
+  const projectCounters = project.counters;
+
+  
+
+  // Calculate progress percentage based on counters with targets
+
+  const calculateProgress = () => {
+
+    const countersWithTargets = projectCounters.filter((c) => c.target && c.target > 0);
+
+    if (countersWithTargets.length === 0) return 0;
+
+    
+
+    const totalProgress = countersWithTargets.reduce((sum, counter) => {
+
+      const progress = Math.min((counter.current / counter.target!) * 100, 100);
+
+      return sum + progress;
+
+    }, 0);
+
+    
+
+  const handleVoiceCommand = useCallback((command: { 
+
+    command: string; 
+
+    transcript: string;
+
+    counterType?: 'row' | 'stitch' | 'repeat' | 'custom';
+
+  }) => {
+
+    console.log('Voice command received:', command.command, 'Active counter ID:', activeCounterId);
+
+    
+
+    if (projectCounters.length === 0) {
+
+      setVoiceCommand('No counters available');
+
+      return;
+
+    }
+
+    
+
+    // Use active counter if set, otherwise fall back to first
+
+    let targetCounter = projectCounters.find((c) => c.id === activeCounterId) || projectCounters[0];
+
+    console.log('Target counter:', targetCounter.name, 'ID:', targetCounter.id);
+
+    
+
+    // If counter type specified in voice command, try to find that type
+
+    if (command.counterType) {
+
+      const foundCounter = projectCounters.find(
+
+        (c) => c.type.toLowerCase() === command.counterType!.toLowerCase()
+
+      );
+
+      
+
+      if (foundCounter) {
+
+        targetCounter = foundCounter;
+
+        console.log('Switched to counter by type:', targetCounter.name);
+
+        // Auto-select this counter
+
+        setActiveCounterId(foundCounter.id);
+
+      } else {
+
+        setVoiceCommand(`No ${command.counterType} counter found`);
+
+        return;
+
+      }
+
+    }
+
+    
+
+    // Execute command on target counter
+
+    switch (command.command) {
+
+      case 'increment':
+
+        console.log('Incrementing:', targetCounter.name);
+
+        increment(targetCounter.id);
+
+        setVoiceCommand(`Increased ${targetCounter.name}`);
+
+        break;
+
+      case 'decrement':
+
+        decrement(targetCounter.id);
+
+        setVoiceCommand(`Decreased ${targetCounter.name}`);
+
+        break;
+
+      case 'undo':
+
+        undo(targetCounter.id);
+
+        setVoiceCommand(`Undo ${targetCounter.name}`);
+
+        break;
+
+      case 'reset':
+
+        reset(targetCounter.id);
+
+        setVoiceCommand(`Reset ${targetCounter.name}`);
+
+        break;
+
+    }
+
+  }, [activeCounterId, projectCounters, increment, decrement, undo, reset]);
+
+  
+
+  return (
+
+    <div className="container mx-auto p-6">
+
+      {/* Header */}
+
+      <div className="mb-6 flex items-center gap-4">
+
+        <button
+
+          onClick={() => navigate('/projects')}
+
+          className="tap-target rounded-lg p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+
+          aria-label="Back to projects"
+
+        >
+
+          <ArrowLeft className="h-6 w-6" />
+
+        </button>
+
+        <div className="flex-1">
+
+          <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-50">
+
+            {project.name}
+
+          </h1>
+
+          <p className="text-neutral-600 dark:text-neutral-400">
+
+            Started {new Date(project.startDate).toLocaleDateString()}
+
+          </p>
+
+        </div>
+
+        {activeTab === 'counters' ? (
+
+          <button
+
+            onClick={() => setShowAddCounterDialog(true)}
+
+            className="btn-primary flex items-center gap-2"
+
+          >
+            <Plus className="h-5 w-5" />
+            Add Counter
+          </button>
+        ) : (
+          <button
+            onClick={() => setShowAddPhotoDialog(true)}
+            className="btn-primary flex items-center gap-2"
+          >
+            <Camera className="h-5 w-5" />
+            Add Photo
+          </button>
+        )}
+      </div>
+      
+      {/* Voice Command Feedback */}
+      {voiceCommand && (
+        <div className="mb-4 rounded-lg bg-green-100 p-4 text-center text-green-800 dark:bg-green-900/30 dark:text-green-200">
+          ✓ {voiceCommand}
+        </div>
+      )}
+      
+      {/* Progress Bar (if counters have targets) */}
+      {projectCounters.some((c) => c.target && c.target > 0) && (
+        <div className="card mb-6">
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+              Overall Progress
+            </span>
+            <span className="text-sm font-bold text-primary-600 dark:text-primary-400">
+              {progressPercentage}%
+            </span>
+          </div>
+          <div className="h-4 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
+            <div
+              className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-500"
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+        </div>
+      )}
+      
+      {/* Project Info Card */}
+      <div className="card mb-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">Category</p>
+            <p className="font-medium capitalize text-neutral-900 dark:text-neutral-50">
+              {project.category}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">Hook Size</p>
+            <p className="font-medium text-neutral-900 dark:text-neutral-50">
+              {project.hookSize || 'Not specified'}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">Status</p>
+            <p className="font-medium capitalize text-neutral-900 dark:text-neutral-50">
+              {project.status}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">Difficulty</p>
+            <p className="font-medium text-neutral-900 dark:text-neutral-50">
+              {'⭐'.repeat(project.difficulty)}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Tabs */}
+      <div className="mb-6 flex gap-2 border-b border-neutral-200 dark:border-neutral-700">
+        <button
+          onClick={() => setActiveTab('counters')}
+          className={`px-4 py-2 font-medium transition-colors ${
+            activeTab === 'counters'
+              ? 'border-b-2 border-primary-600 text-primary-600 dark:text-primary-400'
+              : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50'
+          }`}
+        >
+          Counters ({projectCounters.length})
+        </button>
+        <button
+          onClick={() => setActiveTab('progress')}
+          className={`px-4 py-2 font-medium transition-colors ${
+            activeTab === 'progress'
+              ? 'border-b-2 border-primary-600 text-primary-600 dark:text-primary-400'
+              : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50'
+          }`}
+        >
+          Progress ({(project.progressPhotos || []).length})
+        </button>
+      </div>
+      
+      {/* Tab Content */}
+      {activeTab === 'counters' ? (
+        <>
+          {/* Counters */}
+          {projectCounters.length === 0 ? (
+            <div className="card text-center">
+              <div className="py-12">
+                <div className="mb-4 text-6xl">🔢</div>
+                <h2 className="mb-2 text-xl font-semibold text-neutral-900 dark:text-neutral-50">
+                  No Counters Yet
+                </h2>
+                <p className="mb-6 text-neutral-600 dark:text-neutral-400">
+                  Add counters to track rows, stitches, or repeats.
+                </p>
+                <button
+                  onClick={() => setShowAddCounterDialog(true)}
+                  className="btn-primary"
+                >
+                  Add Your First Counter
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mb-4 rounded-lg bg-blue-50 p-3 text-center text-sm text-blue-800 dark:bg-blue-900/20 dark:text-blue-200">
+                👆 Click any counter card to select it for voice control
+                {activeCounterId && ` • Currently controlling: ${projectCounters.find(c => c.id === activeCounterId)?.name}`}
+              </div>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {projectCounters.map((counter) => (
+                  <div
+                    key={counter.id}
+                    onClick={() => {
+                      console.log('Selecting counter:', counter.name);
+                      setActiveCounterId(counter.id);
+                    }}
+                    className={`relative cursor-pointer rounded-lg transition-all ${
+                      activeCounterId === counter.id
+                        ? 'ring-8 ring-green-500'
+                        : 'hover:ring-4 hover:ring-primary-200 dark:hover:ring-primary-800'
+                    }`}
+                  >
+                    {/* Active Badge */}
+                    {activeCounterId === counter.id && (
+                      <div className="absolute -right-2 -top-2 z-10 rounded-full bg-green-500 px-3 py-1 text-xs font-bold text-white shadow-lg">
+                        ACTIVE
+                      </div>
+                    )}
+                    <Counter counter={counter} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <ProgressTimeline
+          photos={project.progressPhotos || []}
+          onDelete={handleDeletePhoto}
+        />
+      )}
+      
+      {/* Add Counter Dialog */}
+      <AddCounterDialog
+        open={showAddCounterDialog}
+        onOpenChange={setShowAddCounterDialog}
+        projectId={project.id}
+      />
+      
+      {/* Add Progress Photo Dialog */}
+      <AddProgressPhotoDialog
+        open={showAddPhotoDialog}
+        onOpenChange={setShowAddPhotoDialog}
+        projectId={project.id}
+      />
+      
+      {/* Voice Control Button */}
+      {projectCounters.length > 0 && activeTab === 'counters' && (
+        <VoiceControlButton onCommand={handleVoiceCommand} />
+      )}
+    </div>
+  );
+}

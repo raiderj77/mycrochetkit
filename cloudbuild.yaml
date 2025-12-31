@@ -1,0 +1,13 @@
+steps:
+  # Install dependencies, build, and run Playwright tests
+  - name: "mcr.microsoft.com/playwright:v1.49.1-jammy"
+    entrypoint: "bash"
+    args:
+      - -lc
+      - |
+        npm ci
+        npm run build
+        BASE_URL="https://my-crochetkit.web.app" npx playwright test
+
+options:
+  logging: CLOUD_LOGGING_ONLY

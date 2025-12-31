@@ -1,0 +1,51 @@
+{
+  "recommendations": [
+    // === CORE DEVELOPMENT ===
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "usernamehw.errorlens",
+    
+    // === REACT + TYPESCRIPT ===
+    "dsznajder.es7-react-js-snippets",
+    "styled-components.vscode-styled-components",
+    "formulahendry.auto-rename-tag",
+    "pmneo.tsimporter",
+    
+    // === TAILWIND CSS ===
+    "bradlc.vscode-tailwindcss",
+    "csstools.postcss",
+    
+    // === FIREBASE ===
+    "toba.vsfire",
+    "firebase.vscode-firestore-snippets",
+    
+    // === ACCESSIBILITY (CRITICAL FOR THIS PROJECT) ===
+    "deque-systems.vscode-axe-linter",
+    "MaxvanderSchee.web-accessibility",
+    "salesforce.salesforcedx-vscode-lwc",
+    
+    // === PWA & WEB STANDARDS ===
+    "ms-vscode.vscode-typescript-next",
+    "christian-kohler.path-intellisense",
+    
+    // === GIT & COLLABORATION ===
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+    
+    // === PRODUCTIVITY ===
+    "streetsidesoftware.code-spell-checker",
+    "wayou.vscode-todo-highlight",
+    "gruntfuggly.todo-tree",
+    "oderwat.indent-rainbow",
+    
+    // === MARKDOWN (for documentation) ===
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-mermaid",
+    
+    // === JSON & DATA ===
+    "ZainChen.json",
+    
+    // === BROWSER TESTING ===
+    "ms-vscode.live-server"
+  ]
+}

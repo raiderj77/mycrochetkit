@@ -1,0 +1,54 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment
+.env
+.env.local
+.env.production
+.env.development
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build
+build
+.cache
+
+# Firebase
+.firebase
+firebase-debug.log
+firestore-debug.log
+
+# Testing
+coverage
+.nyc_output
+
+# Misc
+.eslintcache
+*.tsbuildinfo
+
+# Playwright Auth
+e2e/.auth/*
+
+# SEO Blog Automation
+scripts/service-account.json

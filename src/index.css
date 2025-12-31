@@ -1,0 +1,369 @@
+/**
+ * Base CSS with Tailwind directives
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Apply custom properties from accessibility system */
+  body {
+    @apply bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50 transition-colors duration-500 ease-in-out;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+
+  * {
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
+  :root {
+    --bg-home: #0b0e14;
+    --card-home: #1a1d23;
+    --accent-purple: #8a2be2;
+    --accent-glow: rgba(138, 43, 226, 0.2);
+    --soft-green: #a8ffbc;
+  }
+
+  body.home-page-theme {
+    background-color: var(--bg-home);
+    color: #ffffff;
+  }
+
+  @keyframes pulse-soft {
+    0% {
+      opacity: 0.6;
+      transform: scale(0.95);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 10px var(--soft-green);
+    }
+    100% {
+      opacity: 0.6;
+      transform: scale(0.95);
+    }
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .card-neumorphic {
+    background-color: var(--card-home);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px var(--accent-glow);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .btn-pill {
+    border-radius: 50px;
+    padding-left: 24px;
+    padding-right: 24px;
+    font-weight: 700;
+  }
+  /* Ensure minimum contrast ratios */
+  ::selection {
+    @apply bg-primary-200 text-primary-900 dark:bg-primary-700 dark:text-primary-50;
+  }
+}
+
+@layer components {
+  /* Common component patterns */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition-colors;
+    @apply min-h-[44px] min-w-[44px];
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 active:bg-primary-800;
+  }
+
+  .btn-secondary {
+    @apply btn bg-neutral-200 text-neutral-900 hover:bg-neutral-300 dark:bg-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-600;
+  }
+
+  .btn-outline {
+    @apply btn border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20;
+  }
+
+  .card {
+    @apply rounded-xl bg-white p-6 shadow-sm dark:bg-neutral-800;
+    @apply border border-neutral-200 dark:border-neutral-700;
+  }
+
+  .input {
+    @apply w-full rounded-lg border-2 border-neutral-300 bg-white px-4 py-2 text-neutral-900;
+    @apply min-h-[44px];
+    @apply focus:border-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-600/20;
+    @apply dark:border-neutral-500 dark:bg-neutral-800 dark:text-neutral-100;
+    @apply dark:focus:bg-neutral-700 dark:focus:border-primary-400;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .label {
+    @apply mb-2 block text-sm font-medium text-neutral-700 dark:text-neutral-300;
+  }
+
+  /* Global Dark Mode Contrast Overrides */
+  .dark .btn-active,
+  .dark .active-toggle {
+    @apply bg-white text-neutral-950 font-bold border-white !important;
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    @apply text-neutral-500;
+  }
+
+  /* ============================================
+     CALCULATOR & GLOBAL INPUT FIXES - Dark/Light Mode
+     ============================================ */
+
+  /* --- DARK MODE: Fix invisible white-on-white text --- */
+  [data-theme="dark"] input,
+  [data-theme="dark"] select,
+  [data-theme="dark"] textarea,
+  [data-theme="dark"] .input-box,
+  [data-theme="dark"] .calculator-input,
+  [data-theme="high-contrast"] input,
+  [data-theme="high-contrast"] select,
+  [data-theme="high-contrast"] textarea,
+  .dark input,
+  .dark select,
+  .dark textarea {
+    background-color: #12121a !important; /* Very dark grey background */
+    color: #ffffff !important; /* Force text to pure white */
+    border: 2px solid #a582ff !important; /* Prominent purple border */
+    padding: 10px !important;
+    font-size: 16px !important;
+  }
+
+  /* Fix dropdown options in dark mode */
+  [data-theme="dark"] select option,
+  [data-theme="high-contrast"] select option,
+  .dark select option {
+    background-color: #12121a !important;
+    color: #ffffff !important;
+  }
+
+  /* Fix placeholder text in dark mode */
+  [data-theme="dark"] input::placeholder,
+  [data-theme="dark"] textarea::placeholder,
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #999999 !important; /* Light grey placeholder */
+    opacity: 1 !important;
+  }
+
+  /* --- LIGHT MODE: Make fields more prominent --- */
+  [data-theme="light"] input,
+  [data-theme="light"] select,
+  [data-theme="light"] textarea,
+  [data-theme="light"] .input-box,
+  [data-theme="light"] .calculator-input,
+  body:not(.dark) input,
+  body:not(.dark) select,
+  body:not(.dark) textarea {
+    background-color: #ffffff !important; /* Pure white background */
+    color: #1a1a1a !important; /* Dark text for contrast */
+    border: 2px solid #000000 !important; /* Thick black border */
+    padding: 10px !important;
+    font-size: 16px !important;
+  }
+
+  /* Fix placeholder text in light mode */
+  [data-theme="light"] input::placeholder,
+  [data-theme="light"] textarea::placeholder,
+  body:not(.dark) input::placeholder,
+  body:not(.dark) textarea::placeholder {
+    color: #666666 !important; /* Medium grey placeholder */
+    opacity: 1 !important;
+  }
+
+  /* --- Focus states for better UX --- */
+  [data-theme="dark"] input:focus,
+  [data-theme="dark"] select:focus,
+  [data-theme="dark"] textarea:focus,
+  .dark input:focus,
+  .dark select:focus,
+  .dark textarea:focus {
+    border-color: #b794ff !important; /* Lighter purple on focus */
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(165, 130, 255, 0.3) !important;
+  }
+
+  [data-theme="light"] input:focus,
+  [data-theme="light"] select:focus,
+  [data-theme="light"] textarea:focus,
+  body:not(.dark) input:focus,
+  body:not(.dark) select:focus,
+  body:not(.dark) textarea:focus {
+    border-color: #4a90e2 !important; /* Blue on focus */
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2) !important;
+  }
+
+  /* --- Disabled state styling --- */
+  [data-theme="dark"] input:disabled,
+  [data-theme="dark"] select:disabled,
+  [data-theme="dark"] textarea:disabled,
+  .dark input:disabled,
+  .dark select:disabled,
+  .dark textarea:disabled {
+    background-color: #1a1a24 !important;
+    color: #666666 !important;
+    border-color: #333333 !important;
+    cursor: not-allowed !important;
+  }
+
+  [data-theme="light"] input:disabled,
+  [data-theme="light"] select:disabled,
+  [data-theme="light"] textarea:disabled,
+  body:not(.dark) input:disabled,
+  body:not(.dark) select:disabled,
+  body:not(.dark) textarea:disabled {
+    background-color: #f5f5f5 !important;
+    color: #999999 !important;
+    border-color: #cccccc !important;
+    cursor: not-allowed !important;
+  }
+
+  /* --- Labels for better context --- */
+  [data-theme="dark"] label,
+  .dark label {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    margin-bottom: 6px !important;
+    display: block !important;
+  }
+
+  [data-theme="light"] label,
+  body:not(.dark) label {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+    margin-bottom: 6px !important;
+    display: block !important;
+  }
+
+  /* --- Form group spacing --- */
+  .form-group,
+  .input-group,
+  .calculator-field {
+    margin-bottom: 16px !important;
+  }
+
+  /* --- Ensure dropdown arrows are visible --- */
+  [data-theme="dark"] select,
+  .dark select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23FFFFFF' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    padding-right: 35px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+  }
+
+  [data-theme="light"] select,
+  body:not(.dark) select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231A1A1A' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    padding-right: 35px !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+  }
+}
+
+@layer utilities {
+  /* Custom utility classes */
+  .tap-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  .tap-target-large {
+    @apply min-h-[60px] min-w-[60px];
+  }
+
+  /* Text truncation */
+  .truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* SiteLayout - Global header styles */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  @apply bg-white/95 dark:bg-neutral-900/95 backdrop-blur-sm;
+  @apply border-b border-neutral-200 dark:border-neutral-800;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 1.25rem;
+  text-decoration: none;
+  @apply text-neutral-900 dark:text-neutral-50;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.navlink {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  @apply text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100;
+}
+
+.navlink.active {
+  @apply text-primary-600 dark:text-primary-400;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page {
+  flex: 1;
+  padding: 24px 16px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}

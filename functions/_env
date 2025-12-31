@@ -1,0 +1,2 @@
+# Stripe secrets are now managed via Firebase Secret Manager.
+# Do not add STRIPE_SECRET_KEY or standardized Price IDs here to avoid overlap errors.

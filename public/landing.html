@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>My Crochet Kit - The Smart Way to Track Your Crochet Projects | Free App</title>
+  <meta name="title" content="My Crochet Kit - The Smart Way to Track Your Crochet Projects | Free App">
+  <meta name="description" content="Finally, a crochet app that actually works! Voice-controlled counters, pattern library, progress tracking, and instant sharing. 100% free for 10 projects. No ads, no account required.">
+  <meta name="keywords" content="crochet app, crochet counter, pattern tracker, voice control crochet, crochet project manager, free crochet app, offline crochet app">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mycrochetkit.com/">
+  <meta property="og:title" content="My Crochet Kit - The Smart Way to Track Your Crochet Projects">
+  <meta property="og:description" content="Voice-controlled counters, digital patterns, progress photos, and instant Instagram sharing. Free for serious crocheters.">
+  <meta property="og:image" content="https://mycrochetkit.com/og-image.png">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://mycrochetkit.com/">
+  <meta property="twitter:title" content="My Crochet Kit - The Smart Way to Track Your Crochet Projects">
+  <meta property="twitter:description" content="Voice-controlled counters, digital patterns, progress photos, and instant Instagram sharing. Free for serious crocheters.">
+  <meta property="twitter:image" content="https://mycrochetkit.com/og-image.png">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://mycrochetkit.com/">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧶</text></svg>">
+  
+  <!-- Schema.org Structured Data --><script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "My Crochet Kit",
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "Web Browser, iOS, Android",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "150"
+    },
+    "description": "The complete crochet project manager with voice-controlled counters, pattern library, and instant sharing."
+  }
+  </script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fff;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 100px 20px 80px;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    
+    .hero .subtitle {
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      margin-bottom: 40px;
+      opacity: 0.95;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: white;
+      color: #667eea;
+      padding: 18px 50px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+    
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+    }
+    
+    .stat {
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      display: block;
+    }
+    
+    .stat-label {
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+    
+    /* Promises Section */
+    .promises {
+      padding: 80px 20px;
+      background: #f9fafb;
+    }
+    
+    .promises h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+    }
+    
+    .promise-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    @media (max-width: 1024px) {
+      .promise-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .promise-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .promise-card {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 320px;
+    }
+    
+    .promise-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    
+    .promise-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #667eea;
+    }
+    
+    .promise-text {
+      color: #4b5563;
+      line-height: 1.8;
+      flex: 1;
+    }
+    
+    /* Pain Points Section */
+    .pain-points {
+      padding: 80px 20px;
+      background: white;
+    }
+    
+    .pain-points h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 60px;
+    }
+    
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .comparison-card {
+      padding: 30px;
+      border-radius: 15px;
+      border: 2px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+    }
+    
+    .comparison-card.bad {
+      background: #fee;
+      border-color: #fca5a5;
+    }
+    
+    .comparison-card.good {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+    
+    .comparison-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.5px;
+    }
+    
+    .comparison-card.bad .comparison-label {
+      color: #dc2626;
+    }
+    
+    .comparison-card.good .comparison-label {
+      color: #2563eb;
+    }
+    
+    .comparison-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #1a1a1a;
+      flex: 1;
+    }
+    
+    @media (max-width: 1024px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Features Section */
+    .features {
+      padding: 80px 20px;
+      background: #f9fafb;
+    }
+    
+    .features h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .features-subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 1.2rem;
+      margin-bottom: 60px;
+    }
+    
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .feature-item {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 240px;
+    }
+    
+    @media (max-width: 1024px) {
+      .feature-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .feature-list {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .feature-emoji {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+    
+    .feature-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .feature-desc {
+      color: #6b7280;
+      line-height: 1.7;
+      flex: 1;
+    }
+    
+    /* Pricing Section */
+    .pricing {
+      padding: 80px 20px;
+      background: white;
+    }
+    
+    .pricing h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .pricing-subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 1.2rem;
+      margin-bottom: 60px;
+    }
+    
+    .pricing-card {
+      max-width: 500px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+      text-align: center;
+    }
+    
+    .pricing-title {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    
+    .pricing-price {
+      font-size: 4rem;
+      font-weight: 800;
+      margin: 20px 0;
+    }
+    
+    .pricing-features {
+      list-style: none;
+      margin: 30px 0;
+      text-align: left;
+    }
+    
+    .pricing-features li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      font-size: 1.1rem;
+    }
+    
+    .pricing-features li:before {
+      content: "✓ ";
+      font-weight: 700;
+      margin-right: 10px;
+    }
+    
+    /* Donation Section */
+    .donation {
+      padding: 80px 20px;
+      background: #fffbeb;
+      text-align: center;
+    }
+    
+    .donation h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .donation p {
+      font-size: 1.2rem;
+      color: #78350f;
+      max-width: 700px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
+    
+    .donate-button {
+      display: inline-block;
+      background: #f59e0b;
+      color: white;
+      padding: 18px 50px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .donate-button:hover {
+      background: #d97706;
+      transform: translateY(-2px);
+    }
+    
+    /* Roadmap Section */
+    .roadmap {
+      padding: 80px 20px;
+      background: white;
+    }
+    
+    .roadmap h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .roadmap-subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 1.2rem;
+      margin-bottom: 60px;
+    }
+    
+    .roadmap-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .roadmap-item {
+      background: #f9fafb;
+      padding: 25px 30px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      border-left: 5px solid #667eea;
+    }
+    
+    .roadmap-item h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+    
+    .roadmap-item p {
+      color: #6b7280;
+      line-height: 1.7;
+    }
+    
+    .roadmap-status {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    
+    /* Footer CTA */
+    .footer-cta {
+      padding: 100px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+    }
+    
+    .footer-cta h2 {
+      font-size: 3rem;
+      margin-bottom: 30px;
+    }
+    
+    .footer-cta p {
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+      opacity: 0.95;
+    }
+    
+    /* Footer */
+    footer {
+      padding: 40px 20px;
+      background: #1f2937;
+      color: #9ca3af;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .hero-stats {
+        gap: 20px;
+      }
+      
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Finally, A Crochet App That Actually Works</h1>
+      <p class="subtitle">Voice-Controlled Counters. Digital Patterns. Instant Sharing. 100% Free.</p>
+      <a href="/app" class="cta-button">Try It Free Now 🧶</a>
+      
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Free Forever</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">0</span>
+          <span class="stat-label">Ads or Tracking</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Offline Capable</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Promises Section -->
+  <section class="promises">
+    <div class="container">
+      <h2>We PROMISE Your Experience Will Be...</h2>
+      
+      <div class="promise-grid">
+        <div class="promise-card">
+          <div class="promise-icon">🎯</div>
+          <h3 class="promise-title">1. Frustration-Free</h3>
+          <p class="promise-text">No more lost counts! Voice control keeps your hands on your work. Say "increase" and we handle the rest.</p>
+        </div>
+        
+        <div class="promise-card">
+          <div class="promise-icon">📱</div>
+          <h3 class="promise-title">2. Device-Free</h3>
+          <p class="promise-text">Works offline. No account required. No data collection. Your projects stay private on YOUR device.</p>
+        </div>
+        
+        <div class="promise-card">
+          <div class="promise-icon">💸</div>
+          <h3 class="promise-title">3. Cost-Free</h3>
+          <p class="promise-text">Track 10 projects, 20 patterns, unlimited counters. Forever. No credit card. No hidden fees. No ads.</p>
+        </div>
+        
+        <div class="promise-card">
+          <div class="promise-icon">🚀</div>
+          <h3 class="promise-title">4. Hassle-Free</h3>
+          <p class="promise-text">One-click Instagram sharing. Auto-generated captions. QR codes for craft fairs. Share your work in seconds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Pain Points Section -->
+  <section class="pain-points">
+    <div class="container">
+      <h2>Other Apps? They Don't Get It.</h2>
+      
+      <div class="comparison-grid">
+        <!-- Row 1: Counting while you crochet -->
+        <div class="comparison-card bad">
+          <div class="comparison-label">
+            <span>❌</span> BASIC ROW COUNTER APPS
+          </div>
+          <p class="comparison-text">Tap-tap-tap after every row. Screen has to stay on. A notification or distraction and you're double-checking where you were… again.</p>
+        </div>
+        
+        <div class="comparison-card good">
+          <div class="comparison-label">
+            <span>✓</span> MY CROCHET KIT
+          </div>
+          <p class="comparison-text">Say "increase" to add a row and "undo" to fix mistakes. Hands stay on your hook, your count is tied to the project, and you always know exactly where you left off.</p>
+        </div>
+        
+        <div class="comparison-card good">
+          <div class="comparison-label">
+            <span>✓</span> MY CROCHET KIT
+          </div>
+          <p class="comparison-text">Voice-first counting is made for crocheters, not generic step trackers—so you can stay in the flow instead of babysitting a counter app.</p>
+        </div>
+        
+        <!-- Row 2: Pattern storage & Instagram sharing -->
+        <div class="comparison-card bad">
+          <div class="comparison-label">
+            <span>❌</span> PAPER & SCATTERED PDF PATTERNS
+          </div>
+          <p class="comparison-text">Patterns live in random binders, Etsy emails, and download folders. Hard to search. Easy to lose when you change phones, laptops, or printers.</p>
+        </div>
+        
+        <div class="comparison-card good">
+          <div class="comparison-label">
+            <span>✓</span> MY CROCHET KIT
+          </div>
+          <p class="comparison-text">All your crochet patterns in one library. Tag by project or designer, search instantly, and auto-backup to the cloud so you never lose a favorite pattern again.</p>
+        </div>
+        
+        <div class="comparison-card bad">
+          <div class="comparison-label">
+            <span>❌</span> MANUAL INSTAGRAM SHARING
+          </div>
+          <p class="comparison-text">Open photos. Try to remember yarn, hook size, pattern name, and changes. Write a caption from scratch. Google hashtags. Hope it sounds okay.</p>
+        </div>
+        
+        <!-- Row 3: Stash, yarn, and project history -->
+        <div class="comparison-card good">
+          <div class="comparison-label">
+            <span>✓</span> MY CROCHET KIT
+          </div>
+          <p class="comparison-text">One tap and your caption is auto-generated from your project details—with yarn, hook, pattern, notes, and curated crochet hashtags. Copy. Paste. Post. Done in seconds.</p>
+        </div>
+        
+        <div class="comparison-card bad">
+          <div class="comparison-label">
+            <span>❌</span> RANDOM STASH NOTES & PHOTOS
+          </div>
+          <p class="comparison-text">Yarn labels in a drawer, photos in your camera roll, hook sizes in a notebook. You know you bought the perfect yarn… but where is it and how much is left?</p>
+        </div>
+        
+        <div class="comparison-card good">
+          <div class="comparison-label">
+            <span>✓</span> MY CROCHET KIT
+          </div>
+          <p class="comparison-text">Yarn, hooks, and project notes live with the pattern. See exactly what you used, how much is left, and what you loved (or hated) for next time—without hunting through three different apps.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2>Everything You Need. Nothing You Don't.</h2>
+      <p class="features-subtitle">Built by a crocheter, for crocheters.</p>
+      
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-emoji">🎤</div>
+          <h3 class="feature-title">Voice-Controlled Counters</h3>
+          <p class="feature-desc">Say "increase," "decrease," "undo," or "reset." Hands stay on your work. Works with ANY crochet pattern.</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-emoji">📚</div>
+          <h3 class="feature-title">Digital Pattern Library</h3>
+          <p class="feature-desc">Upload PDFs or save web links. Search, tag, favorite. All your patterns in one beautiful library.</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-emoji">📊</div>
+          <h3 class="feature-title">Progress Tracking</h3>
+          <p class="feature-desc">Upload photos at milestones. Automatic timeline. Track completion percentage. See how far you've come!</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-emoji">🏆</div>
+          <h3 class="feature-title">Finished Objects Gallery</h3>
+          <p class="feature-desc">Your completed projects in one gorgeous gallery. Stats, badges, achievements. Show off your skills!</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-emoji">📱</div>
+          <h3 class="feature-title">Instant Social Sharing</h3>
+          <p class="feature-desc">One-click Instagram, Facebook, Pinterest. Auto-captions, QR codes, public links. Share your FOs instantly!</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-emoji">🧮</div>
+          <h3 class="feature-title">Yarn Calculator</h3>
+          <p class="feature-desc">Calculate yardage, cost, and time. Check if you have enough in your stash. Never run out mid-project!</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-emoji">⭐</div>
+          <h3 class="feature-title">Project Templates</h3>
+          <p class="feature-desc">Quick Start Wizard with 6 templates. Pre-configured counters, materials lists, milestones. Start in seconds!</p>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-emoji">💾</div>
+          <h3 class="feature-title">Auto-Backup</h3>
+          <p class="feature-desc">Export/import your data anytime. Works 100% offline. Your projects are YOURS. Forever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Pricing Section -->
+  <section class="pricing">
+    <div class="container">
+      <h2>Simple, Honest Pricing</h2>
+      <p class="pricing-subtitle">No tricks. No subscriptions. Just free.</p>
+      
+      <div class="pricing-card">
+        <h3 class="pricing-title">Early Access - Wave 1</h3>
+        <div class="pricing-price">$0</div>
+        <p>Free during beta. Limited to first 50 users.</p>
+        
+        <ul class="pricing-features">
+          <li><strong>Founding Member Status</strong> 🏅</li>
+          <li>10 Active Projects</li>
+          <li>20 Pattern Library Slots</li>
+          <li>5 Progress Photos per Project</li>
+          <li>1 Backup Export per Week</li>
+          <li>Unlimited Counters & Voice Control</li>
+          <li>All Sharing Features</li>
+          <li>Project Templates</li>
+          <li>Works 100% Offline</li>
+          <li><strong>Bonus:</strong> Refer 3 paid users later & get Lifetime Free Pro!</li>
+        </ul>
+        
+        <a href="/app" class="cta-button">Join Wave 1 Now</a>
+      </div>
+      
+      <div style="max-width: 600px; margin: 40px auto 0; text-align: center; background: #eff6ff; padding: 20px; border-radius: 15px; border: 1px solid #dbeafe;">
+        <p style="font-size: 0.95rem; color: #1e40af; line-height: 1.6;">
+          <strong>👋 A Note from the Developer:</strong><br>
+          Hi! I'm Jason. I'm building this app solo while working a full-time job. 
+          Please be patient with updates and bugs—I'm coding as fast as I can on nights and weekends! 
+          Your support and kindness mean the world to me. 💙
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Donation Section -->
+  <section class="donation">
+    <div class="container">
+      <h2>🤍 Love My Crochet Kit?</h2>
+      <p>We're a small indie team building this app for the crochet community. Your donation helps us keep the lights on, add new features, and keep it free for everyone. Every coffee counts! ☕</p>
+      <a href="https://buymeacoffee.com/mycrochetkit" class="donate-button" target="_blank">Buy Us a Coffee ☕</a>
+    </div>
+  </section>
+  
+  <!-- Roadmap Section -->
+  <section class="roadmap">
+    <div class="container">
+      <h2>🗺️ What's Coming Next?</h2>
+      <p class="roadmap-subtitle">Your support helps us build these features!</p>
+      
+      <div class="roadmap-list">
+        <div class="roadmap-item">
+          <h3>☁️ Cloud Sync</h3>
+          <p>Sync your projects across devices. Seamlessly switch between phone, tablet, and computer.</p>
+          <span class="roadmap-status">Vote for this feature!</span>
+        </div>
+        
+        <div class="roadmap-item">
+          <h3>👥 Project Sharing with Friends</h3>
+          <p>Collaborate on group projects. Share patterns with your crochet circle. Comment and cheer each other on!</p>
+          <span class="roadmap-status">Vote for this feature!</span>
+        </div>
+        
+        <div class="roadmap-item">
+          <h3>📄 PDF Pattern Export</h3>
+          <p>Export your projects as beautiful PDFs. Perfect for selling your own patterns or keeping records.</p>
+          <span class="roadmap-status">Vote for this feature!</span>
+        </div>
+        
+        <div class="roadmap-item">
+          <h3>🎨 Custom Themes</h3>
+          <p>Pick your favorite colors. Dark mode, light mode, cozy mode. Make it yours!</p>
+          <span class="roadmap-status">Vote for this feature!</span>
+        </div>
+        
+        <div class="roadmap-item">
+          <h3>🛍️ Yarn Stash Manager</h3>
+          <p>Track your yarn inventory. Barcode scanning. Know exactly what you have before you buy more!</p>
+          <span class="roadmap-status">Vote for this feature!</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer CTA -->
+  <section class="footer-cta">
+    <div class="container">
+      <h2>Ready to Transform Your Crochet Life?</h2>
+      <p>Be one of the first to experience the smartest way to track your crochet projects.</p>
+      <a href="/app" class="cta-button">Start Your Free Account</a>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>Made with 🧶 by crocheters, for crocheters.</p>
+      <p style="margin-top: 10px; font-size: 0.9rem;">© 2024 My Crochet Kit. All rights reserved.</p>
+    </div>
+  </footer>
+  
+</body>
+</html>

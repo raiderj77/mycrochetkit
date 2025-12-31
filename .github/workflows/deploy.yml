@@ -1,0 +1,87 @@
+name: Deploy to Firebase Hosting & Functions
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: firebase-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(npx playwright --version | cut -d' ' -f2)" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      # ---------- STAGING (PRs) ----------
+      - name: Build Staging
+        if: github.event_name == 'pull_request'
+        run: npm run build:staging
+        env:
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.STAGING_STRIPE_PUBLISHABLE_KEY }}
+          VITE_IS_PLAYWRIGHT: "true"
+
+      - name: Deploy Staging (Hosting + Functions)
+        if: github.event_name == 'pull_request'
+        run: npx firebase-tools@13 deploy --only hosting:staging,functions --project my-crochetkit-staging --token "${{ secrets.FIREBASE_TOKEN_STAGING }}"
+
+      - name: Install Playwright Browsers (including deps)
+        if: github.event_name == 'pull_request'
+        run: npx playwright install --with-deps
+
+      - name: Run Staging E2E
+        if: github.event_name == 'pull_request'
+        run: npm run test:staging
+        env:
+          BASE_URL: "https://staging.mycrochetkit.com"
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+
+      # ---------- PRODUCTION (main) ----------
+      - name: Build Production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npm run build:prod
+        env:
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PROD_STRIPE_PUBLISHABLE_KEY }}
+          VITE_IS_PLAYWRIGHT: "false"
+
+      - name: Deploy Production (Hosting + Functions)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx firebase-tools@13 deploy --only hosting:production,functions --project my-crochetkit --token "${{ secrets.FIREBASE_TOKEN_PROD }}"
+
+      - name: Install Playwright Browsers
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npx playwright install --with-deps
+
+      - name: Run Production Smoke
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npm run test:prod-smoke
+        env:
+          BASE_URL: "https://mycrochetkit.com"

@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "my-crochetkit",
+    "staging": "my-crochetkit-staging"
+  },
+  "targets": {
+    "my-crochetkit": {
+      "hosting": {
+        "production": ["my-crochetkit"]
+      }
+    },
+    "my-crochetkit-staging": {
+      "hosting": {
+        "staging": ["my-crochetkit-staging"]
+      }
+    }
+  }
+}

@@ -1,0 +1,401 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - generic [ref=e6]:
+      - banner [ref=e7]:
+        - navigation "Breadcrumb" [ref=e8]:
+          - list [ref=e9]:
+            - listitem [ref=e10]:
+              - link "Dash" [ref=e11] [cursor=pointer]:
+                - /url: /dashboard
+                - img [ref=e12]
+                - text: Dash
+            - listitem [ref=e15]:
+              - img [ref=e16]
+              - generic [ref=e18]: crochet abbreviations
+      - generic [ref=e19]:
+        - text: "🎁 Launch Special: Get a $10 Amazon Gift Card for referrals!"
+        - button "Claim Now →" [ref=e20] [cursor=pointer]
+      - main [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e24]:
+            - generic [ref=e25]:
+              - img [ref=e26]
+              - text: Free Crochet Reference Guide
+            - heading "Crochet Abbreviations Chart" [level=1] [ref=e28]
+            - paragraph [ref=e29]: Complete guide to US and UK crochet abbreviations. Never be confused by sc, dc, tr, or hdc again!
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - generic [ref=e32]:
+                - img [ref=e33]
+                - textbox "Search abbreviations... (e.g., sc, chain, decrease)" [ref=e36]
+              - generic [ref=e37]:
+                - button "US Terms" [ref=e38] [cursor=pointer]:
+                  - img [ref=e39]
+                  - text: US Terms
+                - combobox [ref=e42]:
+                  - option "All" [selected]
+                  - option "Basic"
+                  - option "Shaping"
+                  - option "Technique"
+                  - option "Decorative"
+                  - option "Instruction"
+            - generic [ref=e43]:
+              - heading "⚠️ US vs UK Terms Are Different!" [level=2] [ref=e44]
+              - paragraph [ref=e45]:
+                - text: A
+                - strong [ref=e46]: US single crochet (sc)
+                - text: is called
+                - strong [ref=e47]: double crochet (dc)
+                - text: in UK patterns. Always check if your pattern uses US or UK terminology before starting!
+              - generic [ref=e48]:
+                - generic [ref=e49]:
+                  - strong [ref=e50]: US sc
+                  - text: =
+                  - strong [ref=e51]: UK dc
+                  - text: (shortest stitch)
+                - generic [ref=e52]:
+                  - strong [ref=e53]: US dc
+                  - text: =
+                  - strong [ref=e54]: UK tr
+                  - text: (tall stitch)
+            - table [ref=e56]:
+              - rowgroup [ref=e57]:
+                - row "US Abbr. Full Name Category" [ref=e58]:
+                  - columnheader "US Abbr." [ref=e59]
+                  - columnheader "Full Name" [ref=e60]
+                  - columnheader "Category" [ref=e61]
+              - rowgroup [ref=e62]:
+                - row "ch Chain Basic" [ref=e63]:
+                  - cell "ch" [ref=e64]:
+                    - code [ref=e65]: ch
+                  - cell "Chain" [ref=e66]
+                  - cell "Basic" [ref=e67]
+                - row "sl st Slip Stitch Basic" [ref=e68]:
+                  - cell "sl st" [ref=e69]:
+                    - code [ref=e70]: sl st
+                  - cell "Slip Stitch" [ref=e71]
+                  - cell "Basic" [ref=e72]
+                - row "sc Single Crochet / Double Crochet (UK) Basic" [ref=e73]:
+                  - cell "sc" [ref=e74]:
+                    - code [ref=e75]: sc
+                  - cell "Single Crochet / Double Crochet (UK)" [ref=e76]
+                  - cell "Basic" [ref=e77]
+                - row "hdc Half Double Crochet / Half Treble (UK) Basic" [ref=e78]:
+                  - cell "hdc" [ref=e79]:
+                    - code [ref=e80]: hdc
+                  - cell "Half Double Crochet / Half Treble (UK)" [ref=e81]
+                  - cell "Basic" [ref=e82]
+                - row "dc Double Crochet / Treble (UK) Basic" [ref=e83]:
+                  - cell "dc" [ref=e84]:
+                    - code [ref=e85]: dc
+                  - cell "Double Crochet / Treble (UK)" [ref=e86]
+                  - cell "Basic" [ref=e87]
+                - row "tr Treble Crochet / Double Treble (UK) Basic" [ref=e88]:
+                  - cell "tr" [ref=e89]:
+                    - code [ref=e90]: tr
+                  - cell "Treble Crochet / Double Treble (UK)" [ref=e91]
+                  - cell "Basic" [ref=e92]
+                - row "dtr Double Treble / Triple Treble (UK) Basic" [ref=e93]:
+                  - cell "dtr" [ref=e94]:
+                    - code [ref=e95]: dtr
+                  - cell "Double Treble / Triple Treble (UK)" [ref=e96]
+                  - cell "Basic" [ref=e97]
+                - row "inc Increase Shaping" [ref=e98]:
+                  - cell "inc" [ref=e99]:
+                    - code [ref=e100]: inc
+                  - cell "Increase" [ref=e101]
+                  - cell "Shaping" [ref=e102]
+                - row "dec Decrease Shaping" [ref=e103]:
+                  - cell "dec" [ref=e104]:
+                    - code [ref=e105]: dec
+                  - cell "Decrease" [ref=e106]
+                  - cell "Shaping" [ref=e107]
+                - row "sc2tog Single Crochet 2 Together Shaping" [ref=e108]:
+                  - cell "sc2tog" [ref=e109]:
+                    - code [ref=e110]: sc2tog
+                  - cell "Single Crochet 2 Together" [ref=e111]
+                  - cell "Shaping" [ref=e112]
+                - row "dc2tog Double Crochet 2 Together Shaping" [ref=e113]:
+                  - cell "dc2tog" [ref=e114]:
+                    - code [ref=e115]: dc2tog
+                  - cell "Double Crochet 2 Together" [ref=e116]
+                  - cell "Shaping" [ref=e117]
+                - row "invdec Invisible Decrease Shaping" [ref=e118]:
+                  - cell "invdec" [ref=e119]:
+                    - code [ref=e120]: invdec
+                  - cell "Invisible Decrease" [ref=e121]
+                  - cell "Shaping" [ref=e122]
+                - row "FLO Front Loop Only Technique" [ref=e123]:
+                  - cell "FLO" [ref=e124]:
+                    - code [ref=e125]: FLO
+                  - cell "Front Loop Only" [ref=e126]
+                  - cell "Technique" [ref=e127]
+                - row "BLO Back Loop Only Technique" [ref=e128]:
+                  - cell "BLO" [ref=e129]:
+                    - code [ref=e130]: BLO
+                  - cell "Back Loop Only" [ref=e131]
+                  - cell "Technique" [ref=e132]
+                - row "BPdc Back Post Double Crochet Technique" [ref=e133]:
+                  - cell "BPdc" [ref=e134]:
+                    - code [ref=e135]: BPdc
+                  - cell "Back Post Double Crochet" [ref=e136]
+                  - cell "Technique" [ref=e137]
+                - row "FPdc Front Post Double Crochet Technique" [ref=e138]:
+                  - cell "FPdc" [ref=e139]:
+                    - code [ref=e140]: FPdc
+                  - cell "Front Post Double Crochet" [ref=e141]
+                  - cell "Technique" [ref=e142]
+                - row "picot Picot Decorative" [ref=e143]:
+                  - cell "picot" [ref=e144]:
+                    - code [ref=e145]: picot
+                  - cell "Picot" [ref=e146]
+                  - cell "Decorative" [ref=e147]
+                - row "popcorn Popcorn Stitch Decorative" [ref=e148]:
+                  - cell "popcorn" [ref=e149]:
+                    - code [ref=e150]: popcorn
+                  - cell "Popcorn Stitch" [ref=e151]
+                  - cell "Decorative" [ref=e152]
+                - row "puff Puff Stitch Decorative" [ref=e153]:
+                  - cell "puff" [ref=e154]:
+                    - code [ref=e155]: puff
+                  - cell "Puff Stitch" [ref=e156]
+                  - cell "Decorative" [ref=e157]
+                - row "bobble Bobble Stitch Decorative" [ref=e158]:
+                  - cell "bobble" [ref=e159]:
+                    - code [ref=e160]: bobble
+                  - cell "Bobble Stitch" [ref=e161]
+                  - cell "Decorative" [ref=e162]
+                - row "shell Shell Stitch Decorative" [ref=e163]:
+                  - cell "shell" [ref=e164]:
+                    - code [ref=e165]: shell
+                  - cell "Shell Stitch" [ref=e166]
+                  - cell "Decorative" [ref=e167]
+                - row "V-st V-Stitch Decorative" [ref=e168]:
+                  - cell "V-st" [ref=e169]:
+                    - code [ref=e170]: V-st
+                  - cell "V-Stitch" [ref=e171]
+                  - cell "Decorative" [ref=e172]
+                - row "yo Yarn Over Instruction" [ref=e173]:
+                  - cell "yo" [ref=e174]:
+                    - code [ref=e175]: yo
+                  - cell "Yarn Over" [ref=e176]
+                  - cell "Instruction" [ref=e177]
+                - row "sk Skip / Miss Instruction" [ref=e178]:
+                  - cell "sk" [ref=e179]:
+                    - code [ref=e180]: sk
+                  - cell "Skip / Miss" [ref=e181]
+                  - cell "Instruction" [ref=e182]
+                - row "sp Space Instruction" [ref=e183]:
+                  - cell "sp" [ref=e184]:
+                    - code [ref=e185]: sp
+                  - cell "Space" [ref=e186]
+                  - cell "Instruction" [ref=e187]
+                - row "rep Repeat Instruction" [ref=e188]:
+                  - cell "rep" [ref=e189]:
+                    - code [ref=e190]: rep
+                  - cell "Repeat" [ref=e191]
+                  - cell "Instruction" [ref=e192]
+                - row "rnd Round Instruction" [ref=e193]:
+                  - cell "rnd" [ref=e194]:
+                    - code [ref=e195]: rnd
+                  - cell "Round" [ref=e196]
+                  - cell "Instruction" [ref=e197]
+                - row "RS Right Side Instruction" [ref=e198]:
+                  - cell "RS" [ref=e199]:
+                    - code [ref=e200]: RS
+                  - cell "Right Side" [ref=e201]
+                  - cell "Instruction" [ref=e202]
+                - row "WS Wrong Side Instruction" [ref=e203]:
+                  - cell "WS" [ref=e204]:
+                    - code [ref=e205]: WS
+                  - cell "Wrong Side" [ref=e206]
+                  - cell "Instruction" [ref=e207]
+                - row "tog Together Instruction" [ref=e208]:
+                  - cell "tog" [ref=e209]:
+                    - code [ref=e210]: tog
+                  - cell "Together" [ref=e211]
+                  - cell "Instruction" [ref=e212]
+                - row "pm Place Marker Instruction" [ref=e213]:
+                  - cell "pm" [ref=e214]:
+                    - code [ref=e215]: pm
+                  - cell "Place Marker" [ref=e216]
+                  - cell "Instruction" [ref=e217]
+                - row "MC Magic Circle / Ring Instruction" [ref=e218]:
+                  - cell "MC" [ref=e219]:
+                    - code [ref=e220]: MC
+                  - cell "Magic Circle / Ring" [ref=e221]
+                  - cell "Instruction" [ref=e222]
+                - row "MR Magic Ring Instruction" [ref=e223]:
+                  - cell "MR" [ref=e224]:
+                    - code [ref=e225]: MR
+                  - cell "Magic Ring" [ref=e226]
+                  - cell "Instruction" [ref=e227]
+                - row "fo Fasten Off Instruction" [ref=e228]:
+                  - cell "fo" [ref=e229]:
+                    - code [ref=e230]: fo
+                  - cell "Fasten Off" [ref=e231]
+                  - cell "Instruction" [ref=e232]
+                - row "cont Continue Instruction" [ref=e233]:
+                  - cell "cont" [ref=e234]:
+                    - code [ref=e235]: cont
+                  - cell "Continue" [ref=e236]
+                  - cell "Instruction" [ref=e237]
+                - row "beg Beginning Instruction" [ref=e238]:
+                  - cell "beg" [ref=e239]:
+                    - code [ref=e240]: beg
+                  - cell "Beginning" [ref=e241]
+                  - cell "Instruction" [ref=e242]
+                - row "alt Alternate Instruction" [ref=e243]:
+                  - cell "alt" [ref=e244]:
+                    - code [ref=e245]: alt
+                  - cell "Alternate" [ref=e246]
+                  - cell "Instruction" [ref=e247]
+                - row "approx Approximately Instruction" [ref=e248]:
+                  - cell "approx" [ref=e249]:
+                    - code [ref=e250]: approx
+                  - cell "Approximately" [ref=e251]
+                  - cell "Instruction" [ref=e252]
+                - row "ea Each Instruction" [ref=e253]:
+                  - cell "ea" [ref=e254]:
+                    - code [ref=e255]: ea
+                  - cell "Each" [ref=e256]
+                  - cell "Instruction" [ref=e257]
+                - row "lp(s) Loop(s) Instruction" [ref=e258]:
+                  - cell "lp(s)" [ref=e259]:
+                    - code [ref=e260]: lp(s)
+                  - cell "Loop(s)" [ref=e261]
+                  - cell "Instruction" [ref=e262]
+                - row "prev Previous Instruction" [ref=e263]:
+                  - cell "prev" [ref=e264]:
+                    - code [ref=e265]: prev
+                  - cell "Previous" [ref=e266]
+                  - cell "Instruction" [ref=e267]
+                - row "rem Remaining Instruction" [ref=e268]:
+                  - cell "rem" [ref=e269]:
+                    - code [ref=e270]: rem
+                  - cell "Remaining" [ref=e271]
+                  - cell "Instruction" [ref=e272]
+                - row "tch Turning Chain Instruction" [ref=e273]:
+                  - cell "tch" [ref=e274]:
+                    - code [ref=e275]: tch
+                  - cell "Turning Chain" [ref=e276]
+                  - cell "Instruction" [ref=e277]
+                - row "st(s) Stitch(es) Instruction" [ref=e278]:
+                  - cell "st(s)" [ref=e279]:
+                    - code [ref=e280]: st(s)
+                  - cell "Stitch(es)" [ref=e281]
+                  - cell "Instruction" [ref=e282]
+            - paragraph [ref=e283]: Showing 44 of 44 abbreviations
+            - generic [ref=e284]:
+              - heading "Frequently Asked Questions" [level=2] [ref=e285]
+              - generic [ref=e286]:
+                - generic [ref=e287]:
+                  - heading "What does SC mean in crochet?" [level=3] [ref=e288]
+                  - paragraph [ref=e289]:
+                    - text: SC stands for
+                    - strong [ref=e290]: Single Crochet
+                    - text: in US terminology. It's the shortest and most basic crochet stitch. In UK patterns, the same stitch is called
+                    - strong [ref=e291]: Double Crochet (dc)
+                    - text: ". To make a single crochet: insert hook, yarn over, pull through, yarn over, pull through both loops."
+                - generic [ref=e292]:
+                  - heading "What's the difference between US and UK crochet terms?" [level=3] [ref=e293]
+                  - paragraph [ref=e294]: US and UK crochet terms are offset by one stitch height. What Americans call "single crochet" (sc), British crocheters call "double crochet" (dc). US "double crochet" (dc) is UK "treble" (tr). Always check whether your pattern uses US or UK terminology before starting!
+                - generic [ref=e295]:
+                  - heading "What does HDC mean in crochet?" [level=3] [ref=e296]
+                  - paragraph [ref=e297]:
+                    - text: HDC stands for
+                    - strong [ref=e298]: Half Double Crochet
+                    - text: . It's taller than a single crochet but shorter than a double crochet. In UK terms, it's called
+                    - strong [ref=e299]: Half Treble (htr)
+                    - text: ". To make one: yarn over, insert hook, yarn over, pull through, yarn over, pull through all 3 loops at once."
+                - generic [ref=e300]:
+                  - heading "What is a magic circle in crochet?" [level=3] [ref=e301]
+                  - paragraph [ref=e302]:
+                    - text: A
+                    - strong [ref=e303]: Magic Circle
+                    - text: (also called Magic Ring or MC/MR) is an adjustable starting loop used when crocheting in the round. It allows you to pull the center tight so there's no hole. It's essential for amigurumi and any project worked in rounds from the center outward.
+            - generic [ref=e304]:
+              - heading "Never Forget an Abbreviation Again" [level=2] [ref=e305]
+              - paragraph [ref=e306]: My Crochet Kit includes a built-in glossary with all these terms, plus voice-controlled row counters, pattern tracking, and more.
+              - button "Start Free Trial" [ref=e307] [cursor=pointer]:
+                - text: Start Free Trial
+                - img [ref=e308]
+            - generic [ref=e310]:
+              - button "Pricing Guide" [ref=e311] [cursor=pointer]:
+                - text: Pricing Guide
+                - img [ref=e312]
+              - button "Yarn Weights" [ref=e314] [cursor=pointer]:
+                - text: Yarn Weights
+                - img [ref=e315]
+      - navigation [ref=e317]:
+        - generic [ref=e318]:
+          - link "Home" [ref=e319] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e320]
+            - generic [ref=e323]: Home
+          - link "Projects" [ref=e324] [cursor=pointer]:
+            - /url: /projects
+            - img [ref=e325]
+            - generic [ref=e327]: Projects
+          - link "Patterns" [ref=e328] [cursor=pointer]:
+            - /url: /patterns
+            - img [ref=e329]
+            - generic [ref=e331]: Patterns
+          - link "Calculator" [ref=e332] [cursor=pointer]:
+            - /url: /calculator
+            - img [ref=e333]
+            - generic [ref=e335]: Calculator
+          - link "Finished" [ref=e336] [cursor=pointer]:
+            - /url: /finished
+            - img [ref=e337]
+            - generic [ref=e343]: Finished
+          - link "Community" [ref=e344] [cursor=pointer]:
+            - /url: /community
+            - img [ref=e345]
+            - generic [ref=e350]: Community
+          - link "Marketplace" [ref=e351] [cursor=pointer]:
+            - /url: /marketplace
+            - img [ref=e352]
+            - generic [ref=e356]: Marketplace
+          - link "Glossary" [ref=e357] [cursor=pointer]:
+            - /url: /glossary
+            - img [ref=e358]
+            - generic [ref=e360]: Glossary
+          - link "Blog" [ref=e361] [cursor=pointer]:
+            - /url: /blog
+            - img [ref=e362]
+            - generic [ref=e364]: Blog
+          - link "Roadmap" [ref=e365] [cursor=pointer]:
+            - /url: /roadmap
+            - img [ref=e366]
+            - generic [ref=e368]: Roadmap
+          - link "Settings" [ref=e369] [cursor=pointer]:
+            - /url: /settings
+            - img [ref=e370]
+            - generic [ref=e373]: Settings
+          - generic [ref=e374]:
+            - button "Toggle theme" [ref=e375] [cursor=pointer]:
+              - generic [ref=e376]: ☀️
+              - generic [ref=e377]: Light
+            - generic [ref=e378]: Theme
+    - dialog "Cookie consent" [ref=e379]:
+      - generic [ref=e380]:
+        - generic [ref=e381]:
+          - heading "🍪 Cookie Settings" [level=3] [ref=e382]
+          - paragraph [ref=e383]:
+            - text: We use essential cookies for authentication and site functionality. Analytics cookies help us improve your experience.
+            - link "Cookie Policy" [ref=e384] [cursor=pointer]:
+              - /url: /cookies
+        - generic [ref=e385]:
+          - button "Reject non-essential" [ref=e386] [cursor=pointer]
+          - button "Accept all" [ref=e387] [cursor=pointer]
+        - button "Close" [ref=e388] [cursor=pointer]:
+          - img [ref=e389]
+  - iframe [ref=e392]:
+    
+```

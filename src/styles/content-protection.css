@@ -1,0 +1,214 @@
+/* 
+ * ADVANCED Content Protection CSS
+ * Multi-layer defense - Tier-aware protection
+ */
+
+/* === 1. DISABLE SELECTION (Free users only via JS) === */
+/* Default: Allow selection for paid users */
+body {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* Free users get no-select class added via JS */
+body.free-tier * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none; /* iOS */
+}
+
+/* Allow selection on input fields */
+input,
+textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+/* === 2. DISABLE IMAGE OPERATIONS === */
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  pointer-events: none; /* Disable all pointer events */
+  position: relative;
+}
+
+/* Overlay to prevent image access */
+img::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 2;
+}
+
+/* === 3. VISIBLE WATERMARKS === */
+/* Add to any container with class */
+.watermarked {
+  position: relative;
+}
+
+.watermarked::after {
+  content: "© My Crochet Kit";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  font-size: 3rem;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.15);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 100;
+  white-space: nowrap;
+  letter-spacing: 0.5rem;
+}
+
+/* Image-specific watermark */
+.image-watermark {
+  position: relative;
+  display: inline-block;
+}
+
+.image-watermark::after {
+  content: "© My Crochet Kit";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* === 4. SCREENSHOT BLUR === */
+.screenshot-blur {
+  filter: blur(20px) !important;
+  transition: filter 0.05s !important;
+}
+
+.screenshot-blur * {
+  filter: blur(20px) !important;
+}
+
+/* === 5. DISABLE PRINT === */
+@media print {
+  body {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  body::before {
+    content: "This content is protected and cannot be printed.";
+    display: block !important;
+    padding: 50px;
+    font-size: 24px;
+    text-align: center;
+  }
+}
+
+/* === 6. CANVAS PROTECTION === */
+canvas {
+  pointer-events: none !important;
+}
+
+/* === 7. PATTERN CONTENT PROTECTION === */
+.protected-content {
+  position: relative;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(255, 255, 255, 0.02) 10px,
+    rgba(255, 255, 255, 0.02) 20px
+  );
+}
+
+.protected-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.01) 2px,
+    rgba(0, 0, 0, 0.01) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* === 8. PREMIUM PATTERN WATERMARK === */
+.premium-pattern {
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-pattern::after {
+  content: "EXCLUSIVE";
+  position: absolute;
+  top: 20px;
+  right: -40px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 50px;
+  font-size: 12px;
+  font-weight: bold;
+  transform: rotate(45deg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 1000;
+  letter-spacing: 2px;
+}
+
+/* === 9. PROTECT VIDEO === */
+video {
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* === 10. HIDE ON RECORDING === */
+@media (prefers-reduced-motion: reduce) {
+  /* Detection hack: if motion is reduced, might be recording */
+  .sensitive-content {
+    opacity: 0.3;
+    filter: blur(5px);
+  }
+}
+
+/* === 11. ENCRYPTED CONTENT OVERLAY === */
+.encrypted-overlay {
+  position: relative;
+}
+
+.encrypted-overlay::before {
+  content: "🔒";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 5;
+}

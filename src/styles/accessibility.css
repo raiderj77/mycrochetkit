@@ -1,0 +1,283 @@
+/**
+ * Accessibility-First CSS
+ * 
+ * CRITICAL: This file establishes accessibility foundations.
+ * - Reduced motion is DEFAULT (not opt-in)
+ * - High contrast modes
+ * - Focus indicators
+ * - Touch-friendly tap targets
+ * 
+ * NO flashing content, NO parallax, NO seizure triggers
+ */
+
+/* ============================================================================
+   REDUCED MOTION - DEFAULT
+   ============================================================================ */
+
+/* Respect system preference AND our app setting */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* App setting for reduced motion */
+[data-reduced-motion="true"] {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   COLOR SCHEMES
+   ============================================================================ */
+
+/* Light theme (default) */
+:root[data-theme="light"] {
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-primary: #7c3aed;
+  --color-primary-hover: #6d28d9;
+}
+
+/* Dark theme */
+:root[data-theme="dark"],
+:root.dark {
+  --color-bg: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-bg-tertiary: #334155;
+  --color-text: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-border: #334155;
+  --color-primary: #a78bfa;
+  --color-primary-hover: #c4b5fd;
+}
+
+/* Sepia theme (gentle on eyes) */
+:root[data-theme="sepia"] {
+  --color-bg: #f4ecd8;
+  --color-bg-secondary: #e8dcc4;
+  --color-bg-tertiary: #dccfb0;
+  --color-text: #2d2006;
+  --color-text-secondary: #5c4a1a;
+  --color-text-tertiary: #8b7355;
+  --color-border: #c9b998;
+  --color-primary: #8b4513;
+  --color-primary-hover: #a0522d;
+}
+
+/* High contrast theme - WCAG AAA (7:1+) */
+:root[data-theme="high-contrast"],
+:root[data-high-contrast="true"] {
+  --color-bg: #000000;
+  --color-bg-secondary: #1a1a1a;
+  --color-bg-tertiary: #333333;
+  --color-text: #ffffff;
+  --color-text-secondary: #e0e0e0;
+  --color-text-tertiary: #c0c0c0;
+  --color-border: #ffffff;
+  --color-primary: #00d4ff;
+  --color-primary-hover: #4de0ff;
+}
+
+/* ============================================================================
+   FONT SIZES (applied via data-font-size attribute)
+   ============================================================================ */
+
+:root[data-font-size="small"] {
+  font-size: 14px;
+}
+
+:root[data-font-size="medium"] {
+  font-size: 16px;
+}
+
+:root[data-font-size="large"] {
+  font-size: 18px;
+}
+
+:root[data-font-size="x-large"] {
+  font-size: 20px;
+}
+
+/* ============================================================================
+   LINE SPACING
+   ============================================================================ */
+
+:root[data-line-spacing="normal"] {
+  --line-height: 1.5;
+}
+
+:root[data-line-spacing="relaxed"] {
+  --line-height: 1.75;
+}
+
+:root[data-line-spacing="loose"] {
+  --line-height: 2;
+}
+
+body {
+  line-height: var(--line-height, 1.5);
+}
+
+/* ============================================================================
+   FOCUS INDICATORS (WCAG 2.4.7)
+   ============================================================================ */
+
+/* Visible focus for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* High contrast focus */
+:root[data-high-contrast="true"] *:focus-visible {
+  outline: 4px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Remove default focus ring for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================================================
+   TOUCH TARGETS (WCAG 2.5.5 - minimum 44x44px)
+   ============================================================================ */
+
+/* All interactive elements */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[role="link"],
+[role="checkbox"],
+[role="radio"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Large button mode */
+:root[data-large-buttons="true"] button,
+:root[data-large-buttons="true"] a,
+:root[data-large-buttons="true"] [role="button"] {
+  min-height: 60px;
+  min-width: 60px;
+  padding: 1rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+/* ============================================================================
+   LEFT-HAND MODE
+   ============================================================================ */
+
+:root[data-left-hand="true"] {
+  direction: rtl;
+}
+
+:root[data-left-hand="true"] * {
+  text-align: right;
+}
+
+/* ============================================================================
+   SIMPLIFIED UI MODE
+   ============================================================================ */
+
+:root[data-simplified="true"] .advanced-feature,
+:root[data-simplified="true"] [data-advanced] {
+  display: none !important;
+}
+
+/* ============================================================================
+   FOCUS MODE
+   ============================================================================ */
+
+:root[data-focus-mode="true"] nav,
+:root[data-focus-mode="true"] aside,
+:root[data-focus-mode="true"] footer,
+:root[data-focus-mode="true"] [data-distraction] {
+  display: none !important;
+}
+
+/* ============================================================================
+   SKIP LINKS (WCAG 2.4.1)
+   ============================================================================ */
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 9999;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================================================
+   SCREEN READER UTILITIES
+   ============================================================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ============================================================================
+   GLOBAL SAFE STYLES
+   ============================================================================ */
+
+/* NO flashing content ever (WCAG 2.3.1) */
+* {
+  animation-iteration-count: 1;
+}
+
+/* NO parallax (can cause motion sickness) */
+* {
+  background-attachment: scroll !important;
+}
+
+/* Smooth scrolling only when motion is allowed */
+:root:not([data-reduced-motion="true"]) {
+  scroll-behavior: smooth;
+}
