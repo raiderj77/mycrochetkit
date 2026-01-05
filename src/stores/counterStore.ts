@@ -53,7 +53,10 @@ export const useCounterStore = create<CounterStore>((set, get) => ({
   
   // Increment Counter
   increment: async (counterId) => {
-    const counter = get().counters.get(counterId);
+     if (!canIncrement(counterId)) {
+    console.log(`[Counter] Skipped duplicate increment for ${counterId}`);
+    return;
+  }const counter = get().counters.get(counterId);
     if (!counter) return;
     
     const newValue = counter.current + 1;
