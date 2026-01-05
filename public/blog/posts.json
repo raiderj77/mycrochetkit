@@ -1,18 +1,51 @@
 [
   {
-    "id": "1e7Eny8Hlg2qaS98USzWc6MLoaZfh6zFO",
-    "path": "/blog/the-2026-crochet-audit:-how-to-catalog-your-wips.html",
-    "title": "The 2026 Crochet Audit: How To Catalog Your Wips",
-    "excerpt": "Want more crochet tips? Visit the Crochet Hub Browse Free Patterns",
-    "author": "My Crochet Kit Team",
-    "publishedDate": "2025-12-30",
-    "readTime": 1,
-    "category": "Guides",
+    "id": "13nO1AMtFAdoVlIDGRiJ1Lf8q6w0opHfH",
+    "path": "/blog/5-ways-voice-counters-changed-my-crochet-game-in-2026.html",
+    "title": "5 Ways Voice Counters Changed My Crochet Game",
+    "excerpt": "Discover how voice-activated row counters are revolutionizing the way we crochet in 2026. Hands-free tracking is finally here.",
+    "author": "Scott @ My Crochet Kit",
+    "publishedDate": "2025-12-31",
+    "readTime": 9,
+    "category": "Technology",
     "tags": [
       "crochet",
-      "imported"
+      "voice-control"
     ],
-    "coverImage": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&q=80&w=1200",
+    "coverImage": "/assets/images/voice-crochet-counter-demo.jpg",
+    "isExternal": true
+  },
+  {
+    "id": "1djf3oYq9XIfxkoeob9VMXxuur3m4H7gm",
+    "path": "/blog/why-mocha-mousse-is-2025-s-ultimate-yarn-trend.html",
+    "title": "Why Mocha Mousse is 2026's Ultimate Yarn Trend",
+    "excerpt": "Pantone's 2026 color is perfect for crochet. Learn why Mocha Mousse is taking over yarn stashes everywhere.",
+    "author": "My Crochet Kit Team",
+    "publishedDate": "2025-12-30",
+    "readTime": 5,
+    "category": "Trends",
+    "tags": [
+      "yarn",
+      "trends"
+    ],
+    "coverImage": "/assets/images/mocha-mousse-chunky-knit-banner.jpg",
+    "isExternal": true
+  },
+  {
+    "id": "2kdg4pZr0YJgzlpfpc0WNyyvs4n5I8hn",
+    "path": "/blog/top-independent-crochet-creators-2026.html",
+    "title": "Top Independent Crochet Creators to Follow in 2026",
+    "excerpt": "Meet the five most influential independent crochet educators shaping modern culture in 2026. Jayda InStitches, The Crochet Crowd, and more.",
+    "author": "My Crochet Kit Team",
+    "publishedDate": "2026-01-01",
+    "readTime": 8,
+    "category": "Community",
+    "tags": [
+      "influencers",
+      "community",
+      "tutorials"
+    ],
+    "coverImage": "/assets/images/top-crochet-creators-2026-banner.jpg",
     "isExternal": true
   }
 ]

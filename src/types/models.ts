@@ -354,6 +354,14 @@ export interface UserProfile {
   stripeCustomerId?: string; // For payment processing
   subscriptionEndsAt?: Date; // For canceled subscriptions
   
+  // Referral Program 2.0
+  referredByCode?: string; // The code used to sign up
+  referredByUid?: string; // The actual UID of the referrer
+  purchaseDate?: Date; // When they first upgraded to Pro/Lifetime
+  referralStatus?: 'pending' | 'completed' | 'failed' | null;
+  referralCompletedDate?: Date;
+  completedReferrals?: number; // Total count of successful referrals for this user
+  
   // Metadata
   createdAt: Date;
   updatedAt: Date;

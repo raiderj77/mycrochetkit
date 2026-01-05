@@ -3,10 +3,12 @@
  * View and interact with individual patterns
  */
 
+import { lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, ExternalLink } from 'lucide-react';
 import { usePatternStore } from '@/stores/patternStore';
-import { PDFViewer } from '@/components/PDFViewer';
+
+const PDFViewer = lazy(() => import('@/components/PDFViewer').then(module => ({ default: module.PDFViewer })));
 
 export default function PatternReader() {
   const { id } = useParams<{ id: string }>();
@@ -136,10 +138,19 @@ export default function PatternReader() {
       
       {/* PDF Viewer or Cover Image */}
       {pattern.pdfFile ? (
-        <PDFViewer
-          pdfBase64={pattern.pdfFile.replace(/^data:application\/pdf;base64,/, '')}
-          onError={(err) => console.error('PDF Error:', err)}
-        />
+        <Suspense fallback={
+          <div className="flex h-96 items-center justify-center">
+            <div className="text-center">
+              <div className="mb-4 text-4xl animate-pulse">📄</div>
+              <p className="text-neutral-600 dark:text-neutral-400">Initializing PDF Engine...</p>
+            </div>
+          </div>
+        }>
+          <PDFViewer
+            pdfBase64={pattern.pdfFile.replace(/^data:application\/pdf;base64,/, '')}
+            onError={(err) => console.error('PDF Error:', err)}
+          />
+        </Suspense>
       ) : pattern.coverImage ? (
         <div className="card">
           <img

@@ -30,6 +30,11 @@ export function AddYarnDialog({ open, onOpenChange }: AddYarnDialogProps) {
     gramsPerSkein: '',
     skeinsOwned: '',
     storageLocation: '',
+    dyeLot: '',
+    purchaseDate: '',
+    purchasePrice: '',
+    purchaseLocation: '',
+    careInstructions: '',
     notes: '',
   });
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -118,6 +123,11 @@ export function AddYarnDialog({ open, onOpenChange }: AddYarnDialogProps) {
         skeinsOwned,
         yardageRemaining: yardagePerSkein * skeinsOwned,
         storageLocation: formData.storageLocation,
+        dyeLot: formData.dyeLot,
+        purchaseDate: formData.purchaseDate ? new Date(formData.purchaseDate) : undefined,
+        purchasePrice: parseFloat(formData.purchasePrice) || undefined,
+        purchaseLocation: formData.purchaseLocation,
+        careInstructions: formData.careInstructions,
         photo: photoUrl || undefined,
         notes: formData.notes,
         tags: [],
@@ -135,6 +145,11 @@ export function AddYarnDialog({ open, onOpenChange }: AddYarnDialogProps) {
         gramsPerSkein: '',
         skeinsOwned: '',
         storageLocation: '',
+        dyeLot: '',
+        purchaseDate: '',
+        purchasePrice: '',
+        purchaseLocation: '',
+        careInstructions: '',
         notes: '',
       });
       setPhotoPreview(null);
@@ -357,20 +372,110 @@ export function AddYarnDialog({ open, onOpenChange }: AddYarnDialogProps) {
               </div>
             </div>
             
-            {/* Storage Location */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              {/* Dye Lot */}
+              <div>
+                <label htmlFor="dyeLot" className="label">
+                  Dye Lot
+                </label>
+                <input
+                  id="dyeLot"
+                  type="text"
+                  className="input"
+                  value={formData.dyeLot}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dyeLot: e.target.value })
+                  }
+                  placeholder="A123"
+                />
+              </div>
+              
+              {/* Storage Location */}
+              <div>
+                <label htmlFor="storage" className="label">
+                  Storage Location
+                </label>
+                <input
+                  id="storage"
+                  type="text"
+                  className="input"
+                  value={formData.storageLocation}
+                  onChange={(e) =>
+                    setFormData({ ...formData, storageLocation: e.target.value })
+                  }
+                  placeholder="Bin 3, Shelf 2"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              {/* Purchase Date */}
+              <div>
+                <label htmlFor="purchaseDate" className="label">
+                  Purchase Date
+                </label>
+                <input
+                  id="purchaseDate"
+                  type="date"
+                  className="input"
+                  value={formData.purchaseDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, purchaseDate: e.target.value })
+                  }
+                />
+              </div>
+              
+              {/* Purchase Price */}
+              <div>
+                <label htmlFor="purchasePrice" className="label">
+                  Price Paid ($)
+                </label>
+                <input
+                  id="purchasePrice"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  className="input"
+                  value={formData.purchasePrice}
+                  onChange={(e) =>
+                    setFormData({ ...formData, purchasePrice: e.target.value })
+                  }
+                  placeholder="5.99"
+                />
+              </div>
+              
+              {/* Purchase Location */}
+              <div>
+                <label htmlFor="purchaseLocation" className="label">
+                  Store/Source
+                </label>
+                <input
+                  id="purchaseLocation"
+                  type="text"
+                  className="input"
+                  value={formData.purchaseLocation}
+                  onChange={(e) =>
+                    setFormData({ ...formData, purchaseLocation: e.target.value })
+                  }
+                  placeholder="Joann / Etsy"
+                />
+              </div>
+            </div>
+            
+            {/* Care Instructions */}
             <div>
-              <label htmlFor="storage" className="label">
-                Storage Location (Optional)
+              <label htmlFor="care" className="label">
+                Care Instructions (Optional)
               </label>
               <input
-                id="storage"
+                id="care"
                 type="text"
                 className="input"
-                value={formData.storageLocation}
+                value={formData.careInstructions}
                 onChange={(e) =>
-                  setFormData({ ...formData, storageLocation: e.target.value })
+                  setFormData({ ...formData, careInstructions: e.target.value })
                 }
-                placeholder="Bin 3, Shelf 2"
+                placeholder="Machine wash cold, lay flat to dry"
               />
             </div>
             

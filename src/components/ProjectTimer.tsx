@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../lib/firebase';
 import { doc, updateDoc, arrayUnion, increment, Timestamp } from 'firebase/firestore';
+import { Lock } from 'lucide-react';
 
 interface ProjectTimerProps {
   projectId: string;
@@ -13,8 +14,9 @@ export default function ProjectTimer({
   projectId, 
   initialTotalSeconds = 0,
   initialHourlyRate = 0,
-  initialMaterialCost = 0
-}: ProjectTimerProps) {
+  initialMaterialCost = 0,
+  isSyncedFromStash = false
+}: ProjectTimerProps & { isSyncedFromStash?: boolean }) {
   // Timer State
   const [isRunning, setIsRunning] = useState(false);
   const [sessionSeconds, setSessionSeconds] = useState(0); 
@@ -105,6 +107,13 @@ export default function ProjectTimer({
         </button>
       </div>
 
+      {isSyncedFromStash && (
+        <div className="mb-6 flex items-center gap-2 px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+          <Lock className="h-3 w-3 text-indigo-400" />
+          <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Material costs synced from stash allocations</span>
+        </div>
+      )}
+
       {/* PRICING INPUTS */}
       {showSettings && (
         <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl mb-6 border border-neutral-200 dark:border-neutral-700">
@@ -119,12 +128,16 @@ export default function ProjectTimer({
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-neutral-600 dark:text-neutral-400 mb-1">Materials ($)</label>
+              <label className="block text-xs font-bold text-neutral-600 dark:text-neutral-400 mb-1">
+                Materials {isSyncedFromStash ? '(Auto)' : '($)'}
+              </label>
               <input 
                 type="number" 
                 value={materialCost || ''}
+                readOnly={isSyncedFromStash}
                 onChange={(e) => setMaterialCost(parseFloat(e.target.value) || 0)}
-                className="w-full rounded-lg border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+                className={`w-full rounded-lg border-neutral-300 dark:border-neutral-600 dark:bg-neutral-700 dark:text-white ${isSyncedFromStash ? 'opacity-50 cursor-not-allowed bg-neutral-100' : ''}`}
+                placeholder={isSyncedFromStash ? 'Using Stash' : '0.00'}
               />
             </div>
           </div>

@@ -61,7 +61,7 @@ export default function Landing() {
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-white animate-pulse">🎁</span>
           <p className="text-sm font-bold text-white">
             <span className="bg-emerald-500 text-[10px] px-1.5 py-0.5 rounded mr-2 align-middle">NEW</span>
-            Launch Offer: Get a <span className="text-emerald-300">$10 Amazon Gift Card</span> for every friend you refer!
+            Launch Offer: Get a <span className="text-emerald-300">$10 Amazon Gift Card</span> for every 3 friends you refer!
             <button 
               onClick={() => goToLifetimeCheckout()}
               className="ml-3 underline hover:text-emerald-200 decoration-emerald-400 font-bold"

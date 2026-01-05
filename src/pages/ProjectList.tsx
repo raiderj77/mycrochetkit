@@ -21,6 +21,7 @@ export default function ProjectList() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [sortBy, setSortBy] = useState<'name' | 'date' | 'status'>('date');
+  const [viewMode, setViewMode] = useState<'grid' | 'kanban'>('grid');
   
   // Filter projects
   let filteredProjects = projects;
@@ -78,6 +79,20 @@ export default function ProjectList() {
             <Sparkles className="h-5 w-5" />
             Quick Start
           </button>
+          <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
+            <button 
+              onClick={() => setViewMode('grid')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${viewMode === 'grid' ? 'bg-white shadow dark:bg-neutral-700' : 'text-neutral-500'}`}
+            >
+              Grid
+            </button>
+            <button 
+              onClick={() => setViewMode('kanban')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${viewMode === 'kanban' ? 'bg-white shadow dark:bg-neutral-700' : 'text-neutral-500'}`}
+            >
+              Kanban
+            </button>
+          </div>
           <button
             onClick={() => setShowNewProjectDialog(true)}
             className="btn-primary"
@@ -192,10 +207,62 @@ export default function ProjectList() {
             )}
           </div>
         </div>
-      ) : (
+      ) : viewMode === 'grid' ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
+      ) : (
+        <div className="flex gap-6 overflow-x-auto pb-6">
+          {(['planned', 'active', 'paused', 'completed'] as ProjectStatus[]).map((status) => (
+            <div key={status} className="flex-none w-80">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="font-bold flex items-center gap-2 capitalize">
+                  <span className={`w-2 h-2 rounded-full ${
+                    status === 'active' ? 'bg-green-500' :
+                    status === 'paused' ? 'bg-amber-500' :
+                    status === 'completed' ? 'bg-purple-500' :
+                    'bg-neutral-400'
+                  }`} />
+                  {status}
+                </h3>
+                <span className="text-xs text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded-full">
+                  {projects.filter(p => p.status === status).length}
+                </span>
+              </div>
+              <div className="space-y-4">
+                {projects
+                  .filter(p => p.status === status)
+                  .map(project => (
+                    <div 
+                      key={project.id}
+                      onClick={() => navigate(`/projects/${project.id}`)}
+                      className="group cursor-pointer bg-white dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md hover:border-primary-500/50 transition-all"
+                    >
+                      <h4 className="font-bold text-neutral-900 dark:text-neutral-50 group-hover:text-primary-600 truncate">
+                        {project.name}
+                      </h4>
+                      <p className="text-xs text-neutral-500 capitalize mt-1">
+                        {project.category} • {project.counters.length} counters
+                      </p>
+                      <div className="mt-3 flex items-center justify-between">
+                        <span className="text-[10px] text-neutral-400">
+                          {new Date(project.startDate).toLocaleDateString()}
+                        </span>
+                        <div className="flex -space-x-1">
+                          {/* Mini progress/tags if needed */}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                {projects.filter(p => p.status === status).length === 0 && (
+                  <div className="border-2 border-dashed border-neutral-100 dark:border-neutral-800 rounded-xl h-24 flex items-center justify-center">
+                    <span className="text-xs text-neutral-400">No {status} projects</span>
+                  </div>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       )}

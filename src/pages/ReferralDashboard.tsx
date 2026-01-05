@@ -2,15 +2,16 @@ import { useAuthStore } from '@/stores/useAuthStore';
 import { useSubscriptionStore } from '@/stores/subscriptionStore';
 import { Trophy, Users, Gift, Copy, Check, Clock, Award } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { collection, query, where, onSnapshot, orderBy, Timestamp } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, orderBy, Timestamp, doc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 
 
-interface ReferralRecord {
+interface ReferredUser {
   id: string;
-  status: 'qualified' | 'flagged' | 'pending';
-  qualifiedAt?: Timestamp;
+  referralStatus: 'pending' | 'completed' | 'failed' | null;
+  tier: string;
+  purchaseDate?: Timestamp;
 }
 
 interface RewardRecord {
@@ -25,19 +26,31 @@ export default function ReferralDashboard() {
   const { user } = useAuthStore();
   const { tier } = useSubscriptionStore();
   const [copied, setCopied] = useState(false);
-  const [referrals, setReferrals] = useState<ReferralRecord[]>([]);
+  const [referredUsers, setReferredUsers] = useState<ReferredUser[]>([]);
   const [rewards, setRewards] = useState<RewardRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [referralCode, setReferralCode] = useState<string>('');
 
   useEffect(() => {
-    if (!user || tier !== 'lifetime') return;
+    if (!user || tier !== 'lifetime') {
+      return;
+    }
 
+    // First get current user's referral code from Firestore if not in user object
+    const userRef = doc(db, 'users', user.uid);
+    const unsubUser = onSnapshot(userRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const code = data.referralCode || user.uid.slice(0, 8).toUpperCase();
+        if (code !== referralCode) {
+          setReferralCode(code);
+        }
+      }
+    });
 
-
-    const referralsQuery = query(
-      collection(db, 'referrals'),
-      where('referrerUid', '==', user.uid),
-      where('status', '==', 'qualified')
+    const referredQuery = query(
+      collection(db, 'users'),
+      where('referredByCode', '==', referralCode || user.uid.slice(0, 8).toUpperCase())
     );
 
     const rewardsQuery = query(
@@ -46,8 +59,8 @@ export default function ReferralDashboard() {
       orderBy('createdAt', 'desc')
     );
 
-    const unsubReferrals = onSnapshot(referralsQuery, (snap) => {
-      setReferrals(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ReferralRecord)));
+    const unsubReferred = onSnapshot(referredQuery, (snap) => {
+      setReferredUsers(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as ReferredUser)));
     });
 
     const unsubRewards = onSnapshot(rewardsQuery, (snap) => {
@@ -56,12 +69,15 @@ export default function ReferralDashboard() {
     });
 
     return () => {
-      unsubReferrals();
+      unsubUser();
+      unsubReferred();
       unsubRewards();
     };
-  }, [user, tier]);
+  }, [user, tier, referralCode]);
+  
+  const isLifetime = tier === 'lifetime';
 
-  if (tier !== 'lifetime') {
+  if (!isLifetime) {
     return (
       <div className="container mx-auto p-6 max-w-4xl text-center min-h-[60vh] flex items-center justify-center">
         <div className="card bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 p-12 transition-colors">
@@ -82,8 +98,8 @@ export default function ReferralDashboard() {
     );
   }
 
-  const referralCode = user?.uid?.slice(0, 8).toUpperCase() || 'INVITE';
-  const referralLink = `${window.location.origin}/signup?ref=${referralCode}`;
+  const finalReferralCode = referralCode || user?.uid?.slice(0, 8).toUpperCase() || 'INVITE';
+  const referralLink = `${window.location.origin}/signup?ref=${finalReferralCode}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralLink);
@@ -91,15 +107,16 @@ export default function ReferralDashboard() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const qualifiedCount = referrals.length;
-  const progressToNext = qualifiedCount % 3;
+  const completedCount = referredUsers.filter(u => u.referralStatus === 'completed').length;
+  const pendingCount = referredUsers.filter(u => u.referralStatus === 'pending').length;
+  const progressToNext = completedCount % 3;
   const progressPercent = (progressToNext / 3) * 100;
 
   return (
     <div className="container mx-auto p-6 max-w-5xl transition-colors">
       <header className="mb-10 text-center md:text-left">
         <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-2 transition-colors">Referral Rewards 🎁</h1>
-        <p className="text-slate-600 dark:text-slate-400">Give $5 off, get $10 Amazon rewards. Simple.</p>
+        <p className="text-slate-600 dark:text-slate-400">Invite friends, earn $10 Amazon rewards. Simple.</p>
       </header>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-10">
@@ -120,8 +137,8 @@ export default function ReferralDashboard() {
             </button>
           </div>
           <p className="text-xs text-slate-500 mt-4 leading-relaxed">
-            Friends get <span className="font-bold text-slate-700">$5 off</span> their first purchase. 
-            You get a <span className="font-bold text-slate-700">$10 Amazon card</span> for every 3 friends who join Lifetime Pro.
+            Invite your friends to join MyCrochetKit. 
+            You get a <span className="font-bold text-slate-700">$10 Amazon card</span> for every 3 friends who join our Pro or Lifetime community.
           </p>
         </div>
 
@@ -130,11 +147,11 @@ export default function ReferralDashboard() {
           <div>
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-slate-800 dark:text-slate-100">
               <Trophy className="text-amber-500 w-5 h-5" />
-              Progress
+              Completed
             </h2>
             <div className="flex justify-between items-end mb-2">
-              <div className="text-4xl font-black text-slate-900 dark:text-white transition-colors">{qualifiedCount}</div>
-              <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Confirmed Joins</div>
+              <div className="text-4xl font-black text-slate-900 dark:text-white transition-colors">{completedCount}</div>
+              <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Verified Rewards</div>
             </div>
             <div className="h-4 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden mb-3 border border-slate-200 dark:border-slate-700">
               <div 
@@ -143,11 +160,14 @@ export default function ReferralDashboard() {
               ></div>
             </div>
           </div>
-          <p className="text-xs font-bold text-slate-500 dark:text-slate-400 text-center uppercase tracking-wide transition-colors">
-            {progressToNext === 0 && qualifiedCount > 0 
-              ? "All caught up! Next join starts your next reward."
-              : `${3 - progressToNext} more to earn your next reward`}
-          </p>
+          <div className="flex justify-between items-center px-1">
+            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+              {pendingCount} Pending Verification
+            </span>
+            <span className="text-[10px] font-bold text-indigo-600 dark:text-purple-400 uppercase tracking-wide">
+              {3 - progressToNext} More to Go
+            </span>
+          </div>
         </div>
       </div>
 
@@ -213,9 +233,14 @@ export default function ReferralDashboard() {
             </h2>
             <div className="space-y-6">
               <Step num={1} title="Invite Friends" desc="Send your unique link to fellow crocheters." color="blue" />
-              <Step num={2} title="They Join Lifetime" desc="Your friend gets $5 off and joins the Lifetime community." color="green" />
-              <Step num={3} title="Verification" desc="Rewards are locked for 30 days to ensure non-canceled orders." color="amber" />
-              <Step num={4} title="Get Rewarded" desc="Once verified, we email your $10 Amazon card automatically." color="indigo" />
+              <Step num={2} title="Purchase Pro/Lifetime" desc="Friend signs up and buys Pro or Lifetime ($9.99+)." color="green" />
+              <Step num={3} title="30-Day Window" desc="Rewards process after 30 days of active paid membership." color="amber" />
+              <Step num={4} title="Get Your Reward" desc="Every 3 verified friends = $10 Amazon card via email." color="indigo" />
+            </div>
+            <div className="mt-8 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl">
+              <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed font-medium">
+                ⚠️ <span className="font-bold">Important:</span> Free tier users do not qualify. Subscriptions must remain active and past the refund window (30 days) to count. Program currently available to US residents only.
+              </p>
             </div>
           </div>
         </div>

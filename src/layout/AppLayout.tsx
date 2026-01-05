@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { DesktopNav, MobileNav } from '@/components/ui/Navigation';
-import { goToLifetimeCheckout } from '@/lib/stripe-client';
 import { ChevronRight, Home } from 'lucide-react';
 
 function Breadcrumbs() {
@@ -56,17 +55,6 @@ export default function AppLayout() {
             {/* Contextual actions could go here */}
           </div>
         </header>
-
-        {/* Global Banner */}
-        <div className="bg-yellow-400 dark:bg-yellow-600 text-yellow-900 dark:text-yellow-100 py-1.5 text-center font-bold text-[11px] shadow-inner relative z-10 transition-colors shrink-0">
-          🎁 Launch Special: Get a $10 Amazon Gift Card for referrals! 
-          <button 
-            onClick={goToLifetimeCheckout}
-            className="ml-2 underline hover:text-yellow-700 font-black uppercase"
-          >
-            Claim Now &rarr;
-          </button>
-        </div>
 
         {/* Dynamic Page Content */}
         <main id="main-content" className="flex-1 overflow-y-auto pb-16 md:pb-0 scroll-smooth">

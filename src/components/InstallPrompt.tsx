@@ -17,9 +17,10 @@ export function InstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   
   useEffect(() => {
-    // Check if already dismissed
-    const dismissed = localStorage.getItem('pwa-install-dismissed');
-    if (dismissed) return;
+    // Check if already dismissed in this session OR permanently
+    const dismissedSession = sessionStorage.getItem('pwa-install-dismissed-session');
+    const dismissedPermanent = localStorage.getItem('pwa-install-dismissed');
+    if (dismissedSession || dismissedPermanent) return;
     
     // Listen for install prompt event
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -58,7 +59,8 @@ export function InstallPrompt() {
   
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem('pwa-install-dismissed', 'true');
+    sessionStorage.setItem('pwa-install-dismissed-session', 'true');
+    localStorage.setItem('pwa-install-dismissed', 'true'); // Still keep local storage for long term
   };
   
   if (!showPrompt || !deferredPrompt) return null;

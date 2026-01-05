@@ -72,6 +72,7 @@ export const routes: RouteObject[] = [
       { path: '/hook-size-chart', element: <HookSizeChart /> },
       { path: '/support', element: <Support /> },
       { path: '/voice-help', element: <VoiceHelp /> },
+      { path: '/calculator', element: <YarnCalculator /> },
     ],
   },
   // Content & App pages (Sidebar layout)
@@ -83,7 +84,6 @@ export const routes: RouteObject[] = [
       { path: '/projects/:id', element: <ProjectDetail /> },
       { path: '/patterns', element: <PatternLibrary /> },
       { path: '/patterns/:id', element: <PatternReader /> },
-      { path: '/calculator', element: <YarnCalculator /> },
       { path: '/quick-start', element: <QuickStartWizard /> },
       { path: '/finished', element: <FinishedObjects /> },
       { path: '/settings', element: <Settings /> },

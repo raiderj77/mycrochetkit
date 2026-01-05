@@ -72,11 +72,11 @@ export default function Blog() {
   const [importedPosts, setImportedPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const categories = ['All', 'Business', 'Reference', 'Guides'];
+  const categories = ['All', 'Business', 'Reference', 'Guides', 'Community'];
 
   const fetchManifest = async () => {
     try {
-      const response = await fetch('/blog/posts.json');
+      const response = await fetch(`/blog/posts.json?t=${new Date().getTime()}`);
       if (response.ok) {
         const data: BlogPost[] = await response.json();
         // Add isExternal flag to imported posts

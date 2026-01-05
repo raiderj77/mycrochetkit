@@ -8,11 +8,10 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import { getStripe, admin } from './shared';
 import Stripe from 'stripe';
-import { qualifyReferralOnLifetimePurchase } from './qualifyReferralOnLifetime';
 
 const db = admin.firestore();
 
-// @ts-ignore
+// @ts-expect-error - firebase-functions v2 onRequest types can be tricky with rawBody
 export const stripeEvents = onRequest({ enforceAppCheck: false }, async (req, res) => {
   const sig = req.headers['stripe-signature'];
   
@@ -152,7 +151,8 @@ async function resolveUserId(session: Stripe.Checkout.Session | Stripe.Invoice |
   // Fallback: lookup by email
   const email = (session as Stripe.Checkout.Session).customer_details?.email || 
                 (session as Stripe.Checkout.Session).customer_email || 
-                (session as any).email; // Invoice doesn't have email in top level, but customer_email
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                (session as any).email; 
   
   if (email && typeof email === 'string') {
     const usersSnapshot = await db.collection('users')
@@ -210,20 +210,19 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         lifetimeSince: admin.firestore.FieldValue.serverTimestamp(),
         stripeCustomerId: session.customer ?? null,
         stripeCheckoutSessionId: session.id,
+        // Referral Program 2.0
+        purchaseDate: admin.firestore.FieldValue.serverTimestamp(),
+        referralStatus: snap.data()?.referredByCode ? 'pending' : null,
       },
       { merge: true }
     );
 
-    console.log(`Updated user ${userId} to LIFETIME plan`);
+    console.log(`Updated user ${userId} to LIFETIME plan (Pending Referral)`);
 
-    // C) Qualify referral AFTER tier update
-    try {
-      await qualifyReferralOnLifetimePurchase({
-        referredUid: userId,
-        lifetimePurchaseId: session.id,
-      });
-    } catch (err) {
-      console.error('Error qualifying referral:', err);
+    // C) Referral qualification now happens via daily cloud function
+    // But we can log for debugging
+    if (snap.data()?.referredByCode) {
+      console.log(`Referral for user ${userId} marked as pending (30-day window starts)`);
     }
   } else {
     // It's a subscription setup
@@ -250,8 +249,12 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 
   console.log(`Payment succeeded for user ${userId}: $${invoice.amount_paid / 100} (${tier})`);
 
-  // Update user profile
-  await db.collection('users').doc(userId).update({
+  // Handle potential referral qualification
+  const userRef = db.collection('users').doc(userId);
+  const userSnap = await userRef.get();
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData: Record<string, any> = {
     tier: tier,
     subscriptionTier: tier,
     subscriptionStatus: status,
@@ -260,10 +263,15 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     trialEndsAt: sub.trial_end ? new Date(sub.trial_end * 1000) : null,
     lastPaymentDate: new Date(invoice.created * 1000),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-  });
+  };
 
-  // If this is the FIRST payment after trial, could qualify for non-cancel referral here
-  // For now, Lifetime is the primary trigger, but we track billing status accurately.
+  // If they have a referral code and aren't already pending/completed/failed, mark as pending
+  if (userSnap.exists && userSnap.data()?.referredByCode && !userSnap.data()?.referralStatus) {
+    updateData.referralStatus = 'pending';
+    updateData.purchaseDate = admin.firestore.FieldValue.serverTimestamp();
+  }
+
+  await userRef.update(updateData);
 }
 
 /**

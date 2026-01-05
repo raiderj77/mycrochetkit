@@ -3,11 +3,14 @@
  * App configuration and accessibility settings
  */
 
-import { useState, useRef } from 'react';
-import { Download, Upload, Trash2, AlertTriangle, CreditCard, Crown, ExternalLink, Loader2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Download, Upload, Trash2, AlertTriangle, CreditCard, Crown, ExternalLink, Loader2, Trophy } from 'lucide-react';
 import { goToCheckout } from '@/lib/stripe-client';
 import { useSubscriptionStore } from '@/stores/subscriptionStore';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useAccessibility } from '@/contexts/AccessibilityContext';
+import { collection, query, where, onSnapshot, doc, DocumentSnapshot, QuerySnapshot } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 import {
   downloadBackup,
   importBackup,
@@ -362,8 +365,24 @@ function SubscriptionSection() {
               Manage Billing
             </button>
           )}
+
+          {tier === 'lifetime' && (
+            <a
+              href="/referrals"
+              className="flex items-center gap-2 px-6 py-2.5 bg-purple-100 text-purple-700 font-bold rounded-full hover:bg-purple-200 transition-all"
+            >
+              <Trophy className="w-4 h-4" />
+              Referral Rewards
+            </a>
+          )}
         </div>
       </div>
+
+      {tier === 'lifetime' && (
+        <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800">
+          <ReferralStatsSection />
+        </div>
+      )}
 
       {tier !== 'free' && (
         <div className="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800">
@@ -373,6 +392,103 @@ function SubscriptionSection() {
           </p>
         </div>
       )}
+    </div>
+  );
+}
+
+function ReferralStatsSection() {
+  const { user } = useAuthStore();
+  const [stats, setStats] = useState({
+    totalSignups: 0,
+    pending: 0,
+    completed: 0,
+    earnedRewards: 0,
+    nextReward: 3
+  });
+
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    // First get user's referral code
+    const userRef = doc(db, "users", user.uid);
+    const unsubUser = onSnapshot(userRef, (userSnap: DocumentSnapshot) => {
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const code = userData.referralCode || user.uid.slice(0, 8).toUpperCase();
+
+        // Then watch for signups with that code
+        const q = query(
+          collection(db, 'users'),
+          where('referredByCode', '==', code)
+        );
+
+        const unsubStats = onSnapshot(q, (snapshot: QuerySnapshot) => {
+          const completed = snapshot.docs.filter((d) => d.data().referralStatus === 'completed').length;
+          const pending = snapshot.docs.filter((d) => d.data().referralStatus === 'pending').length;
+          const rewards = Math.floor(completed / 3) * 10;
+
+          setStats({
+            totalSignups: snapshot.size,
+            completed,
+            pending,
+            earnedRewards: Math.min(100, rewards),
+            nextReward: 3 - (completed % 3)
+          });
+        });
+
+        return () => unsubStats();
+      }
+    });
+
+    return () => unsubUser();
+  }, [user?.uid]);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-amber-500" />
+          Referral Program
+        </h3>
+        <a href="/referrals" className="text-sm font-bold text-indigo-600 dark:text-purple-400 hover:underline">
+          View Detailed Dashboard &rarr;
+        </a>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+        <StatCard label="Total Signups" value={stats.totalSignups} color="slate" />
+        <StatCard label="Pending (30d)" value={stats.pending} color="amber" />
+        <StatCard label="Completed" value={stats.completed} color="green" />
+        <StatCard label="Earned" value={`$${stats.earnedRewards}`} color="indigo" />
+        <StatCard label="Until Next" value={stats.nextReward} color="purple" />
+      </div>
+
+      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800">
+        <p className="text-xs font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">How it works:</p>
+        <ol className="text-xs text-slate-600 dark:text-slate-400 space-y-1 ml-4 list-decimal">
+          <li>Share your unique referral link from the dashboard</li>
+          <li>Friend signs up and purchases any paid plan (Pro or Lifetime)</li>
+          <li>After 30 days of active membership, referral is verified</li>
+          <li>Every 3 verified referrals = $10 Amazon card (max $100, US Only)</li>
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ label, value, color }: { label: string; value: string | number; color: string }) {
+  const colors: Record<string, string> = {
+    slate: 'text-slate-600 dark:text-slate-400',
+    amber: 'text-amber-600 dark:text-amber-400',
+    green: 'text-green-600 dark:text-green-400',
+    indigo: 'text-indigo-600 dark:text-purple-400',
+    purple: 'text-purple-600 dark:text-indigo-400',
+  };
+
+  return (
+    <div className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-100 dark:border-slate-800 text-center shadow-sm">
+      <div className={`text-xl font-black mb-0.5 ${colors[color]}`}>{value}</div>
+      <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tight">{label}</div>
     </div>
   );
 }

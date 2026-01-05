@@ -5,14 +5,22 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Maximize2, X, Plus, Minus, RotateCcw } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 
-// Configure PDF.js worker - use local worker from node_modules
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
-).toString();
+// Set worker source for better performance and thread management
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+
+import { StickyNote, Trash2, Edit3 } from 'lucide-react';
+
+interface PDFNote {
+  id: string;
+  page: number;
+  x: number;
+  y: number;
+  text: string;
+}
 
 interface PDFViewerProps {
   pdfBase64: string;
@@ -21,7 +29,7 @@ interface PDFViewerProps {
 
 export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [pdf, setPdf] = useState<any>(null);
+  const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [numPages, setNumPages] = useState(0);
   const [scale, setScale] = useState(1.5);
@@ -31,6 +39,11 @@ export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
   const [showHighlighter, setShowHighlighter] = useState(false);
   const [highlighterTop, setHighlighterTop] = useState(100);
   const [isDragging, setIsDragging] = useState(false);
+  const [notes, setNotes] = useState<PDFNote[]>([]);
+  const [isAddingNote, setIsAddingNote] = useState(false);
+  const [highlightColor, setHighlightColor] = useState('rgba(255, 255, 0, 0.4)'); // Default yellow
+  const [showQuickRef, setShowQuickRef] = useState(false);
+  const [repeatCounter, setRepeatCounter] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Load PDF document
@@ -100,7 +113,8 @@ export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
           viewport: viewport,
         };
         
-        await page.render(renderContext).promise;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (page as any).render(renderContext).promise;
       } catch (err) {
         console.error('Error rendering page:', err);
       }
@@ -146,6 +160,33 @@ export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
   
   const fitToWidth = () => {
     setScale(1.5);
+  };
+
+  const addNote = (e: React.MouseEvent) => {
+    if (!isAddingNote || !containerRef.current) return;
+    
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const newNote: PDFNote = {
+      id: Math.random().toString(36).substr(2, 9),
+      page: currentPage,
+      x,
+      y,
+      text: 'New Note'
+    };
+    
+    setNotes([...notes, newNote]);
+    setIsAddingNote(false);
+  };
+
+  const deleteNote = (id: string) => {
+    setNotes(notes.filter(n => n.id !== id));
+  };
+
+  const updateNoteText = (id: string, text: string) => {
+    setNotes(notes.map(n => n.id === id ? { ...n, text } : n));
   };
   
   if (isLoading) {
@@ -200,6 +241,32 @@ export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
         {/* Tools */}
         <div className="flex items-center gap-2 border-l border-neutral-300 pl-4 dark:border-neutral-600">
           <button
+            onClick={() => setIsAddingNote(!isAddingNote)}
+            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              isAddingNote 
+                ? 'bg-amber-500 text-white' 
+                : 'bg-white text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200'
+            }`}
+          >
+            <StickyNote className="h-4 w-4" />
+            {isAddingNote ? 'Cancel Note' : 'Add Note'}
+          </button>
+          
+          <div className="flex items-center gap-1 bg-white rounded-lg p-1 dark:bg-neutral-700">
+            {['rgba(255, 255, 0, 0.4)', 'rgba(0, 255, 0, 0.4)', 'rgba(0, 200, 255, 0.4)', 'rgba(255, 0, 255, 0.4)'].map(color => (
+              <button 
+                key={color}
+                onClick={() => {
+                  setHighlightColor(color);
+                  setShowHighlighter(true);
+                }}
+                className={`w-6 h-6 rounded-full border-2 transition-all ${highlightColor === color ? 'border-neutral-900 scale-110' : 'border-transparent'}`}
+                style={{ backgroundColor: color.replace('0.4', '1') }}
+              />
+            ))}
+          </div>
+
+          <button
             onClick={() => setShowHighlighter(!showHighlighter)}
             className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
               showHighlighter 
@@ -210,6 +277,47 @@ export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
             <Maximize2 className="h-4 w-4 rotate-45" />
             {showHighlighter ? 'Hide Highlighter' : 'Show Highlighter'}
           </button>
+          
+          <button
+            onClick={() => setShowQuickRef(!showQuickRef)}
+            className={`flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              showQuickRef 
+                ? 'bg-indigo-600 text-white' 
+                : 'bg-white text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-200'
+            }`}
+          >
+            <Edit3 className="h-4 w-4" />
+            Quick Ref
+          </button>
+        </div>
+
+        {/* Repeat Counters (Advanced Tool) */}
+        <div className="flex items-center gap-4 bg-white dark:bg-neutral-700 px-4 py-2 rounded-xl border border-neutral-200 dark:border-neutral-600">
+          <span className="text-xs font-bold text-neutral-500 uppercase">Repeat Counter</span>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => setRepeatCounter(Math.max(0, repeatCounter - 1))}
+              className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-200"
+              aria-label="Decrease repeat"
+            >
+              <Minus className="w-4 h-4" />
+            </button>
+            <span className="text-xl font-black w-8 text-center">{repeatCounter}</span>
+            <button 
+              onClick={() => setRepeatCounter(repeatCounter + 1)}
+              className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center hover:bg-neutral-200"
+              aria-label="Increase repeat"
+            >
+              <Plus className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => setRepeatCounter(0)}
+              className="ml-2 w-8 h-8 rounded-lg text-neutral-400 hover:text-red-500"
+              aria-label="Reset repeat"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          </div>
         </div>
         
         {/* Zoom Controls */}
@@ -244,22 +352,49 @@ export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
       {/* PDF Canvas Container */}
       <div 
         ref={containerRef}
-        className="relative overflow-auto rounded-lg border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900"
+        className={`relative overflow-auto rounded-lg border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-900 ${isAddingNote ? 'cursor-crosshair' : ''}`}
         onMouseMove={handleMouseMove}
         onTouchMove={handleTouchMove}
         onMouseUp={() => setIsDragging(false)}
         onTouchEnd={() => setIsDragging(false)}
+        onClick={addNote}
       >
         <canvas ref={canvasRef} className="mx-auto shadow-2xl" />
+
+        {/* Notes */}
+        {notes.filter(n => n.page === currentPage).map(note => (
+          <div 
+            key={note.id}
+            style={{ left: note.x, top: note.y }}
+            className="absolute z-20 group"
+          >
+            <div className="relative bg-amber-100 dark:bg-amber-900/80 p-2 rounded shadow-lg border border-amber-300 dark:border-amber-700 min-w-[120px]">
+              <div className="flex justify-between items-center mb-1 border-b border-amber-200 dark:border-amber-800 pb-1">
+                <Edit3 className="w-3 h-3 text-amber-700 dark:text-amber-400" />
+                <button onClick={(e) => { e.stopPropagation(); deleteNote(note.id); }}>
+                  <Trash2 className="w-3 h-3 text-red-500 hover:text-red-700" />
+                </button>
+              </div>
+              <textarea 
+                value={note.text}
+                onChange={(e) => updateNoteText(note.id, e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-transparent text-xs w-full focus:outline-none resize-none overflow-hidden"
+                rows={2}
+              />
+            </div>
+          </div>
+        ))}
 
         {/* Chart Highlighter Bar */}
         {showHighlighter && (
           <div
             style={{ 
               top: `${highlighterTop}px`,
-              cursor: isDragging ? 'grabbing' : 'grab'
+              cursor: isDragging ? 'grabbing' : 'grab',
+              backgroundColor: highlightColor
             }}
-            className="absolute left-0 right-0 z-10 flex h-10 items-center justify-center bg-primary-500/30 backdrop-blur-[2px] border-y-2 border-primary-500 transition-shadow duration-150 select-none shadow-[0_0_15px_rgba(124,58,237,0.3)]"
+            className="absolute left-0 right-0 z-10 flex h-10 items-center justify-center backdrop-blur-[2px] border-y-2 border-primary-500 transition-all duration-150 select-none shadow-[0_0_15px_rgba(124,58,237,0.3)]"
             onMouseDown={(e) => {
               e.preventDefault();
               setIsDragging(true);
@@ -279,8 +414,40 @@ export function PDFViewer({ pdfBase64, onError }: PDFViewerProps) {
 
       {showHighlighter && (
         <p className="text-center text-xs text-neutral-500 dark:text-neutral-400">
-          Tip: Drag the purple bar to follow along with your pattern rows.
+          Tip: Drag the highlighter bar to follow along. Switch colors above for different section types.
         </p>
+      )}
+
+      {/* Quick Ref Overlay */}
+      {showQuickRef && (
+        <div className="fixed bottom-24 right-8 z-40 w-64 bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl border border-neutral-200 dark:border-neutral-700 p-4 animate-in slide-in-from-right-4">
+          <div className="flex items-center justify-between mb-3 border-b border-neutral-100 dark:border-neutral-700 pb-2">
+            <h4 className="font-bold text-sm flex items-center gap-2">
+              <StickyNote className="w-4 h-4 text-indigo-500" />
+              Quick Reference
+            </h4>
+            <button onClick={() => setShowQuickRef(false)}>
+              <X className="w-4 h-4 text-neutral-400" />
+            </button>
+          </div>
+          <div className="max-h-60 overflow-y-auto space-y-2">
+            {notes.length === 0 ? (
+              <p className="text-xs text-neutral-500 italic">No notes added yet. Use 'Add Note' to pin details to the pattern.</p>
+            ) : (
+              notes.map(note => (
+                <div key={note.id} className="text-xs p-2 bg-neutral-50 dark:bg-neutral-900/50 rounded-lg border border-neutral-100 dark:border-neutral-700">
+                  <div className="flex justify-between items-center mb-1 opacity-60">
+                    <span>Page {note.page}</span>
+                  </div>
+                  {note.text}
+                </div>
+              ))
+            )}
+          </div>
+          <div className="mt-3 pt-2 border-t border-neutral-100 dark:border-neutral-700">
+            <p className="text-[10px] text-neutral-400">Keep your most important row counts and color changes here.</p>
+          </div>
+        </div>
       )}
     </div>
   );

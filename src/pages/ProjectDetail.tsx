@@ -11,6 +11,7 @@ import { ProgressTimeline } from '@/components/ProgressTimeline';
 import ProjectTimer from '@/components/ProjectTimer';
 import SellerControls from '@/components/SellerControls';
 import { shareContent } from '@/lib/share';
+import { MaterialsManager } from '@/components/MaterialsManager';
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -36,9 +37,8 @@ export default function ProjectDetail() {
   }, []);
   
   useEffect(() => {
-    const firstCounterId = project?.counters?.[0]?.id;
-    if (firstCounterId && !activeCounterId) {
-      setActiveCounterId(firstCounterId);
+    if (project?.counters && project.counters.length > 0 && !activeCounterId) {
+      setActiveCounterId(project.counters[0].id);
     }
   }, [project?.counters, activeCounterId]);
   
@@ -177,8 +177,11 @@ export default function ProjectDetail() {
             initialTotalSeconds={project.totalSeconds || 0} 
             initialHourlyRate={project.hourlyRate || 0}
             initialMaterialCost={project.materialCost || 0}
+            isSyncedFromStash={(project.yarnsUsed || []).length > 0}
           />
         </div>
+
+        <MaterialsManager project={project} />
         
         <SellerControls
           projectId={project.id}

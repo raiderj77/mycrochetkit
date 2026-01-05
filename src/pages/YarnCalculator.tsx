@@ -5,7 +5,9 @@
  */
 
 import { useState } from 'react';
-import { Calculator, DollarSign, Package, Clock, AlertCircle } from 'lucide-react';
+import { Calculator, DollarSign, Package, Clock, AlertCircle, ArrowRight } from 'lucide-react';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { Link } from 'react-router-dom';
 import {
   calculateRectangularYardage,
   calculateCircularYardage,
@@ -18,6 +20,7 @@ import {
 type ProjectShape = 'rectangular' | 'circular';
 
 export default function YarnCalculator() {
+  const { user } = useAuthStore();
   const [shape, setShape] = useState<ProjectShape>('rectangular');
   const [projectType, setProjectType] = useState('blanket');
   
@@ -373,6 +376,19 @@ export default function YarnCalculator() {
               💡 <strong>Pro Tip:</strong> Always buy 10-20% extra yarn to account for gauge variations and mistakes. It's better to have too much than run out mid-project!
             </p>
           </div>
+
+          {!user && (
+            <div className="card bg-gradient-to-r from-indigo-600 to-purple-600 border-none text-white p-8 text-center shadow-xl">
+              <h3 className="text-2xl font-black mb-2">Want to save your projects?</h3>
+              <p className="opacity-90 mb-6 max-w-md mx-auto">Sign up for a free account to save your yardage calculations and keep your stash updated across devices.</p>
+              <Link 
+                to="/signup" 
+                className="inline-flex items-center gap-2 bg-white text-indigo-600 px-8 py-4 rounded-xl font-bold hover:bg-neutral-50 transition-colors"
+              >
+                Create Free Account <ArrowRight className="w-5 h-5" />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

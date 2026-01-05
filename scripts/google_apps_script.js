@@ -155,33 +155,33 @@ function setupAnalyticsSheet() {
 }
 
 /**
- * 2. Start Automated Checking (weekly)
- * Sets a trigger to run every Monday at 10 AM
+ * 2. Start Automated Checking (daily)
+ * Sets a trigger to run every day at 10 AM
  */
-function setupWeeklyCitationCheck() {
+function setupDailyCitationCheck() {
   // Check if trigger already exists
   const triggers = ScriptApp.getProjectTriggers();
   for (let i = 0; i < triggers.length; i++) {
-    if (triggers[i].getHandlerFunction() === 'weeklyCitationCheck') {
-      Logger.log('ℹ️ Weekly citation check trigger already exists.');
+    if (triggers[i].getHandlerFunction() === 'dailyCitationCheck') {
+      Logger.log('ℹ️ Daily citation check trigger already exists.');
       return;
     }
   }
   
-  ScriptApp.newTrigger('weeklyCitationCheck')
+  ScriptApp.newTrigger('dailyCitationCheck')
     .timeBased()
-    .onWeekDay(ScriptApp.WeekDay.MONDAY)
+    .everyDays(1)
     .atHour(10)
     .create();
     
-  Logger.log('✅ Success: Weekly citation checking scheduled for Mondays at 10 AM.');
+  Logger.log('✅ Success: Daily citation checking scheduled for 10 AM.');
 }
 
 /**
- * Weekly Citation Check Handler
+ * Daily Citation Check Handler
  * (Checks if Google has indexed your posts - simple check for now)
  */
-function weeklyCitationCheck() {
+function dailyCitationCheck() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Sheet1'); // Assuming original sheet is Sheet1
   if (!sheet) return;
   

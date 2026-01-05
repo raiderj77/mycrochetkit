@@ -21,3 +21,6 @@ export { directCheckout as lifetimePurchase } from './lifetime-checkout';
 
 // Export referral code generation on user creation
 export { onAuthUserCreated } from './referrals';
+
+// Export daily referral check
+export { checkPendingReferrals } from './referralDailyCheck';

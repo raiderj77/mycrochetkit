@@ -70,7 +70,7 @@ export default function PricingTable({ showAnnualDefault = false }: PricingTable
       },
       icon: Zap,
       color: 'indigo',
-      description: '30-Day Money-Back Guarantee',
+      description: '✨ 30-Day Risk-Free Guarantee',
       popular: true,
       features: [
         { text: '100 active projects', included: true },
@@ -101,6 +101,7 @@ export default function PricingTable({ showAnnualDefault = false }: PricingTable
         { text: 'All future features', included: true },
         { text: 'Founding member badge', included: true },
         { text: '1GB cloud storage', included: true, highlight: true },
+        { text: 'Add-on storage available later', included: true, highlight: false },
         { text: '0% commission marketplace', included: true, highlight: true },
         { text: 'Referral rewards program', included: true },
       ],
@@ -163,6 +164,15 @@ export default function PricingTable({ showAnnualDefault = false }: PricingTable
           isLifetime={true}
           showBonusBadge={true}
         />
+      </div>
+      
+      <div className="mt-8 text-center px-4">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          🛡️ <strong>30-Day Risk-Free Guarantee:</strong> If you're not wowed in your first month, we'll refund your payment in full. No questions asked.
+        </p>
+        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-4">
+          * Referral program currently available to US residents only. Referees must remain active for 30 days to qualify.
+        </p>
       </div>
     </div>
   );

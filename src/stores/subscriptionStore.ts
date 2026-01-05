@@ -228,9 +228,11 @@ export const useSubscriptionStore = create<SubscriptionStore>((set, get) => ({
       
       if (userDoc.exists()) {
         const data = userDoc.data();
+        const detectedTier = (data.tier || data.subscriptionTier || data.plan || 'free').toLowerCase() as SubscriptionTier;
+        
         set({
-          tier: data.subscriptionTier || 'free',
-          status: data.subscriptionStatus || null,
+          tier: detectedTier === 'lifetime' || detectedTier === 'pro' ? detectedTier : 'free',
+          status: data.subscriptionStatus || data.status || null,
           trialEndsAt: data.trialEndsAt?.toDate() || null,
           stripeCustomerId: data.stripeCustomerId || null,
           stripeSubscriptionId: data.stripeSubscriptionId || null,

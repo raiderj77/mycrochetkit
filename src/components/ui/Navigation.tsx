@@ -29,6 +29,7 @@ const navItems = [
   { to: '/marketplace', icon: ShoppingCart, label: 'Marketplace' },
   { to: '/glossary', icon: Book, label: 'Glossary' },
   { to: '/blog', icon: BookOpen, label: 'Blog' },
+  { to: '/referrals', icon: Trophy, label: 'Referrals' },
   { to: '/roadmap', icon: Map, label: 'Roadmap' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];

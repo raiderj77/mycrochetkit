@@ -13,7 +13,7 @@ export default function Hero({ foundersOpen }: HeroProps) {
   return (
     <section className="relative overflow-hidden bg-white dark:bg-slate-950 py-20 lg:py-32 transition-colors">
       {/* Decorative Blobs */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden="true">
         <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 dark:bg-purple-900/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
         <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-200 dark:bg-yellow-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 dark:bg-pink-900/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
@@ -85,8 +85,8 @@ export default function Hero({ foundersOpen }: HeroProps) {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-white font-bold border border-slate-700">−</div>
-                      <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-white font-bold border border-slate-700">+</div>
+                      <button className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-white font-bold border border-slate-700" aria-label="Decrease row mockup">−</button>
+                      <button className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-white font-bold border border-slate-700" aria-label="Increase row mockup">+</button>
                     </div>
                   </div>
 

@@ -31,7 +31,12 @@ export default function Signup() {
     const userRef = doc(db, 'users', user.uid);
     setDoc(
       userRef,
-      { referredByCode: stored, createdAt: serverTimestamp() },
+      { 
+        referredByCode: stored || null,
+        tier: 'free',
+        referralStatus: null,
+        createdAt: serverTimestamp() 
+      },
       { merge: true }
     ).then(() => {
       // Clear after write to prevent sticky referral across accounts
@@ -44,7 +49,7 @@ export default function Signup() {
     try {
       await signUp(email, password, displayName);
       navigate('/community');
-    } catch (err) {
+    } catch {
       // Error handled by store
     }
   };

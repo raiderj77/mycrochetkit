@@ -9,6 +9,8 @@ import { usePatternStore } from '@/stores/patternStore';
 import { AddPatternDialog } from '@/components/AddPatternDialog';
 import { PatternCard } from '@/components/PatternCard';
 import type { SkillLevel } from '@/types/models';
+import { starterPatterns } from '@/utils/starterPatternsData';
+import { Sparkles, Download, Check } from 'lucide-react';
 
 type FilterSkill = 'all' | SkillLevel;
 
@@ -20,6 +22,26 @@ export default function PatternLibrary() {
   const [filterSkill, setFilterSkill] = useState<FilterSkill>('all');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [sortBy, setSortBy] = useState<'title' | 'author' | 'added'>('added');
+  const [activeTab, setActiveTab] = useState<'my-patterns' | 'discover'>('my-patterns');
+  const [importingId, setImportingId] = useState<string | null>(null);
+
+  const addPattern = usePatternStore((state) => state.addPattern);
+  
+  const handleImportPattern = async (starter: typeof starterPatterns[0]) => {
+    setImportingId(starter.id);
+    
+    // Omit fields that are handled by the store
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, isFavorite, ...patternData } = starter;
+    
+    // addPattern expects Omit<Pattern, 'id' | 'dateAdded' | 'lastAccessed'>
+    await addPattern(patternData as unknown as Parameters<typeof addPattern>[0]); 
+    
+    setTimeout(() => {
+      setImportingId(null);
+      setActiveTab('my-patterns');
+    }, 1000);
+  };
   
   // Filter patterns
   let filteredPatterns = patterns;
@@ -73,6 +95,20 @@ export default function PatternLibrary() {
             {patterns.length} pattern{patterns.length !== 1 ? 's' : ''} 
             {favoritesCount > 0 && ` • ${favoritesCount} favorite${favoritesCount !== 1 ? 's' : ''}`}
           </p>
+        </div>
+        <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
+          <button 
+            onClick={() => setActiveTab('my-patterns')}
+            className={`px-4 py-2 text-sm font-bold rounded-md transition-all ${activeTab === 'my-patterns' ? 'bg-white shadow dark:bg-neutral-700 text-primary-600' : 'text-neutral-500'}`}
+          >
+            My Library
+          </button>
+          <button 
+            onClick={() => setActiveTab('discover')}
+            className={`px-4 py-2 text-sm font-bold rounded-md transition-all flex items-center gap-2 ${activeTab === 'discover' ? 'bg-white shadow dark:bg-neutral-700 text-indigo-600' : 'text-neutral-500'}`}
+          >
+            <Sparkles className="h-4 w-4" /> Discover
+          </button>
         </div>
         <button
           onClick={() => setShowAddDialog(true)}
@@ -185,10 +221,52 @@ export default function PatternLibrary() {
             )}
           </div>
         </div>
-      ) : (
+      ) : activeTab === 'my-patterns' ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredPatterns.map((pattern) => (
             <PatternCard key={pattern.id} pattern={pattern} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {starterPatterns.map((pattern) => (
+            <div key={pattern.id} className="card group hover:border-indigo-500/50 transition-all flex flex-col h-full">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
+                    pattern.skillLevel === 'beginner' ? 'bg-green-100 text-green-700' : 'bg-indigo-100 text-indigo-700'
+                  }`}>
+                    {pattern.skillLevel}
+                  </span>
+                  <span className="text-[10px] font-black uppercase bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded">
+                    {pattern.category}
+                  </span>
+                </div>
+                <h3 className="text-lg font-black text-neutral-900 dark:text-white group-hover:text-indigo-600 transition-colors">
+                  {pattern.title}
+                </h3>
+                <p className="text-sm text-neutral-500 mt-2 line-clamp-2">
+                  {pattern.notes}
+                </p>
+                <div className="flex flex-wrap gap-1 mt-4">
+                  {pattern.tags.slice(0, 3).map(tag => (
+                    <span key={tag} className="text-[10px] text-neutral-400">#{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <button 
+                onClick={() => handleImportPattern(pattern)}
+                disabled={importingId === pattern.id}
+                className="mt-6 w-full py-3 bg-neutral-900 dark:bg-indigo-600 text-white rounded-xl font-bold text-xs tracking-widest flex items-center justify-center gap-2 hover:bg-neutral-800 dark:hover:bg-indigo-500 transition-all disabled:opacity-50"
+              >
+                {importingId === pattern.id ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Download className="h-4 w-4" />
+                )}
+                {importingId === pattern.id ? 'IMPORTED' : 'IMPORT TO LIBRARY'}
+              </button>
+            </div>
           ))}
         </div>
       )}

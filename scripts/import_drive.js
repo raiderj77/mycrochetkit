@@ -260,8 +260,17 @@ async function runEliteImport() {
 
     const files = filesRes.data.files || [];
     
-    // Always start with empty mapping
+    // Load existing mapping if it exists to prevent wiping manual posts
     let postsMapping = [];
+    const manifestPath = path.join(BLOG_DIR, 'posts.json');
+    if (fs.existsSync(manifestPath)) {
+      try {
+        postsMapping = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        console.log(`📜 Loaded ${postsMapping.length} existing posts from manifest.`);
+      } catch (e) {
+        console.warn('⚠️ Warning: Could not parse existing posts.json, starting fresh.');
+      }
+    }
 
     // If we have no files, we still want to update the sitemap for static pages
     if (files.length === 0) {
@@ -287,11 +296,24 @@ async function runEliteImport() {
         .replace(/([A-Za-z])(for|with|the|and|your|from|to|is|using)\b/gi, '$1 $2')
         .replace(/\b\w/g, c => c.toUpperCase());
       
+      const publishDateIso = new Date(file.createdTime).toISOString().split('T')[0];
+      
+      const filePath = path.join(BLOG_DIR, file.name);
+      let isManual = false;
+      if (fs.existsSync(filePath)) {
+        const existingFileContent = fs.readFileSync(filePath, 'utf8');
+        if (existingFileContent.includes('MCK_MANUAL_POST')) {
+          console.log(`🛡️ Skipping sync for manual post (content & metadata): ${file.name}`);
+          isManual = true;
+        }
+      }
+
+      if (isManual) continue;
+
       const description = extractDescription(rawContent, title);
       const thumbnail = extractThumbnail(rawContent, file.name);
       const readingTime = calculateReadingTime(rawContent);
       const publishDateStr = new Date(file.createdTime).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-      const publishDateIso = new Date(file.createdTime).toISOString().split('T')[0];
       const schema = generateSchema(title, description, file.name, publishDateIso, thumbnail);
       const shareUrl = encodeURIComponent(`${SITE_URL}/blog/${file.name}`);
       
@@ -314,9 +336,9 @@ async function runEliteImport() {
         .replaceAll('{{SHARE_URL}}', shareUrl)
         .replace('{{CONTENT}}', cleanInjectedContent);
 
-      fs.writeFileSync(path.join(BLOG_DIR, file.name), finalHtml);
+      fs.writeFileSync(filePath, finalHtml);
       
-      postsMapping.push({
+      const postEntry = {
         id: file.id,
         path: `/blog/${file.name}`,
         title: title,
@@ -328,7 +350,14 @@ async function runEliteImport() {
         tags: ['crochet', 'imported'],
         coverImage: thumbnail,
         isExternal: true
-      });
+      };
+
+      const existingIndex = postsMapping.findIndex(p => p.id === file.id || p.path === postEntry.path);
+      if (existingIndex !== -1) {
+        postsMapping[existingIndex] = { ...postsMapping[existingIndex], ...postEntry };
+      } else {
+        postsMapping.push(postEntry);
+      }
     }
 
     // --- Save Manifest for Frontend ---
