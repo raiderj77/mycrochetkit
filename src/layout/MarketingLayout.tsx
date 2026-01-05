@@ -30,7 +30,8 @@ export default function MarketingLayout() {
             <NavLink to="/login" className="text-neutral-600 hover:text-primary-600 transition-colors font-medium">
               Sign In
             </NavLink>
-          </nav>
+          <AuthButton />
+</nav>
 
           <div className="flex items-center gap-4">
             <ThemeToggle />
