@@ -7,6 +7,7 @@
 import { Outlet, NavLink, useLocation } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import Footer from "../components/Footer";
+import { AuthButton } from '@/components/AuthButton';
 
 export default function MarketingLayout() {
   const { pathname } = useLocation();
