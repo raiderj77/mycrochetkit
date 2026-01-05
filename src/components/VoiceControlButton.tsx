@@ -46,25 +46,34 @@ export function VoiceControlButton({ onCommand }: VoiceControlButtonProps) {
           </div>
         )}
         
-        {/* Microphone Button */}
+        {/* Microphone Button - FIXED: 44px minimum tap target (WCAG) */}
         <button
           onClick={handleToggle}
-          className={`tap-target relative h-14 w-14 rounded-full shadow-lg transition-all ${
-            isListening
-              ? 'bg-red-600 text-white hover:bg-red-700'
-              : 'bg-primary-600 text-white hover:bg-primary-700'
-          }`}
+          className={`
+            tap-target relative
+            h-[56px] w-[56px]
+            sm:h-14 sm:w-14
+            rounded-full
+            shadow-lg
+            transition-all
+            flex items-center justify-center
+            ${
+              isListening
+                ? 'bg-red-600 text-white hover:bg-red-700'
+                : 'bg-primary-600 text-white hover:bg-primary-700'
+            }
+          `}
           aria-label={isListening ? 'Stop voice control' : 'Start voice control'}
           title={isListening ? 'Stop voice control' : 'Start voice control'}
         >
           {isListening ? (
             <>
-              <MicOff className="h-6 w-6" />
+              <MicOff className="h-6 w-6 sm:h-6 sm:w-6" />
               {/* Pulsing animation */}
               <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-red-400 opacity-75" />
             </>
           ) : (
-            <Mic className="h-6 w-6" />
+            <Mic className="h-6 w-6 sm:h-6 sm:w-6" />
           )}
         </button>
         
