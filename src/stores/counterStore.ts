@@ -7,6 +7,23 @@
 import { create } from 'zustand';
 import { db } from '@/db/schema';
 import type { Counter } from '@/types/models';
+// ============ DEBOUNCE FIX FOR VOICE DOUBLE-INCREMENT ============
+const incrementTimestamps = new Map<string, number>();
+const DEBOUNCE_MS = 300;
+
+function canIncrement(counterId: string): boolean {
+  const lastTime = incrementTimestamps.get(counterId) || 0;
+  const now = Date.now();
+  
+  if (now - lastTime < DEBOUNCE_MS) {
+    console.warn(`[Counter] Debounce: Ignoring duplicate increment for ${counterId}`);
+    return false;
+  }
+  
+  incrementTimestamps.set(counterId, now);
+  return true;
+}
+// ============ END DEBOUNCE FIX ============
 
 interface CounterStore {
   // State
