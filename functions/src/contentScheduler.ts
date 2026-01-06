@@ -22,10 +22,10 @@ const db = admin.firestore();
  * 
  * Security: Requires Firebase Authentication or API key
  */
-export const runContentScheduler = functions.https.onCall(async (data, context) => {
+export const runContentScheduler = functions.https.onCall(async (data, context: any) => {
   try {
     // Verify user is authenticated
-    if (!context.auth) {
+    if (!context?.auth) {
       throw new functions.https.HttpsError(
         'unauthenticated',
         'Must be authenticated to run scheduler'
@@ -33,7 +33,7 @@ export const runContentScheduler = functions.https.onCall(async (data, context) 
     }
 
     // Verify user is admin (optional - add your own logic)
-    const userDoc = await db.collection('users').doc(context.auth.uid).get();
+    const userDoc = await db.collection('users').doc(context?.auth?.uid || '').get();
     const isAdmin = userDoc.data()?.isAdmin === true;
 
     if (!isAdmin) {
@@ -98,66 +98,64 @@ export const runContentScheduler = functions.https.onCall(async (data, context) 
 });
 
 /**
- * Cloud Scheduler trigger (runs every Sunday at 2 AM UTC)
- * Set up in Google Cloud Console to call this function
+ * Cloud Scheduler trigger via HTTP
+ * Set up Cloud Scheduler to call this endpoint every Sunday at 2 AM UTC
  */
-export const scheduledContentPublish = functions.pubsub
-  .schedule('0 2 * * 0') // Every Sunday 2 AM UTC
-  .timeZone('UTC')
-  .onRun(async (context) => {
-    try {
-      console.log('📅 Scheduled content publish starting...');
+export const scheduledContentPublish = functions.https.onRequest(async (req, res) => {
+  try {
+    console.log('📅 Scheduled content publish starting...');
 
-      // Fetch trends
-      const trends = await fetchRedditTrends();
-      console.log(`✅ Discovered ${trends.length} trends`);
+    // Fetch trends
+    const trends = await fetchRedditTrends();
+    console.log(`✅ Discovered ${trends.length} trends`);
 
-      // Generate articles
-      const articles = await generateArticles(trends.slice(0, 5));
-      console.log(`✅ Generated ${articles.length} articles`);
+    // Generate articles
+    const articles = await generateArticles(trends.slice(0, 5));
+    console.log(`✅ Generated ${articles.length} articles`);
 
-      // Save articles
-      const saved = await saveArticles(articles);
-      console.log(`✅ Saved ${saved} articles`);
+    // Save articles
+    const saved = await saveArticles(articles);
+    console.log(`✅ Saved ${saved} articles`);
 
-      // Update blog manifest
-      await updateBlogManifest(articles);
+    // Update blog manifest
+    await updateBlogManifest(articles);
 
-      const report = {
-        runDate: new Date(),
-        trendsDiscovered: trends.length,
-        articlesGenerated: articles.length,
-        articlesSaved: saved,
-        status: 'success',
-        message: 'Scheduled publish completed',
-        isScheduled: true,
-      };
+    const report = {
+      runDate: new Date(),
+      trendsDiscovered: trends.length,
+      articlesGenerated: articles.length,
+      articlesSaved: saved,
+      status: 'success',
+      message: 'Scheduled publish completed',
+      isScheduled: true,
+    };
 
-      await db.collection('scheduler-reports').add(report);
+    await db.collection('scheduler-reports').add(report);
 
-      console.log('✅ Scheduled publish completed');
-      return null;
+    console.log('✅ Scheduled publish completed');
+    res.json(report);
 
-    } catch (error) {
-      console.error('❌ Scheduled publish error:', error);
+  } catch (error) {
+    console.error('❌ Scheduled publish error:', error);
 
-      await db.collection('scheduler-reports').add({
-        runDate: new Date(),
-        status: 'error',
-        message: error instanceof Error ? error.message : 'Unknown error',
-        isScheduled: true,
-      });
+    const errorReport = {
+      runDate: new Date(),
+      status: 'error',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      isScheduled: true,
+    };
 
-      throw error;
-    }
-  });
+    await db.collection('scheduler-reports').add(errorReport);
+    res.status(500).json(errorReport);
+  }
+});
 
 /**
  * Fetch trending topics from Reddit
  */
 async function fetchRedditTrends(): Promise<any[]> {
   try {
-    const trends = [];
+    const trends: any[] = [];
     const subreddits = ['r/Crochet', 'r/Amigurumi', 'r/crafts'];
 
     for (const subreddit of subreddits) {
@@ -271,9 +269,9 @@ async function updateBlogManifest(articles: any[]): Promise<void> {
 /**
  * Get scheduler status
  */
-export const getSchedulerStatus = functions.https.onCall(async (data, context) => {
+export const getSchedulerStatus = functions.https.onCall(async (data, context: any) => {
   try {
-    if (!context.auth) {
+    if (!context?.auth) {
       throw new functions.https.HttpsError(
         'unauthenticated',
         'Must be authenticated'

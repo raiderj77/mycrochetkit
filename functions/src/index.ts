@@ -31,3 +31,9 @@ export {
   scheduledContentPublish, 
   getSchedulerStatus 
 } from './contentScheduler';
+
+// Export daily scheduler functions
+export { 
+  publishDailyArticle, 
+  getDailySchedulerStatus 
+} from './dailyScheduler';
