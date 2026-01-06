@@ -64,7 +64,7 @@ class ContentGenerator {
    * Generate SEO-optimized title
    * Rules: keyword in first 60 chars, compelling, includes number if possible
    */
-  private generateSEOTitle(topic: string, keyword: string): string {
+  private generateSEOTitle(_topic: string, keyword: string): string {
     const templates = [
       `${keyword}: Complete Guide for Crocheters`,
       `${keyword} in 2026: Everything You Need to Know`,
@@ -162,7 +162,7 @@ class ContentGenerator {
   /**
    * Generate SEO-optimized FAQ schema
    */
-  generateFAQ(topic: string, keyword: string): Array<{ question: string; answer: string }> {
+  generateFAQ(_topic: string, keyword: string): Array<{ question: string; answer: string }> {
     return [
       {
         question: `What is ${keyword}?`,

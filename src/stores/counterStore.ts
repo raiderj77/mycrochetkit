@@ -174,7 +174,7 @@ export const useCounterStore = create<CounterStore>((set, get) => ({
     });
     
     await persistCounterToProject(counterId, updatedCounter);
-    console.log(`[Counter] Incremented ${counterId} to ${newValue}`);
+    console.log(`[Counter] Incremented ${counterId} to ${updatedCounter.current}`);
   },
   
   // Add New Counter

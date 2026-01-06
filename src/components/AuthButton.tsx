@@ -4,7 +4,8 @@ import { LogOut, User, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
 export function AuthButton() {
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
+  const logout = useAuthStore.getState().signOut;
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
 
