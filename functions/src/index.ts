@@ -24,3 +24,10 @@ export { onAuthUserCreated } from './referrals';
 
 // Export daily referral check
 export { checkPendingReferrals } from './referralDailyCheck';
+
+// Export content scheduler functions
+export { 
+  runContentScheduler, 
+  scheduledContentPublish, 
+  getSchedulerStatus 
+} from './contentScheduler';
