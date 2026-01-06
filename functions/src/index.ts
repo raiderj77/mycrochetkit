@@ -37,3 +37,11 @@ export {
   publishDailyArticle, 
   getDailySchedulerStatus 
 } from './dailyScheduler';
+
+// Export social media automation functions
+export {
+  socialMediaDailyPost,
+  monitorRedditQuestions,
+  monitorTwitterEngagement,
+  getSocialMediaMetrics
+} from './socialMediaAutomation';
