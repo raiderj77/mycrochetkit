@@ -52,3 +52,6 @@ e2e/.auth/*
 
 # SEO Blog Automation
 scripts/service-account.json
+.env.staging  
+.env.staging.local  
+.env.production.local 
