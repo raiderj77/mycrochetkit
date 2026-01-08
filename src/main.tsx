@@ -63,16 +63,18 @@ initializeApp().then(() => {
   );
 });
 
-// Register service worker for PWA
+// Register service worker for PWA using vite-plugin-pwa
+import { registerSW } from 'virtual:pwa-register';
+
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').then(
-      (registration) => {
-        console.log('✅ Service Worker registered:', registration.scope);
-      },
-      (error) => {
-        console.log('❌ Service Worker registration failed:', error);
+  registerSW({
+    onNeedRefresh() {
+      if (confirm('New content available. Reload?')) {
+        window.location.reload();
       }
-    );
+    },
+    onOfflineReady() {
+      console.log('✅ App is ready to work offline');
+    },
   });
 }
