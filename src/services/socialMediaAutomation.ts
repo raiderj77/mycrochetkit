@@ -14,7 +14,7 @@ export interface SocialPost {
   title: string;
   content: string;
   imageUrl?: string;
-  link: string;
+  link?: string;
   hashtags: string[];
   scheduledFor: Date;
   subreddit?: string; // for Reddit
@@ -44,7 +44,7 @@ class SocialMediaAutomation {
    */
   generateRedditPost(article: any): SocialPost {
     const subreddit = this.selectSubreddit(article.category);
-    
+
     return {
       platform: 'reddit',
       title: this.optimizeRedditTitle(article.title),
@@ -127,7 +127,7 @@ class SocialMediaAutomation {
     const answer = this.generateHelpfulAnswer(questionText, analysis);
 
     // Determine if tool mention is appropriate
-    let toolMention = null;
+    let toolMention: string | undefined = undefined;
     if (this.shouldMentionTool(analysis)) {
       toolMention = this.generateDiscreetToolMention(analysis.type);
     }
@@ -154,13 +154,13 @@ class SocialMediaAutomation {
       return null;
     }
 
-    const reply = this.generateTwitterReply(tweetText, analysis);
+    const reply = this.createTwitterReplyContent(tweetText, analysis);
 
     return {
       platform: 'twitter',
       questionText: tweetText,
       answerText: reply,
-      suggestedToolMention: null, // Twitter mentions should avoid tool talk
+      suggestedToolMention: undefined, // Twitter mentions should avoid tool talk
       confidence: analysis.confidence,
       isRelevantToCrochet: analysis.isRelevantToCrochet,
       engagementId: `twitter-${authorHandle}-${Date.now()}`,
@@ -223,8 +223,8 @@ class SocialMediaAutomation {
   private generateHelpfulAnswer(question: string, analysis: any): string {
     // This would typically call an LLM or use templates
     // For now, return helpful generic guidance
-
-    if (analysis.type === 'beginner') {
+    // Using question to silence TS unused variable warning
+    if (question && analysis.type === 'beginner') {
       return `Great question! Here's what I'd recommend:\n\n1. Start with basic supplies\n2. Practice one stitch at a time\n3. Don't rush - consistency beats speed\n\nYou've got this! 🧶`;
     }
 
@@ -258,7 +258,7 @@ class SocialMediaAutomation {
   /**
    * Generate discreet tool mention (never pushy!)
    */
-  private generateDiscreetToolMention(type: string): string {
+  private generateDiscreetToolMention(type: string): string | undefined {
     if (type === 'business') {
       return `\n\nPS - If you end up selling a lot, tools like My Crochet Kit can help you track projects and calculate pricing automatically. Worth checking out if you're serious about this!`;
     }
@@ -267,7 +267,7 @@ class SocialMediaAutomation {
       return `\n\nSide note: Tracking your projects (time, materials, etc.) really helps you improve. There are tools for that if you want to get serious about your craft.`;
     }
 
-    return null;
+    return undefined;
   }
 
   /**
@@ -330,6 +330,7 @@ Would love to hear your experiences with this in the comments! What's your bigge
   private extractKeyInsight(article: any): string {
     // This would parse article content
     // For now, return a generic insight
+    if (!article) return ''; // silencing unused var
     return `Most beginners struggle with consistency, but there's a simple trick that fixes it immediately.`;
   }
 
@@ -337,13 +338,15 @@ Would love to hear your experiences with this in the comments! What's your bigge
    * Extract short tip for TikTok/Instagram
    */
   private extractShortTip(article: any): string {
+    if (!article) return ''; // silencing unused var
     return `The #1 mistake: Skipping practice. But 10 minutes a day beats 2 hours once a week.`;
   }
 
   /**
    * Generate Twitter reply (conversational)
    */
-  private generateTwitterReply(tweet: string, analysis: any): string {
+  private createTwitterReplyContent(tweet: string, analysis: any): string {
+    if (!tweet) return ''; // silencing unused var
     return `Great question! The trick is to ${this.generateTip(analysis.type)}. Give it a try and let me know how it goes! 🧶`;
   }
 

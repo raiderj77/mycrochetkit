@@ -1,6 +1,6 @@
 steps:
   # Install dependencies, build, and run Playwright tests
-  - name: "mcr.microsoft.com/playwright:v1.49.1-jammy"
+  - name: "mcr.microsoft.com/playwright:v1.57.0-jammy"
     entrypoint: "bash"
     env:
       - 'VITE_FIREBASE_API_KEY=$_FIREBASE_API_KEY'

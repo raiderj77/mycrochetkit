@@ -13,14 +13,24 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+// Safety check: Don't initialize if API key is missing
+const isConfigured = !!firebaseConfig.apiKey && firebaseConfig.apiKey !== 'your_api_key_here';
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+if (!isConfigured && typeof window !== 'undefined') {
+  console.warn('⚠️ Firebase API Key is missing. Check your .env file.');
+}
 
-// Google Analytics - only initialize in browser
+export const app = isConfigured 
+  ? (!getApps().length ? initializeApp(firebaseConfig) : getApp())
+  : null;
+
+// Export instances or nulls if not configured
+export const auth = app ? getAuth(app) : (null as any);
+export const db = app ? getFirestore(app) : (null as any);
+
+// Google Analytics - only initialize in browser and if app exists
 let analyticsInstance: ReturnType<typeof getAnalytics> | null = null;
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && app) {
   isSupported().then(yes => {
     if (yes) analyticsInstance = getAnalytics(app);
   });

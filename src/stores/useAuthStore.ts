@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { 
-  User, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
+import {
+  User,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
   updateProfile,
   onAuthStateChanged,
@@ -16,7 +16,7 @@ interface AuthState {
   loading: boolean;
   error: string | null;
   initialized: boolean;
-  
+
   // Actions
   initialize: () => () => void; // Returns unsubscribe function
   signIn: (email: string, password: string) => Promise<void>;
@@ -33,6 +33,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   initialized: false,
 
   initialize: () => {
+    if (!auth) {
+      console.warn('⚠️ Auth store: Firebase Auth not initialized. Using offline mode.');
+      set({ loading: false, initialized: true });
+      return () => { };
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       set({ user, loading: false, initialized: true });
     });
@@ -54,13 +60,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: true, error: null });
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
+
       // Update display name
       if (userCredential.user) {
         await updateProfile(userCredential.user, {
           displayName: displayName
         });
-        
+
         // Force update user state to reflect display name change
         set({ user: { ...userCredential.user, displayName } as User });
       }
