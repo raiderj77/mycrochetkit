@@ -25,15 +25,18 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { initializeAppCheck, ReCaptchaV3Provider, type AppCheck } from 'firebase/app-check';
 
 // Firebase configuration from environment variables
+// Firebase configuration - HARDCODED for reliability
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyA3pdixOcnqbs7HECuUnCcb1tITIfHSE94",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "my-crochetkit.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "my-crochetkit",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "my-crochetkit.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "646754548026",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:646754548026:web:1aba50399e980570d73803",
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-23B576BHEZ",
+  apiKey: "AIzaSyA3pdixOcnqbs7HECuUnCcb1tITIfHSE94",
+  authDomain: "my-crochetkit.firebaseapp.com",
+  projectId: "my-crochetkit",
+  storageBucket: "my-crochetkit.firebasestorage.app",
+  messagingSenderId: "646754548026",
+  appId: "1:646754548026:web:1aba50399e980570d73803",
+  measurementId: "G-23B576BHEZ",
 };
+
+console.log("🔥 Firebase Config: Initializing main services (v1.0.1)");
 
 // Check if Firebase is configured
 const isConfigured = Object.values(firebaseConfig).every(value => value && value !== 'undefined');
