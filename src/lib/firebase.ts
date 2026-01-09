@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'my-crochetkit.firebasestorage.app',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyA3pdixOcnqbs7HECuUnCcb1tITIfHSE94",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "my-crochetkit.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "my-crochetkit",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "my-crochetkit.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "646754548026",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:646754548026:web:1aba50399e980570d73803",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-23B576BHEZ"
 };
 
 // Safety check: Don't initialize if API key is missing
