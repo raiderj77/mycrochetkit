@@ -7,15 +7,15 @@
 
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { getAuth, type Auth } from 'firebase/auth';
-import { 
-  getFirestore, 
+import {
+  getFirestore,
   type Firestore,
   enableIndexedDbPersistence
 } from 'firebase/firestore';
 import { getStorage, type FirebaseStorage } from 'firebase/storage';
-import { 
-  getAnalytics, 
-  type Analytics, 
+import {
+  getAnalytics,
+  type Analytics,
   isSupported,
   setUserId,
   setUserProperties,
@@ -26,13 +26,13 @@ import { initializeAppCheck, ReCaptchaV3Provider, type AppCheck } from 'firebase
 
 // Firebase configuration from environment variables
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyA3pdixOcnqbs7HECuUnCcb1tITIfHSE94",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "my-crochetkit.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "my-crochetkit",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "my-crochetkit.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "646754548026",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:646754548026:web:1aba50399e980570d73803",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-23B576BHEZ",
 };
 
 // Check if Firebase is configured
@@ -67,7 +67,7 @@ export function initializeFirebase(): void {
 
     // Initialize Firestore with offline persistence
     db = getFirestore(app);
-    
+
     // Enable offline persistence (Google's best practice)
     enableIndexedDbPersistence(db, {
       forceOwnership: false, // Allow multiple tabs
@@ -94,26 +94,26 @@ export function initializeFirebase(): void {
         if (supported && app) {
           analytics = getAnalytics(app);
           console.log('✅ Firebase Analytics initialized');
-          
+
           // ===== NEW CODE: Track user ID for retention analytics =====
           if (auth) {
             onAuthStateChanged(auth, (user) => {
               if (user && analytics) {
                 // User is signed in - set user ID for analytics
                 setUserId(analytics, user.uid);
-                
+
                 // Set user properties for better segmentation
                 setUserProperties(analytics, {
                   account_created: user.metadata.creationTime || new Date().toISOString(),
                   sign_in_method: user.providerData[0]?.providerId || 'password',
                   user_type: 'authenticated'
                 });
-                
+
                 // Log engagement event
                 logEvent(analytics, 'user_engagement', {
                   engagement_time_msec: 100
                 });
-                
+
                 console.log('✅ Analytics: User ID set for retention tracking:', user.uid);
               } else if (analytics) {
                 // User is signed out - clear user ID
