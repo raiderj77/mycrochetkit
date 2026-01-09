@@ -1,0 +1,61 @@
+{
+    "title": "MyCrochetKit Emergency Fixes",
+    "branchName": "feature/emergency-fixes",
+    "description": "Critical fixes to restore site functionality",
+    "userStories": [
+        {
+            "id": "STORY-001",
+            "priority": 1,
+            "title": "Fix Firebase API Key Error",
+            "description": "The live site shows 'auth/invalid-api-key' error. Firebase keys are hardcoded but deployment is failing.",
+            "acceptanceCriteria": [
+                "GitHub Actions deployment succeeds without errors",
+                "Live site at mycrochetkit.com loads without Firebase errors",
+                "Console shows '🔥 Firebase Config: Initializing main services (v1.0.1)' log",
+                "Users can sign in and use the app"
+            ],
+            "technicalNotes": [
+                "GitHub Actions failing at 'Install Dependencies' step",
+                "Need to fix package-lock.json or add --legacy-peer-deps",
+                "Firebase keys are already hardcoded in src/lib/firebase.ts and src/config/firebase.ts",
+                "Alternative: manual deploy with 'npx firebase-tools@13 deploy --only hosting:production --project my-crochetkit'"
+            ],
+            "passes": false
+        },
+        {
+            "id": "STORY-002",
+            "priority": 2,
+            "title": "Fix GitHub Actions CI/CD Pipeline",
+            "description": "The 'Install Dependencies' step in GitHub Actions is failing, preventing automatic deployments.",
+            "acceptanceCriteria": [
+                "GitHub Actions workflow completes successfully",
+                "All steps (Install, Build, Deploy) pass with green checkmarks",
+                "Pushing to main branch triggers successful deployment"
+            ],
+            "technicalNotes": [
+                "Check if --legacy-peer-deps is needed in npm ci command",
+                "Verify package-lock.json is in sync with package.json",
+                "Check for any missing or incompatible dependencies"
+            ],
+            "passes": false
+        },
+        {
+            "id": "STORY-003",
+            "priority": 3,
+            "title": "Add environment variable security",
+            "description": "Move hardcoded Firebase keys back to environment variables once deployment is fixed.",
+            "acceptanceCriteria": [
+                "Firebase keys loaded from environment variables",
+                "Fallback to hardcoded values if env vars missing (for local dev)",
+                "GitHub Actions secrets properly configured",
+                "No sensitive keys exposed in source code"
+            ],
+            "technicalNotes": [
+                "Add FIREBASE_* secrets to GitHub repository settings",
+                "Update deploy.yml to use secrets instead of hardcoded values",
+                "Keep fallback values for local development"
+            ],
+            "passes": false
+        }
+    ]
+}

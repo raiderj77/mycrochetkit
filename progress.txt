@@ -1,0 +1,27 @@
+=== Ralph Progress Log ===
+This file tracks learnings and context across iterations.
+Each iteration appends its findings here.
+
+=== Initial Context - 2026-01-09 ===
+Problem: mycrochetkit.com showing "auth/invalid-api-key" error (white page)
+Root Cause: Firebase API keys were in .env file which was gitignored
+
+Attempted Fixes:
+1. Created .env.local with correct keys (local dev works)
+2. Updated cloudbuild.yaml to inject keys during build
+3. Hardcoded keys directly in src/lib/firebase.ts and src/config/firebase.ts
+4. Added keys to GitHub Actions deploy.yml
+
+Current Blocker: GitHub Actions failing at "Install Dependencies" step
+- The new code with fixes never reaches production
+- Old broken build is still being served
+
+Immediate Solution Options:
+1. Fix GitHub Actions (check npm ci / package-lock.json)
+2. Manual deploy: npx firebase-tools@13 deploy --only hosting:production --project my-crochetkit
+
+Key Files:
+- src/lib/firebase.ts - Firebase initialization (used by stores)
+- src/config/firebase.ts - Firebase initialization (used by main.tsx)
+- .github/workflows/deploy.yml - GitHub Actions deployment
+- cloudbuild.yaml - Google Cloud Build config (may be redundant)
