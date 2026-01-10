@@ -6,7 +6,7 @@ export const PRICING = {
     interval: 'month' as const,
     type: 'subscription' as const,
     cta: 'Join Pro Now',
-    priceId: import.meta.env.VITE_STRIPE_PRICE_MONTHLY,
+    priceId: import.meta.env.VITE_STRIPE_PRICE_MONTHLY || 'price_1ScrYv2fs8jzmCc38dhVgbwS',
   },
   proAnnual: {
     id: 'pro_annual',
@@ -15,7 +15,7 @@ export const PRICING = {
     interval: 'year' as const,
     type: 'subscription' as const,
     cta: 'Join Pro Now',
-    priceId: import.meta.env.VITE_STRIPE_PRICE_YEARLY,
+    priceId: import.meta.env.VITE_STRIPE_PRICE_YEARLY || 'price_1ScrYv2fs8jzmCc3fIWaz7Eg',
   },
   lifetime: {
     id: 'lifetime',
@@ -24,8 +24,9 @@ export const PRICING = {
     interval: 'one-time' as const,
     type: 'one_time' as const, // User requested 'payment' mode, but standardizing naming
     cta: 'Get Lifetime',
-    priceId: import.meta.env.VITE_STRIPE_PRICE_LIFETIME,
+    priceId: import.meta.env.VITE_STRIPE_PRICE_LIFETIME || 'price_1ScrcR2fs8jzmCc3utSIHZTr',
   },
 } as const;
 
 export type PricingTier = keyof typeof PRICING;
+
