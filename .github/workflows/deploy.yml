@@ -55,6 +55,18 @@ jobs:
           VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.STAGING_STRIPE_PUBLISHABLE_KEY }}
           VITE_IS_PLAYWRIGHT: "true"
 
+      - name: Install Functions Dependencies
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+        run: |
+          cd functions
+          npm ci
+
+      - name: Build Functions
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+        run: |
+          cd functions
+          npm run build
+
       - name: Deploy Staging (Hosting + Functions)
         if: github.event_name == 'pull_request'
         run: npx firebase-tools@13 deploy --only hosting:staging,functions --project my-crochetkit-staging --token "${{ secrets.FIREBASE_TOKEN_STAGING }}"
