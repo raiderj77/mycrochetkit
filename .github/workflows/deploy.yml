@@ -84,6 +84,9 @@ jobs:
           VITE_FIREBASE_APP_ID: "1:646754548026:web:1aba50399e980570d73803"
           VITE_FIREBASE_MEASUREMENT_ID: "G-23B576BHEZ"
           VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.PROD_STRIPE_PUBLISHABLE_KEY }}
+          VITE_STRIPE_PRICE_MONTHLY: "price_1ScrYv2fs8jzmCc38dhVgbwS"
+          VITE_STRIPE_PRICE_YEARLY: "price_1ScrYv2fs8jzmCc3fIWaz7Eg"
+          VITE_STRIPE_PRICE_LIFETIME: "price_1ScrcR2fs8jzmCc3utSIHZTr"
           VITE_IS_PLAYWRIGHT: "false"
 
       - name: Deploy Production (Hosting + Functions)

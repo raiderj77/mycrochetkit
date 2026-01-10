@@ -1,6 +1,10 @@
 import { onRequest } from "firebase-functions/v2/https";
+import { defineSecret } from "firebase-functions/params";
 import { getStripe, admin } from "./shared";
 import Stripe from "stripe";
+
+// Define the secret (this forces it to be loaded)
+const stripeSecretKey = defineSecret("STRIPE_SECRET_KEY");
 
 // Env vars needed in Firebase Functions:
 // STRIPE_SECRET_KEY=sk_...
@@ -19,7 +23,7 @@ import Stripe from "stripe";
  * - lifetimeSpotsRemaining > 0
  */
 export const directCheckout = onRequest(
-  { cors: true },
+  { cors: true, secrets: [stripeSecretKey] },
   async (req, res) => {
     try {
       const method = req.method;
