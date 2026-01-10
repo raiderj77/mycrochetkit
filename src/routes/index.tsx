@@ -30,6 +30,7 @@ const Glossary = lazy(() => import('@/pages/Glossary'));
 const Pricing = lazy(() => import('@/pages/Pricing'));
 const Marketplace = lazy(() => import('@/pages/Marketplace'));
 const Blog = lazy(() => import('@/pages/Blog'));
+const BlogPost = lazy(() => import('@/pages/BlogPost'));
 const Privacy = lazy(() => import('@/pages/Privacy'));
 const Terms = lazy(() => import('@/pages/Terms'));
 const CookiePolicy = lazy(() => import('@/pages/CookiePolicy'));
@@ -73,6 +74,8 @@ export const routes: RouteObject[] = [
       { path: '/support', element: <Support /> },
       { path: '/voice-help', element: <VoiceHelp /> },
       { path: '/calculator', element: <YarnCalculator /> },
+      { path: '/blog', element: <Blog /> },
+      { path: '/blog/:slug', element: <BlogPost /> },
     ],
   },
   // Content & App pages (Sidebar layout)
@@ -90,7 +93,7 @@ export const routes: RouteObject[] = [
       { path: '/shared/project/:id', element: <SharedProject /> },
       { path: '/manage-kit-77', element: <Admin /> },
       { path: '/admin/rewards', element: <AdminRewards /> },
-      { path: '/blog', element: <Blog /> },
+
       { path: '/glossary', element: <Glossary /> },
       { path: '/community', element: <Community /> },
       { path: '/marketplace', element: <Marketplace /> },

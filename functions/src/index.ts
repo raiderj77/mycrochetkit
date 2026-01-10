@@ -26,16 +26,17 @@ export { onAuthUserCreated } from './referrals';
 export { checkPendingReferrals } from './referralDailyCheck';
 
 // Export content scheduler functions
-export { 
-  runContentScheduler, 
-  scheduledContentPublish, 
-  getSchedulerStatus 
+export {
+  runContentScheduler,
+  scheduledContentPublish,
+  getSchedulerStatus
 } from './contentScheduler';
 
 // Export daily scheduler functions
-export { 
-  publishDailyArticle, 
-  getDailySchedulerStatus 
+export {
+  publishDailyArticle,
+  getDailySchedulerStatus,
+  upgradeLegacyArticles
 } from './dailyScheduler';
 
 // Export social media automation functions

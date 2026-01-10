@@ -14,6 +14,10 @@
 
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import { defineSecret } from "firebase-functions/params";
+import OpenAI from "openai";
+
+const openAiApiKey = defineSecret("OPENAI_API_KEY");
 
 // Initialize admin if not already done
 if (!admin.apps.length) {
@@ -26,7 +30,7 @@ const db = admin.firestore();
  * Main daily scheduler - runs at 6 AM UTC every day
  * Generates and publishes 1 article automatically
  */
-export const publishDailyArticle = functions.https.onRequest(async (req, res) => {
+export const publishDailyArticle = functions.https.onRequest({ secrets: [openAiApiKey], timeoutSeconds: 300 }, async (req, res) => {
   try {
     console.log('📅 Daily article scheduler starting...');
 
@@ -60,7 +64,7 @@ export const publishDailyArticle = functions.https.onRequest(async (req, res) =>
 
     await db.collection('daily-article-reports').add(report);
 
-    res.json(report);
+    res.json({ ...article, status: 'success' });
 
   } catch (error) {
     console.error('❌ Daily scheduler error:', error);
@@ -72,7 +76,57 @@ export const publishDailyArticle = functions.https.onRequest(async (req, res) =>
     };
 
     await db.collection('daily-article-reports').add(errorReport);
-    res.status(500).json(errorReport);
+    res.status(500).send(error);
+  }
+});
+
+/**
+ * Manual trigger to upgrade ALL legacy articles to AI standards
+ */
+export const upgradeLegacyArticles = functions.https.onRequest({ secrets: [openAiApiKey], timeoutSeconds: 540 }, async (req, res) => {
+  try {
+    console.log('🔄 Starting bulk article upgrade...');
+    const snapshot = await db.collection('blog-articles').get();
+    let updatedCount = 0;
+    const updates: string[] = [];
+
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+
+      // Skip if already AI generated with gpt-4o
+      if (data.isAiGenerated && data.model === 'gpt-4o') {
+        continue;
+      }
+
+      console.log(`✨ Upgrading article: ${data.title} (${doc.id})`);
+
+      // Re-generate content
+      const keyword = data.seoKeyword || data.title.replace(': Complete Guide', '');
+      const type = data.articleType || 'general';
+
+      const newContent = await generateArticleContent(keyword, type);
+
+      if (newContent) {
+        await doc.ref.update({
+          ...newContent,
+          updatedDate: new Date().toISOString().split('T')[0],
+          isAiGenerated: true,
+          model: 'gpt-4o',
+          upgradedAt: new Date().toISOString()
+        });
+        updatedCount++;
+        updates.push(data.title);
+      }
+    }
+
+    res.json({
+      status: 'success',
+      message: `Upgraded ${updatedCount} articles`,
+      articles: updates
+    });
+  } catch (error) {
+    console.error('Upgrade failed:', error);
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Unknown error' });
   }
 });
 
@@ -167,7 +221,7 @@ function getTodayTemplate() {
 }
 
 /**
- * Generate full daily article from template
+ * Generate full daily article using OpenAI for SEO-optimized content
  */
 async function generateDailyArticle(template: any) {
   const slug = template.keyword
@@ -176,6 +230,103 @@ async function generateDailyArticle(template: any) {
     .replace(/\s+/g, '-')
     .slice(0, 60);
 
+  // Call the separated generation logic
+  const contentData = await generateArticleContent(template.keyword, template.type);
+
+  if (!contentData) {
+    return generateDailyArticleFallback(template, slug);
+  }
+
+  // merged article object
+  return {
+    id: `daily-${slug}-${Date.now()}`,
+    slug,
+    author: 'My Crochet Kit Team',
+    publishedDate: new Date().toISOString().split('T')[0],
+    updatedDate: new Date().toISOString().split('T')[0],
+    category: getCategoryFromType(template.type),
+    tags: [template.keyword.toLowerCase(), template.type, 'crochet', 'tutorial'],
+    coverImage: 'https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&q=80&w=1200',
+    seoKeyword: template.keyword,
+    internalLinks: [
+      { text: 'Crochet Abbreviations Guide', url: '/crochet-abbreviations' },
+      { text: 'Yarn Weight Chart', url: '/yarn-weight-chart' },
+    ],
+    productMention: "Pro Crochet Kit",
+    isDaily: true,
+    articleType: template.type,
+    isAiGenerated: true,
+    model: "gpt-4o",
+    ...contentData
+  };
+}
+
+/**
+ * Core OpenAI Generation Logic
+ */
+async function generateArticleContent(keyword: string, type: string) {
+  let openai: OpenAI | null = null;
+  try {
+    openai = new OpenAI({ apiKey: openAiApiKey.value() });
+  } catch (e) {
+    console.warn("OpenAI API Key not found.");
+    return null;
+  }
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: `You are a world-class crochet expert and SEO specialist. 
+          Write a comprehensive, engaging, and highly informative blog post.
+          
+          Guidelines:
+          - Use proper Markdown (H1, H2, H3).
+          - Tone: Encouraging, expert, friendly.
+          - Target Audience: Beginners to Intermediate crocheters.
+          - SEO: Focus on key takeaways, clear structure, and answering common questions (EEAT).
+          - Length: 1000+ words.
+          - Structure: Intro, "Why this matters", Step-by-step or Main Guide, Common Mistakes, Expert Tips, FAQ, Conclusion.
+          - Return the response as a JSON object with fields: { "title": "...", "content": "...", "excerpt": "...", "faqSchema": [...] }.
+          `
+        },
+        {
+          role: "user",
+          content: `Write a blog post about "${keyword}". Type: ${type}.
+          
+          Include specific internal links where relevant:
+          - Crochet Abbreviations Guide (/crochet-abbreviations)
+          - Yarn Weight Chart (/yarn-weight-chart)
+          - Hook Size Reference (/hook-size-chart)
+
+          Product mention to include naturally: "Pro Crochet Kit" (all-in-one starter kit).
+          `
+        }
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const contentJson = JSON.parse(completion.choices[0].message.content || "{}");
+
+    return {
+      title: contentJson.title || `${toTitleCase(keyword)}: Complete Guide`,
+      excerpt: contentJson.excerpt || `Learn everything about ${keyword} in this expert guide.`,
+      content: contentJson.content || "",
+      faqSchema: contentJson.faqSchema || [],
+      readTime: Math.ceil((contentJson.content?.split(/\s+/).length || 500) / 200),
+    };
+  } catch (error) {
+    console.error("OpenAI generation failed:", error);
+    return null;
+  }
+}
+
+/**
+ * Fallback generator (The old template logic)
+ */
+function generateDailyArticleFallback(template: any, slug: string) {
   // Determine product based on type
   let productMention = 'Beginner Crochet Kit';
   if (template.type === 'stitch') productMention = 'Complete Stitch Kit';

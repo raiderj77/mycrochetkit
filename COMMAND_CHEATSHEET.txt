@@ -1,0 +1,66 @@
+╔════════════════════════════════════════════════════════════════════╗
+║                  MyCrochetKit Quick Commands                       ║
+║                    (Print & Tape to Monitor)                       ║
+╚════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🚀 FAST DEPLOY (30 seconds)                                     │
+└─────────────────────────────────────────────────────────────────┘
+npm run build
+firebase deploy --only hosting
+git add . && git commit -m "message" && git push
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🏭 PRODUCTION DEPLOY (2-3 minutes, auto)                        │
+└─────────────────────────────────────────────────────────────────┘
+git add .
+git commit -m "Release: description"
+git push origin main
+# Cloud Build does the rest automatically
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🔧 DAILY WORKFLOW                                               │
+└─────────────────────────────────────────────────────────────────┘
+# Start of day
+cd ~/mycrochetkit && git pull origin main
+
+# During work (repeat as needed)
+npm run build && firebase deploy --only hosting
+
+# End of day
+git add . && git commit -m "Summary" && git push
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🆘 EMERGENCY COMMANDS                                           │
+└─────────────────────────────────────────────────────────────────┘
+git status                    # What changed?
+firebase projects:list        # Which project am I on?
+firebase use my-crochetkit    # Switch to production
+git reset --hard HEAD         # Discard all changes (DANGER!)
+git reset --soft HEAD~1       # Undo last commit (keep changes)
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 📍 IMPORTANT LINKS                                              │
+└─────────────────────────────────────────────────────────────────┘
+Live Site:      https://my-crochetkit.web.app
+Firebase:       https://console.firebase.google.com/project/my-crochetkit
+Cloud Build:    https://console.cloud.google.com/cloud-build/builds?project=my-crochetkit
+GitHub:         https://github.com/raiderj77/mycrochetkit
+
+┌─────────────────────────────────────────────────────────────────┐
+│ ❓ QUICK DECISIONS                                              │
+└─────────────────────────────────────────────────────────────────┘
+Testing a feature?           → Fast Deploy
+End of work session?         → Production Deploy (push to GitHub)
+Production is broken?        → Fast Deploy to hotfix NOW
+Not sure what changed?       → git status
+Deploy seems stuck?          → Check Cloud Build link above
+Site not updating?           → Hard refresh (Ctrl+Shift+R)
+
+┌─────────────────────────────────────────────────────────────────┐
+│ ⚡ SHORTCUTS (when in ~/mycrochetkit)                          │
+└─────────────────────────────────────────────────────────────────┘
+alias deploy='npm run build && firebase deploy --only hosting'
+alias pushit='git add . && git commit -m "WIP" && git push'
+
+# Add to ~/.bashrc to use forever

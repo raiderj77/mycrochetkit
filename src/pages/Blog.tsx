@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import NewsletterSignup from '../components/NewsletterSignup';
 import { goToLifetimeCheckout } from '../lib/stripe-client';
+import { db } from '../lib/firebase';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 // Blog post data structure
 export interface BlogPost {
@@ -76,18 +78,34 @@ export default function Blog() {
 
   const fetchManifest = async () => {
     try {
-      const response = await fetch(`/blog/posts.json?t=${new Date().getTime()}`);
-      if (response.ok) {
-        const data: BlogPost[] = await response.json();
-        // Add isExternal flag to imported posts
-        const postsWithFlag = data.map((post) => ({
-          ...post,
-          isExternal: true
-        }));
-        setImportedPosts(postsWithFlag);
-      }
+      // Fetch from Firestore
+      const q = query(
+        collection(db, 'blog-articles'),
+        orderBy('publishedDate', 'desc'),
+        limit(20)
+      );
+
+      const snapshot = await getDocs(q);
+      const firestorePosts = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          title: data.title,
+          excerpt: data.excerpt,
+          path: data.slug ? `/blog/${data.slug}` : `/blog/${doc.id}`,
+          author: data.author || 'My Crochet Kit Team',
+          publishedDate: data.publishedDate,
+          readTime: data.readTime || 5,
+          category: data.category || 'General',
+          tags: data.tags || [],
+          coverImage: data.coverImage,
+          isExternal: false // These are dynamic pages served by the app
+        } as BlogPost;
+      });
+
+      setImportedPosts(firestorePosts);
     } catch (error) {
-      console.error('Failed to fetch blog manifest:', error);
+      console.error('Failed to fetch blog posts from Firestore:', error);
     } finally {
       setIsLoading(false);
     }
@@ -97,7 +115,7 @@ export default function Blog() {
     fetchManifest();
   }, []);
 
-  const allPosts = [...blogPosts, ...importedPosts].sort((a, b) => 
+  const allPosts = [...blogPosts, ...importedPosts].sort((a, b) =>
     new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
   );
 
@@ -131,18 +149,18 @@ export default function Blog() {
               <div className="inline-block bg-emerald-500 text-xs font-bold px-2 py-1 rounded mb-4">FOUNDERS OFFER</div>
               <h3 className="text-3xl font-black mb-4">Lock in everything for life.</h3>
               <p className="text-indigo-200 text-lg mb-0">
-                Join our first 500 members and never pay for a subscription again. 
+                Join our first 500 members and never pay for a subscription again.
                 Includes all future Pro features, 0% marketplace fees, and a $10 Amazon Gift Card referral bonus.
               </p>
             </div>
             <div className="flex flex-col items-center gap-3">
               <div className="text-3xl font-bold text-emerald-300">$79.99 <span className="text-lg font-normal text-indigo-300">one-time</span></div>
-                <button 
-                  onClick={goToLifetimeCheckout}
-                  className="bg-white text-indigo-900 px-8 py-4 rounded-full font-bold hover:bg-indigo-50 transition-all shadow-lg whitespace-nowrap"
-                >
-                  Claim Lifetime Access 🚀
-                </button>
+              <button
+                onClick={goToLifetimeCheckout}
+                className="bg-white text-indigo-900 px-8 py-4 rounded-full font-bold hover:bg-indigo-50 transition-all shadow-lg whitespace-nowrap"
+              >
+                Claim Lifetime Access 🚀
+              </button>
             </div>
           </div>
         </div>
@@ -154,11 +172,10 @@ export default function Blog() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-indigo-600 dark:bg-purple-600 text-white shadow-lg shadow-indigo-500/20'
-                    : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
-                }`}
+                className={`px-4 py-2 rounded-full font-medium transition-colors ${selectedCategory === category
+                  ? 'bg-indigo-600 dark:bg-purple-600 text-white shadow-lg shadow-indigo-500/20'
+                  : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+                  }`}
               >
                 {category}
               </button>
@@ -213,7 +230,7 @@ function BlogPostCard({ post }: BlogPostCardProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent md:hidden" />
         </div>
-        
+
         <div className="p-6 md:p-8 md:w-[60%] flex flex-col">
           {/* Category & Meta */}
           <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-slate-400 mb-4">

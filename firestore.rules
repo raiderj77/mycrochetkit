@@ -66,12 +66,40 @@ service cloud.firestore {
     // ========================================
     // Shared Projects (public read)
     // ========================================
+    // ========================================
+    // Shared Projects (public read)
+    // ========================================
     match /sharedProjects/{shareId} {
       // Anyone can read shared projects (they have unique IDs)
       allow read: if true;
       // Only owner can create/update/delete
       allow write: if request.auth != null && resource.data.userId == request.auth.uid;
       allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================
+    // Blog Articles (public read)
+    // ========================================
+    match /blog-articles/{articleId} {
+      allow read: if true;
+      allow write: if false; // Only Cloud Functions (Admin SDK) can write
+    }
+
+    // ========================================
+    // Community Posts (public read)
+    // ========================================
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && (resource.data.authorId == request.auth.uid || request.auth.token.admin == true);
+    }
+
+    // ========================================
+    // Reports (admin read/write, user create)
+    // ========================================
+    match /reports/{reportId} {
+      allow create: if request.auth != null;
+      allow read, update: if request.auth != null && request.auth.token.admin == true;
     }
     
     // ========================================
