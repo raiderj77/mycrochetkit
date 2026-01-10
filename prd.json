@@ -1,59 +1,307 @@
 {
-    "title": "MyCrochetKit Emergency Fixes",
-    "branchName": "feature/emergency-fixes",
-    "description": "Critical fixes to restore site functionality",
+    "title": "MyCrochetKit Full Feature Audit",
+    "branchName": "feature/full-audit",
+    "description": "Systematic testing of every feature in the application, fixing issues as discovered",
     "userStories": [
         {
-            "id": "STORY-001",
+            "id": "AUDIT-001",
             "priority": 1,
-            "title": "Fix Firebase API Key Error",
-            "description": "The live site shows 'auth/invalid-api-key' error. Firebase keys are hardcoded but deployment is failing.",
+            "title": "BLOCK 1: Landing Page & Marketing",
+            "description": "Test the public landing page, navigation, and marketing components",
             "acceptanceCriteria": [
-                "GitHub Actions deployment succeeds without errors",
-                "Live site at mycrochetkit.com loads without Firebase errors",
-                "Console shows '🔥 Firebase Config: Initializing main services (v1.0.1)' log",
-                "Users can sign in and use the app"
+                "Landing page loads without errors",
+                "Hero section displays correctly",
+                "Feature sections render properly",
+                "CTA buttons are clickable and navigate correctly",
+                "Footer links work",
+                "Responsive on mobile/tablet",
+                "No console errors"
             ],
-            "technicalNotes": [
-                "GitHub Actions failing at 'Install Dependencies' step",
-                "Need to fix package-lock.json or add --legacy-peer-deps",
-                "Firebase keys are already hardcoded in src/lib/firebase.ts and src/config/firebase.ts",
-                "Alternative: manual deploy with 'npx firebase-tools@13 deploy --only hosting:production --project my-crochetkit'"
+            "pages": [
+                "Landing.tsx",
+                "MarketingLayout.tsx"
             ],
             "passes": false
         },
         {
-            "id": "STORY-002",
+            "id": "AUDIT-002",
             "priority": 2,
-            "title": "Fix GitHub Actions CI/CD Pipeline",
-            "description": "The 'Install Dependencies' step in GitHub Actions is failing, preventing automatic deployments.",
+            "title": "BLOCK 2: Authentication Flow",
+            "description": "Test login, signup, and authentication state management",
             "acceptanceCriteria": [
-                "GitHub Actions workflow completes successfully",
-                "All steps (Install, Build, Deploy) pass with green checkmarks",
-                "Pushing to main branch triggers successful deployment"
+                "Login page renders without errors",
+                "Signup page renders without errors",
+                "Email/password login works",
+                "Google sign-in button is present",
+                "Error messages display correctly",
+                "Redirect after login works",
+                "Logout functionality works"
             ],
-            "technicalNotes": [
-                "Check if --legacy-peer-deps is needed in npm ci command",
-                "Verify package-lock.json is in sync with package.json",
-                "Check for any missing or incompatible dependencies"
+            "pages": [
+                "Login.tsx",
+                "Signup.tsx",
+                "SecretAdminLogin.tsx"
             ],
             "passes": false
         },
         {
-            "id": "STORY-003",
+            "id": "AUDIT-003",
             "priority": 3,
-            "title": "Add environment variable security",
-            "description": "Move hardcoded Firebase keys back to environment variables once deployment is fixed.",
+            "title": "BLOCK 3: Dashboard & App Layout",
+            "description": "Test the main dashboard and app navigation",
             "acceptanceCriteria": [
-                "Firebase keys loaded from environment variables",
-                "Fallback to hardcoded values if env vars missing (for local dev)",
-                "GitHub Actions secrets properly configured",
-                "No sensitive keys exposed in source code"
+                "Dashboard loads after login",
+                "AppLayout renders navigation correctly",
+                "Sidebar/navigation menu works",
+                "Quick stats display properly",
+                "Theme toggle works",
+                "User menu/profile dropdown works"
             ],
-            "technicalNotes": [
-                "Add FIREBASE_* secrets to GitHub repository settings",
-                "Update deploy.yml to use secrets instead of hardcoded values",
-                "Keep fallback values for local development"
+            "pages": [
+                "Dashboard.tsx",
+                "AppLayout.tsx",
+                "ThemeToggle.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-004",
+            "priority": 4,
+            "title": "BLOCK 4: Project Management",
+            "description": "Test project list, creation, and detail views",
+            "acceptanceCriteria": [
+                "Project list displays correctly",
+                "New project dialog opens",
+                "Can create a new project",
+                "Project detail page loads",
+                "Row counter functionality works",
+                "Project timer works",
+                "Can edit project details",
+                "Can delete a project"
+            ],
+            "pages": [
+                "ProjectList.tsx",
+                "ProjectDetail.tsx",
+                "NewProjectDialog.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-005",
+            "priority": 5,
+            "title": "BLOCK 5: Pattern Library",
+            "description": "Test pattern storage, PDF viewer, and pattern reader",
+            "acceptanceCriteria": [
+                "Pattern library page loads",
+                "Can upload a pattern",
+                "PDF viewer works",
+                "Pattern reader displays correctly",
+                "Can organize patterns",
+                "Search/filter patterns works"
+            ],
+            "pages": [
+                "PatternLibrary.tsx",
+                "PatternReader.tsx",
+                "PDFViewer.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-006",
+            "priority": 6,
+            "title": "BLOCK 6: Finished Objects Gallery",
+            "description": "Test the finished objects/gallery feature",
+            "acceptanceCriteria": [
+                "FO gallery page loads",
+                "Can view finished projects",
+                "Image display works",
+                "Can add new finished objects",
+                "Gallery filtering works"
+            ],
+            "pages": [
+                "FinishedObjects.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-007",
+            "priority": 7,
+            "title": "BLOCK 7: Settings & Preferences",
+            "description": "Test user settings and preferences",
+            "acceptanceCriteria": [
+                "Settings page loads",
+                "Can update profile",
+                "Can change preferences",
+                "Theme settings persist",
+                "Notification settings work",
+                "Account deletion option present (if applicable)"
+            ],
+            "pages": [
+                "Settings.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-008",
+            "priority": 8,
+            "title": "BLOCK 8: Pricing & Subscriptions",
+            "description": "Test pricing table and subscription flows",
+            "acceptanceCriteria": [
+                "Pricing page loads",
+                "Pricing table displays plans correctly",
+                "Upgrade prompts work",
+                "Stripe integration doesn't throw errors",
+                "Free vs Pro features are clear"
+            ],
+            "pages": [
+                "Pricing.tsx",
+                "PricingTable.tsx",
+                "UpgradePrompt.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-009",
+            "priority": 9,
+            "title": "BLOCK 9: Community Features",
+            "description": "Test community and social features",
+            "acceptanceCriteria": [
+                "Community page loads",
+                "Can view posts/discussions",
+                "Post creation works (if applicable)",
+                "Referral dashboard works"
+            ],
+            "pages": [
+                "Community.tsx",
+                "ReferralDashboard.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-010",
+            "priority": 10,
+            "title": "BLOCK 10: Marketplace",
+            "description": "Test marketplace functionality",
+            "acceptanceCriteria": [
+                "Marketplace page loads",
+                "Can browse listings",
+                "Filters work",
+                "Item details display correctly"
+            ],
+            "pages": [
+                "Marketplace.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-011",
+            "priority": 11,
+            "title": "BLOCK 11: Tools & Calculators",
+            "description": "Test yarn calculator, hook chart, and other tools",
+            "acceptanceCriteria": [
+                "Yarn calculator works correctly",
+                "Hook size chart displays properly",
+                "Yarn weight chart displays properly",
+                "Crochet pricing guide works",
+                "Abbreviations page loads"
+            ],
+            "pages": [
+                "YarnCalculator.tsx",
+                "HookSizeChart.tsx",
+                "YarnWeightChart.tsx",
+                "CrochetPricingGuide.tsx",
+                "CrochetAbbreviations.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-012",
+            "priority": 12,
+            "title": "BLOCK 12: Blog & Content",
+            "description": "Test blog pages and content delivery",
+            "acceptanceCriteria": [
+                "Blog page loads",
+                "Blog posts display correctly",
+                "Individual post pages work",
+                "SEO meta tags are present"
+            ],
+            "pages": [
+                "Blog.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-013",
+            "priority": 13,
+            "title": "BLOCK 13: Legal Pages",
+            "description": "Test terms, privacy, and legal pages",
+            "acceptanceCriteria": [
+                "Terms of Service page loads",
+                "Privacy Policy page loads",
+                "Cookie Policy page loads",
+                "Billing Terms page loads",
+                "All content is readable"
+            ],
+            "pages": [
+                "Terms.tsx",
+                "Privacy.tsx",
+                "CookiePolicy.tsx",
+                "BillingTerms.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-014",
+            "priority": 14,
+            "title": "BLOCK 14: Support & Help",
+            "description": "Test support, help, and onboarding features",
+            "acceptanceCriteria": [
+                "Support page loads",
+                "Glossary page loads",
+                "Voice help feature works",
+                "Quick start wizard works",
+                "Roadmap page loads"
+            ],
+            "pages": [
+                "Support.tsx",
+                "Glossary.tsx",
+                "VoiceHelp.tsx",
+                "QuickStartWizard.tsx",
+                "Roadmap.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-015",
+            "priority": 15,
+            "title": "BLOCK 15: Admin Features",
+            "description": "Test admin panel and rewards system",
+            "acceptanceCriteria": [
+                "Admin page loads (with proper auth)",
+                "Admin rewards page loads",
+                "Admin functions work correctly",
+                "Proper access control in place"
+            ],
+            "pages": [
+                "Admin.tsx",
+                "AdminRewards.tsx"
+            ],
+            "passes": false
+        },
+        {
+            "id": "AUDIT-016",
+            "priority": 16,
+            "title": "BLOCK 16: PWA & Offline",
+            "description": "Test Progressive Web App and offline functionality",
+            "acceptanceCriteria": [
+                "Service worker registers",
+                "App can be installed",
+                "Basic offline functionality works",
+                "Data syncs when back online"
+            ],
+            "pages": [
+                "sw.js",
+                "workbox"
             ],
             "passes": false
         }

@@ -9,10 +9,10 @@ import { useAuthStore } from '../stores/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { Flag, Trash2, Eye, CheckCircle } from 'lucide-react';
 import { db } from '../lib/firebase';
-import { 
-  collection, 
-  query, 
-  orderBy, 
+import {
+  collection,
+  query,
+  orderBy,
   onSnapshot,
   doc,
   deleteDoc,
@@ -38,12 +38,12 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [postContents, setPostContents] = useState<{ [key: string]: string }>({});
 
-  const ADMIN_EMAILS = ['support@mycrochetkit.com']; // Sync with SecretAdminLogin.tsx
+  const ADMIN_EMAILS = ['support@mycrochetkit.com', 'raiderj77@gmail.com']; // Sync with SecretAdminLogin.tsx
   const isAdmin = user && ADMIN_EMAILS.includes(user.email || '');
 
   useEffect(() => {
     if (!initialized) return;
-    
+
     if (!isAdmin) {
       navigate('/');
       return;
@@ -60,7 +60,7 @@ export default function Admin() {
         id: doc.id,
         ...doc.data()
       })) as Report[];
-      
+
       setReports(reportsData);
 
       // Load post contents for each report
@@ -145,11 +145,10 @@ export default function Admin() {
           {reports.map((report) => (
             <div
               key={report.id}
-              className={`card ${
-                report.status === 'pending'
+              className={`card ${report.status === 'pending'
                   ? 'border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/10'
                   : 'opacity-60'
-              }`}
+                }`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
@@ -158,13 +157,12 @@ export default function Admin() {
                     <span className="text-sm font-semibold text-red-600 uppercase">
                       {report.reason}
                     </span>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      report.status === 'pending'
+                    <span className={`text-xs px-2 py-1 rounded-full ${report.status === 'pending'
                         ? 'bg-yellow-100 text-yellow-800'
                         : report.status === 'reviewed'
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}>
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
                       {report.status}
                     </span>
                   </div>
