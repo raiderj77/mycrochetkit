@@ -31,11 +31,11 @@ export const directCheckout = onRequest(
       // Get priceId from request
       const data = method === "POST" ? req.body : req.query;
       let priceId = (data.priceId || data.price_id) as string | undefined;
-      
+
       // Default to Lifetime ONLY if no priceId provided AND specifically hitting the old endpoint (implicit)
       // Actually, let's just make it required or use the environment variable if we are absolutely sure.
       if (!priceId) {
-        priceId = process.env.STRIPE_PRICE_LIFETIME;
+        priceId = process.env.STRIPE_PRICE_LIFETIME || 'price_1ScrcR2fs8jzmCc3utSIHZTr';
       }
 
       const siteUrl = process.env.SITE_URL || "https://mycrochetkit.com";
@@ -45,11 +45,15 @@ export const directCheckout = onRequest(
         return;
       }
 
-      // Validate Price ID
+      // Validate Price ID - fallback values if env vars not set
+      const PRICE_MONTHLY = process.env.STRIPE_PRICE_MONTHLY || 'price_1ScrYv2fs8jzmCc38dhVgbwS';
+      const PRICE_YEARLY = process.env.STRIPE_PRICE_YEARLY || 'price_1ScrYv2fs8jzmCc3fIWaz7Eg';
+      const PRICE_LIFETIME = process.env.STRIPE_PRICE_LIFETIME || 'price_1ScrcR2fs8jzmCc3utSIHZTr';
+
       const ALLOWED_PRICES = new Set([
-        process.env.STRIPE_PRICE_MONTHLY,
-        process.env.STRIPE_PRICE_YEARLY,
-        process.env.STRIPE_PRICE_LIFETIME,
+        PRICE_MONTHLY,
+        PRICE_YEARLY,
+        PRICE_LIFETIME,
       ]);
 
       if (!ALLOWED_PRICES.has(priceId)) {
@@ -66,7 +70,7 @@ export const directCheckout = onRequest(
         return;
       }
 
-      const isLifetime = (priceId === process.env.STRIPE_PRICE_LIFETIME);
+      const isLifetime = (priceId === PRICE_LIFETIME);
       const mode = isLifetime ? 'payment' : 'subscription';
 
       // Specific checks for Lifetime
@@ -94,9 +98,9 @@ export const directCheckout = onRequest(
         cancel_url: `${siteUrl}/pricing?canceled=1`,
         customer_email: email || undefined,
         client_reference_id: userId,
-        metadata: { 
+        metadata: {
           purchase: isLifetime ? "LIFETIME" : "PRO",
-          firebaseUID: userId || "" 
+          firebaseUID: userId || ""
         },
         locale: 'en',
         allow_promotion_codes: true,
