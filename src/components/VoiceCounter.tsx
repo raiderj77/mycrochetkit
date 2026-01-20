@@ -1,8 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { db, auth } from '../firebase';
+import { 
+  saveProjectLocal, 
+  getProjectLocal, 
+  addPendingSync, 
+  getPendingSyncs, 
+  clearPendingSync,
+  markProjectSynced,
+  isOnline 
+} from '../lib/offlineDb';
 
 interface Counter {
   id: string;
@@ -22,12 +31,15 @@ export function VoiceCounter() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [online, setOnline] = useState(navigator.onLine);
+  const [pendingChanges, setPendingChanges] = useState(false);
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const isListeningRef = useRef(false);
   const activeIdRef = useRef(activeId);
+  const lastProcessedRef = useRef<number>(0);
+  const lastTranscriptRef = useRef<string>('');
 
-  // Keep refs in sync with state
   useEffect(() => {
     isListeningRef.current = isListening;
   }, [isListening]);
@@ -36,7 +48,47 @@ export function VoiceCounter() {
     activeIdRef.current = activeId;
   }, [activeId]);
 
-  // Listen for auth changes
+  useEffect(() => {
+    const handleOnline = () => {
+      setOnline(true);
+      syncPendingChanges();
+    };
+    const handleOffline = () => setOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const syncPendingChanges = useCallback(async () => {
+    if (!isOnline()) return;
+    
+    const pending = await getPendingSyncs();
+    
+    for (const item of pending) {
+      try {
+        const [userId, projectId] = item.id.split('_');
+        const docRef = doc(db, 'users', userId, 'projects', projectId);
+        
+        await setDoc(docRef, {
+          counters: item.data.counters,
+          activeId: item.data.activeId,
+          updatedAt: new Date().toISOString()
+        });
+        
+        await clearPendingSync(item.id);
+        await markProjectSynced(userId, projectId);
+        setPendingChanges(false);
+      } catch (error) {
+        console.error('Error syncing:', error);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -47,21 +99,48 @@ export function VoiceCounter() {
     return () => unsubscribe();
   }, []);
 
-  // Load counters from Firestore when user logs in
   useEffect(() => {
     if (!user) return;
     
     const loadCounters = async () => {
       try {
-        const docRef = doc(db, 'users', user.uid, 'projects', 'default');
-        const docSnap = await getDoc(docRef);
+        const localData = await getProjectLocal(user.uid, 'default');
         
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data.counters && data.counters.length > 0) {
-            setCounters(data.counters);
-            setActiveId(data.activeId || data.counters[0].id);
+        if (localData) {
+          setCounters(localData.counters);
+          setActiveId(localData.activeId);
+          setPendingChanges(!localData.synced);
+        }
+        
+        if (isOnline()) {
+          const docRef = doc(db, 'users', user.uid, 'projects', 'default');
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const cloudData = docSnap.data();
+            
+            if (cloudData.counters && cloudData.counters.length > 0) {
+              const cloudTime = new Date(cloudData.updatedAt).getTime();
+              const localTime = localData ? new Date(localData.updatedAt).getTime() : 0;
+              
+              if (cloudTime > localTime) {
+                setCounters(cloudData.counters);
+                setActiveId(cloudData.activeId || cloudData.counters[0].id);
+                await saveProjectLocal(
+                  user.uid,
+                  'default',
+                  cloudData.counters,
+                  cloudData.activeId,
+                  true
+                );
+              }
+            }
+          } else if (!localData) {
+            setCounters([{ id: '1', name: 'Row', count: 0 }]);
+            setActiveId('1');
           }
+          
+          syncPendingChanges();
         }
       } catch (error) {
         console.error('Error loading counters:', error);
@@ -71,51 +150,57 @@ export function VoiceCounter() {
     };
     
     loadCounters();
-  }, [user]);
+  }, [user, syncPendingChanges]);
 
-  // Save counters to Firestore whenever they change
   useEffect(() => {
     if (!user || loading) return;
     
     const saveCounters = async () => {
       setSaving(true);
       try {
-        const docRef = doc(db, 'users', user.uid, 'projects', 'default');
-        await setDoc(docRef, {
-          counters,
-          activeId,
-          updatedAt: new Date().toISOString()
-        });
+        await saveProjectLocal(user.uid, 'default', counters, activeId, false);
+        
+        if (isOnline()) {
+          const docRef = doc(db, 'users', user.uid, 'projects', 'default');
+          await setDoc(docRef, {
+            counters,
+            activeId,
+            updatedAt: new Date().toISOString()
+          });
+          
+          await markProjectSynced(user.uid, 'default');
+          setPendingChanges(false);
+        } else {
+          await addPendingSync(user.uid, 'default', counters, activeId);
+          setPendingChanges(true);
+        }
       } catch (error) {
         console.error('Error saving counters:', error);
+        await addPendingSync(user.uid, 'default', counters, activeId);
+        setPendingChanges(true);
       } finally {
         setSaving(false);
       }
     };
     
-    // Debounce saves
     const timeout = setTimeout(saveCounters, 500);
     return () => clearTimeout(timeout);
   }, [counters, activeId, user, loading]);
 
-  // Get active counter
   const activeCounter = counters.find(c => c.id === activeId) || counters[0];
 
-  // Update a counter's count
   const updateCount = (id: string, delta: number) => {
     setCounters(prev => prev.map(c => 
       c.id === id ? { ...c, count: Math.max(0, c.count + delta) } : c
     ));
   };
 
-  // Reset a counter
   const resetCount = (id: string) => {
     setCounters(prev => prev.map(c => 
       c.id === id ? { ...c, count: 0 } : c
     ));
   };
 
-  // Add new counter
   const addCounter = () => {
     if (!newCounterName.trim()) return;
     const newId = Date.now().toString();
@@ -125,7 +210,6 @@ export function VoiceCounter() {
     setActiveId(newId);
   };
 
-  // Remove counter
   const removeCounter = (id: string) => {
     if (counters.length <= 1) return;
     const newCounters = counters.filter(c => c.id !== id);
@@ -135,7 +219,6 @@ export function VoiceCounter() {
     }
   };
 
-  // Setup speech recognition
   const setupRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return null;
@@ -146,16 +229,34 @@ export function VoiceCounter() {
     recognition.lang = 'en-US';
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
+      // Only process final results
+      if (!event.results[0].isFinal) return;
+      
+      const now = Date.now();
       const transcript = event.results[0][0].transcript.toLowerCase().trim();
+      
+      // Debounce: ignore if same transcript within 1.5 seconds
+      if (transcript === lastTranscriptRef.current && now - lastProcessedRef.current < 1500) {
+        return;
+      }
+      
+      // Also ignore if ANY command within 800ms
+      if (now - lastProcessedRef.current < 800) {
+        return;
+      }
+      
+      lastProcessedRef.current = now;
+      lastTranscriptRef.current = transcript;
       setLastHeard(transcript);
       
       const currentActiveId = activeIdRef.current;
       
-      if (transcript.includes('next') || transcript.includes('plus') || transcript.includes('add')) {
+      // Only respond to exact commands: next, back, reset
+      if (transcript === 'next') {
         updateCount(currentActiveId, 1);
-      } else if (transcript.includes('back') || transcript.includes('minus') || transcript.includes('undo')) {
+      } else if (transcript === 'back') {
         updateCount(currentActiveId, -1);
-      } else if (transcript.includes('reset') || transcript.includes('zero')) {
+      } else if (transcript === 'reset') {
         resetCount(currentActiveId);
       }
     };
@@ -164,7 +265,7 @@ export function VoiceCounter() {
       if (isListeningRef.current) {
         setTimeout(() => {
           try { recognition.start(); } catch (e) { /* ignore */ }
-        }, 100);
+        }, 400);
       }
     };
 
@@ -176,7 +277,6 @@ export function VoiceCounter() {
     return recognition;
   };
 
-  // Start listening
   const startListening = () => {
     if (isListening) return;
     const recognition = setupRecognition();
@@ -186,10 +286,11 @@ export function VoiceCounter() {
     }
     recognitionRef.current = recognition;
     setIsListening(true);
+    lastProcessedRef.current = 0;
+    lastTranscriptRef.current = '';
     try { recognition.start(); } catch (e) { /* ignore */ }
   };
 
-  // Stop listening
   const stopListening = () => {
     setIsListening(false);
     if (recognitionRef.current) {
@@ -197,7 +298,6 @@ export function VoiceCounter() {
     }
   };
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (recognitionRef.current) {
@@ -206,7 +306,6 @@ export function VoiceCounter() {
     };
   }, []);
 
-  // Show loading state
   if (loading) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', color: 'white' }}>
@@ -215,27 +314,35 @@ export function VoiceCounter() {
     );
   }
 
-  // Show sign-in prompt if not logged in
   if (!user) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', color: 'white', padding: '20px', textAlign: 'center' }}>
         <h2 style={{ marginBottom: '16px' }}>Sign in to save your progress</h2>
         <p style={{ opacity: 0.7, marginBottom: '24px' }}>Your counters will be saved automatically.</p>
-        <a href="/" style={{ padding: '12px 24px', background: '#4ade80', color: '#1a1a2e', borderRadius: '12px', textDecoration: 'none', fontWeight: '600' }}>← Go to Sign In</a>
+        <a href="/" style={{ padding: '12px 24px', background: '#4ade80', color: '#1a1a2e', borderRadius: '12px', textDecoration: 'none', fontWeight: '600' }}>Go to Sign In</a>
       </div>
     );
   }
 
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', padding: '16px', color: 'white' }}>
-      {/* Header */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <a href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '1rem' }}>← Back</a>
-        <h1 style={{ fontSize: '1.1rem', margin: 0 }}>🧶 Voice Counter</h1>
-        <div style={{ fontSize: '0.75rem', opacity: 0.5 }}>{saving ? 'Saving...' : 'Saved ✓'}</div>
+        <a href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '1rem' }}>Back</a>
+        <h1 style={{ fontSize: '1.1rem', margin: 0 }}>Voice Counter</h1>
+        <div style={{ fontSize: '0.75rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
+          <span style={{ opacity: 0.5 }}>{saving ? 'Saving...' : 'Saved'}</span>
+          <span style={{ color: online ? '#4ade80' : '#fbbf24', fontSize: '0.7rem' }}>
+            {online ? 'Online' : 'Offline'}{pendingChanges && ' (pending)'}
+          </span>
+        </div>
       </header>
 
-      {/* Counter Tabs */}
+      {!online && (
+        <div style={{ background: 'rgba(251, 191, 36, 0.2)', border: '1px solid #fbbf24', borderRadius: '8px', padding: '10px 16px', marginBottom: '16px', fontSize: '0.85rem', textAlign: 'center' }}>
+          You are offline. Changes will sync when you reconnect.
+        </div>
+      )}
+
       <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
         {counters.map(counter => (
           <button
@@ -270,7 +377,6 @@ export function VoiceCounter() {
         </button>
       </div>
 
-      {/* Add Counter Form */}
       {showAddForm && (
         <div style={{ marginBottom: '20px', padding: '16px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>
           <input
@@ -288,7 +394,6 @@ export function VoiceCounter() {
         </div>
       )}
 
-      {/* Active Counter Display */}
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <p style={{ opacity: 0.7, marginBottom: '8px', fontSize: '1rem' }}>{activeCounter.name}</p>
         <div style={{ fontSize: 'clamp(100px, 25vw, 180px)', fontWeight: '700', lineHeight: 1 }}>
@@ -296,7 +401,6 @@ export function VoiceCounter() {
         </div>
       </div>
 
-      {/* Voice Status */}
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <div style={{
           display: 'inline-block',
@@ -305,12 +409,11 @@ export function VoiceCounter() {
           background: isListening ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255,255,255,0.1)',
           border: isListening ? '2px solid #4ade80' : '2px solid rgba(255,255,255,0.2)'
         }}>
-          {isListening ? '🎤 Listening...' : '🔇 Tap to start'}
+          {isListening ? 'Listening...' : 'Tap to start'}
         </div>
         {lastHeard && <p style={{ marginTop: '8px', opacity: 0.5, fontSize: '0.85rem' }}>Heard: "{lastHeard}"</p>}
       </div>
 
-      {/* Voice Control Button */}
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
         <button
           onClick={isListening ? stopListening : startListening}
@@ -330,13 +433,12 @@ export function VoiceCounter() {
         </button>
       </div>
 
-      {/* Manual Controls */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginBottom: '24px' }}>
         <button
           onClick={() => updateCount(activeId, -1)}
           style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontSize: '2rem', cursor: 'pointer' }}
         >
-          −
+          -
         </button>
         <button
           onClick={() => resetCount(activeId)}
@@ -352,7 +454,6 @@ export function VoiceCounter() {
         </button>
       </div>
 
-      {/* Delete Counter */}
       {counters.length > 1 && (
         <div style={{ textAlign: 'center' }}>
           <button
@@ -364,10 +465,9 @@ export function VoiceCounter() {
         </div>
       )}
 
-      {/* Voice Commands Help */}
       <div style={{ marginTop: '32px', padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', textAlign: 'center' }}>
-        <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"next"</strong> or <strong>"plus"</strong> = Count up</p>
-        <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"back"</strong> or <strong>"minus"</strong> = Count down</p>
+        <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"next"</strong> = Count up</p>
+        <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"back"</strong> = Count down</p>
         <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"reset"</strong> = Back to zero</p>
       </div>
     </div>

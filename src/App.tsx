@@ -73,7 +73,7 @@ function App() {
                 <div className="text-xs text-white/50">Auto-Saved</div>
               </div>
               <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-center">
-                <div className="text-2xl font-bold text-[#4ade80]">🎤</div>firebase login --no-localhost
+                <div className="text-2xl font-bold text-[#4ade80]">🎤</div>
                 <div className="text-xs text-white/50">Voice</div>
               </div>
             </div>
