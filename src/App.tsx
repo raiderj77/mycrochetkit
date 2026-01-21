@@ -18,212 +18,277 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1a2e] to-[#16213e]">
-        <div className="animate-pulse text-white/70 text-lg">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-[#4ade80]/30 border-t-[#4ade80] rounded-full animate-spin"></div>
+          <p className="text-white/50 text-sm">Loading your workspace...</p>
+        </div>
       </div>
     );
   }
 
-  // Logged in view
   if (user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#1a1a2e] to-[#16213e]">
-        <header className="flex justify-between items-center p-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">🧶</span>
-            <span className="font-bold text-lg text-white">MyCrochetKit</span>
+      <div className="min-h-screen bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e]">
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#0f0f1a]/80 border-b border-white/5">
+          <div className="max-w-4xl mx-auto flex justify-between items-center px-4 py-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-[#4ade80] to-emerald-600 rounded-lg flex items-center justify-center">
+                <span className="text-lg">🧶</span>
+              </div>
+              <span className="font-bold text-white">MyCrochetKit</span>
+            </div>
+            <Auth user={user} setUser={setUser} />
           </div>
-          <Auth user={user} setUser={setUser} />
         </header>
 
-        <main className="flex flex-col items-center justify-center px-4 py-12">
-          <div className="text-center animate-[fadeIn_0.3s_ease-out]">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                Welcome back, {user.displayName?.split(' ')[0]}! 👋
-              </h2>
-              <p className="text-white/60">Ready to continue your project?</p>
-            </div>
+        <main className="max-w-4xl mx-auto px-4 py-8">
+          <div className="mb-10">
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
+              Welcome back, {user.displayName?.split(' ')[0]} 👋
+            </h1>
+            <p className="text-white/50">Ready to continue crocheting?</p>
+          </div>
 
-            <div className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 max-w-sm mx-auto">
-              <div className="text-4xl mb-4">🎤</div>
-              <h3 className="text-xl font-semibold text-white mb-2">Voice Counter</h3>
-              <p className="text-white/60 text-sm mb-6">
-                Hands-free row counting with voice commands
-              </p>
-              <a 
-                href="/counter" 
-                className="inline-block px-6 py-3 bg-[#4ade80] text-[#1a1a2e] font-semibold rounded-full transition-transform hover:scale-105 active:scale-95"
-              >
-                Open Counter
-              </a>
-            </div>
+          <div className="grid gap-4 md:grid-cols-2 mb-8">
+            <a 
+              href="/counter"
+              className="group relative overflow-hidden bg-gradient-to-br from-[#4ade80]/20 to-emerald-600/10 border border-[#4ade80]/30 rounded-2xl p-6 transition-all hover:border-[#4ade80]/50 hover:shadow-lg hover:shadow-[#4ade80]/10"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#4ade80]/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-[#4ade80]/20 transition-colors"></div>
+              <div className="relative">
+                <div className="w-12 h-12 bg-[#4ade80]/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <span className="text-2xl">🎤</span>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Voice Counter</h3>
+                <p className="text-white/60 text-sm mb-4">Hands-free row counting with voice commands</p>
+                <div className="flex items-center gap-2 text-[#4ade80] text-sm font-medium">
+                  <span>Open Counter</span>
+                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </div>
+            </a>
 
-            <div className="mt-8 flex gap-4 justify-center">
-              <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-center">
-                <div className="text-2xl font-bold text-[#4ade80]">✓</div>
-                <div className="text-xs text-white/50">Offline Ready</div>
+            <div className="relative overflow-hidden bg-white/5 border border-white/10 rounded-2xl p-6 opacity-60">
+              <div className="absolute top-3 right-3">
+                <span className="text-xs bg-white/10 text-white/50 px-2 py-1 rounded-full">Coming Soon</span>
               </div>
-              <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-center">
-                <div className="text-2xl font-bold text-[#4ade80]">☁️</div>
-                <div className="text-xs text-white/50">Auto-Synced</div>
+              <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4">
+                <span className="text-2xl">📋</span>
               </div>
-              <div className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-center">
-                <div className="text-2xl font-bold text-[#4ade80]">🎤</div>
-                <div className="text-xs text-white/50">Voice</div>
+              <h3 className="text-xl font-semibold text-white mb-2">Projects</h3>
+              <p className="text-white/60 text-sm">Organize multiple projects with notes and patterns</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+              <div className="w-10 h-10 bg-[#4ade80]/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-[#4ade80]">✓</span>
               </div>
+              <p className="text-xs text-white/50">Offline Ready</p>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+              <div className="w-10 h-10 bg-[#4ade80]/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-[#4ade80]">☁️</span>
+              </div>
+              <p className="text-xs text-white/50">Auto-Synced</p>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+              <div className="w-10 h-10 bg-[#4ade80]/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-[#4ade80]">🎤</span>
+              </div>
+              <p className="text-xs text-white/50">Voice Active</p>
             </div>
           </div>
         </main>
+
+        <footer className="max-w-4xl mx-auto px-4 py-8 text-center">
+          <p className="text-white/20 text-xs">Made with 💚 for crocheters</p>
+        </footer>
       </div>
     );
   }
 
-  // Landing page for logged out users
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1a2e] to-[#16213e] overflow-x-hidden">
-      {/* Header */}
-      <header className="flex justify-between items-center p-4 max-w-5xl mx-auto">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">🧶</span>
-          <span className="font-bold text-lg text-white">MyCrochetKit</span>
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e] overflow-x-hidden">
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#0f0f1a]/80 border-b border-white/5">
+        <div className="max-w-5xl mx-auto flex justify-between items-center px-4 py-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#4ade80] to-emerald-600 rounded-lg flex items-center justify-center">
+              <span className="text-lg">🧶</span>
+            </div>
+            <span className="font-bold text-white">MyCrochetKit</span>
+          </div>
+          <Auth user={user} setUser={setUser} />
         </div>
-        <Auth user={user} setUser={setUser} />
       </header>
 
-      {/* Hero Section */}
-      <section className="px-4 pt-8 pb-16 max-w-2xl mx-auto text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+      <section className="px-4 pt-16 pb-20 max-w-3xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 bg-[#4ade80]/10 border border-[#4ade80]/20 rounded-full px-4 py-1.5 mb-8">
+          <span className="w-2 h-2 bg-[#4ade80] rounded-full animate-pulse"></span>
+          <span className="text-[#4ade80] text-sm font-medium">Now with offline mode</span>
+        </div>
+
+        <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
           Stop losing count.
         </h1>
-        <p className="text-xl text-white/70 mb-8 leading-relaxed">
+        <p className="text-xl md:text-2xl text-white/60 mb-10 leading-relaxed max-w-2xl mx-auto">
           Voice-activated counters. Bulletproof project tracking. 
           <span className="text-[#4ade80]"> Your data, actually safe.</span>
         </p>
         
-        {/* CTA */}
-        <div className="flex flex-col items-center gap-4 mb-6">
-          <Auth user={user} setUser={setUser} />
+        <div className="flex flex-col items-center gap-6 mb-8">
+          <div className="transform hover:scale-105 transition-transform">
+            <Auth user={user} setUser={setUser} />
+          </div>
         </div>
         
-        {/* Trust badges */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-white/50">
-          <span className="flex items-center gap-1">✓ No credit card</span>
-          <span className="flex items-center gap-1">✓ Works offline</span>
-          <span className="flex items-center gap-1">✓ Free to start</span>
+        <div className="flex flex-wrap justify-center gap-6 text-sm text-white/40">
+          <span className="flex items-center gap-2">
+            <span className="text-[#4ade80]">✓</span> No credit card
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-[#4ade80]">✓</span> Works offline
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-[#4ade80]">✓</span> Free to start
+          </span>
         </div>
       </section>
 
-      {/* Pain Points Section */}
-      <section className="px-4 py-12 bg-white/5">
+      <section className="px-4 py-16 bg-gradient-to-b from-white/[0.02] to-transparent">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-8">Sound familiar?</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-10">Sound familiar?</h2>
           
           <div className="space-y-4">
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-start gap-3">
-              <span className="text-2xl">😤</span>
-              <p className="text-white/80">
-                You're on row 47. Your phone locks. You tap to unlock. Wait — <span className="text-[#fbbf24]">was it 47 or 48?</span>
+            <div className="group bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 rounded-2xl p-5 flex items-start gap-4 transition-all">
+              <span className="text-2xl group-hover:scale-110 transition-transform">😤</span>
+              <p className="text-white/70 leading-relaxed">
+                You're on row 47. Your phone locks. You tap to unlock. Wait — <span className="text-[#fbbf24] font-medium">was it 47 or 48?</span>
               </p>
             </div>
             
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-start gap-3">
-              <span className="text-2xl">😤</span>
-              <p className="text-white/80">
-                You're at the yarn store. No signal. Can't check your project. <span className="text-[#fbbf24]">Buy duplicates anyway.</span>
+            <div className="group bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 rounded-2xl p-5 flex items-start gap-4 transition-all">
+              <span className="text-2xl group-hover:scale-110 transition-transform">😤</span>
+              <p className="text-white/70 leading-relaxed">
+                You're at the yarn store. No signal. Can't check your project. <span className="text-[#fbbf24] font-medium">Buy duplicates anyway.</span>
               </p>
             </div>
             
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-start gap-3">
-              <span className="text-2xl">😤</span>
-              <p className="text-white/80">
-                Your app updates overnight. Your entire project history: <span className="text-[#fbbf24]">gone.</span>
+            <div className="group bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 rounded-2xl p-5 flex items-start gap-4 transition-all">
+              <span className="text-2xl group-hover:scale-110 transition-transform">😤</span>
+              <p className="text-white/70 leading-relaxed">
+                Your app updates overnight. Your entire project history: <span className="text-[#fbbf24] font-medium">gone.</span>
               </p>
             </div>
           </div>
           
-          <p className="text-center text-white/60 mt-8 text-lg">
+          <p className="text-center text-white/40 mt-10 text-lg">
             You shouldn't need five apps and a spreadsheet to enjoy crocheting.
           </p>
         </div>
       </section>
 
-      {/* Voice Counter Feature */}
-      <section className="px-4 py-16 max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#4ade80]/20 rounded-full mb-4">
-            <span className="text-3xl">🎤</span>
+      <section className="px-4 py-20 max-w-3xl mx-auto">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#4ade80]/20 to-emerald-600/10 border border-[#4ade80]/20 rounded-2xl mb-6">
+            <span className="text-4xl">🎤</span>
           </div>
-          <h2 className="text-3xl font-bold text-white mb-4">"Next row." Just say it.</h2>
-          <p className="text-white/70 text-lg">
-            Keep your hands on your hook. Our voice recognition counts your rows while you crochet. 
-            No stopping. No tapping. No losing your place.
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">"Next." Just say it.</h2>
+          <p className="text-white/60 text-lg max-w-xl mx-auto">
+            Keep your hands on your hook. Voice commands count your rows while you crochet. 
+            No stopping. No tapping.
           </p>
         </div>
         
-        {/* Feature checklist */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-3">
-          <div className="flex items-center gap-3">
-            <span className="text-[#4ade80]">✓</span>
-            <span className="text-white/80">Works offline — even in airplane mode</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[#4ade80]">✓</span>
-            <span className="text-white/80">Simple commands: "next", "back", "reset"</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[#4ade80]">✓</span>
-            <span className="text-white/80">Multiple counters per project</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-[#4ade80]">✓</span>
-            <span className="text-white/80">Auto-syncs when you're back online</span>
+        <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-8">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.03] transition-colors">
+              <div className="w-8 h-8 bg-[#4ade80]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-[#4ade80] text-sm">✓</span>
+              </div>
+              <span className="text-white/80">Works offline — even in airplane mode</span>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.03] transition-colors">
+              <div className="w-8 h-8 bg-[#4ade80]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-[#4ade80] text-sm">✓</span>
+              </div>
+              <span className="text-white/80">Simple: "next", "back", "reset"</span>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.03] transition-colors">
+              <div className="w-8 h-8 bg-[#4ade80]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-[#4ade80] text-sm">✓</span>
+              </div>
+              <span className="text-white/80">Multiple counters per project</span>
+            </div>
+            <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/[0.03] transition-colors">
+              <div className="w-8 h-8 bg-[#4ade80]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-[#4ade80] text-sm">✓</span>
+              </div>
+              <span className="text-white/80">Auto-syncs when back online</span>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section className="px-4 py-12 bg-white/5">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-8">Built by crocheters who've been burned too.</h2>
+      <section className="px-4 py-16 bg-gradient-to-b from-white/[0.02] to-transparent">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-12">Built by crocheters who've been burned too.</h2>
           
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-              <div className="text-3xl mb-3">📱</div>
+            <div className="group bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 rounded-2xl p-6 transition-all">
+              <div className="w-14 h-14 bg-white/5 group-hover:bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4 transition-colors">
+                <span className="text-2xl">📱</span>
+              </div>
               <h3 className="font-semibold text-white mb-2">Offline-first</h3>
-              <p className="text-white/60 text-sm">Your data lives on your device first. Works without internet.</p>
+              <p className="text-white/50 text-sm">Your data lives on your device. Works without internet.</p>
             </div>
             
-            <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-              <div className="text-3xl mb-3">🔒</div>
+            <div className="group bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 rounded-2xl p-6 transition-all">
+              <div className="w-14 h-14 bg-white/5 group-hover:bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4 transition-colors">
+                <span className="text-2xl">🔒</span>
+              </div>
               <h3 className="font-semibold text-white mb-2">Your data is yours</h3>
-              <p className="text-white/60 text-sm">No lock-in. Export anytime. We don't sell your info.</p>
+              <p className="text-white/50 text-sm">No lock-in. Export anytime. We don't sell your info.</p>
             </div>
             
-            <div className="bg-white/5 border border-white/10 rounded-xl p-5">
-              <div className="text-3xl mb-3">💚</div>
+            <div className="group bg-white/[0.03] hover:bg-white/[0.05] border border-white/10 rounded-2xl p-6 transition-all">
+              <div className="w-14 h-14 bg-white/5 group-hover:bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4 transition-colors">
+                <span className="text-2xl">💚</span>
+              </div>
               <h3 className="font-semibold text-white mb-2">Generous free tier</h3>
-              <p className="text-white/60 text-sm">3 projects free forever. Pro unlocks unlimited.</p>
+              <p className="text-white/50 text-sm">3 projects free forever. Pro unlocks unlimited.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="px-4 py-16 max-w-md mx-auto text-center">
-        <h2 className="text-2xl font-bold text-white mb-4">Ready to never lose count again?</h2>
-        <p className="text-white/60 mb-8">Join crocheters who've made the switch.</p>
+      <section className="px-4 py-20 max-w-lg mx-auto text-center">
+        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Ready to never lose count again?</h2>
+        <p className="text-white/50 mb-10">Join crocheters who've made the switch.</p>
         
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-          <Auth user={user} setUser={setUser} />
-          <p className="text-white/40 text-xs mt-4">Start free. Upgrade when you need more.</p>
+        <div className="bg-gradient-to-b from-white/[0.05] to-white/[0.02] border border-white/10 rounded-2xl p-8">
+          <div className="transform hover:scale-105 transition-transform">
+            <Auth user={user} setUser={setUser} />
+          </div>
+          <p className="text-white/30 text-sm mt-6">Start free. Upgrade when you need more.</p>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="text-center py-8 border-t border-white/10">
-        <p className="text-white/30 text-sm">Made with 💚 for crocheters</p>
-        <p className="text-white/20 text-xs mt-2">© 2025 MyCrochetKit</p>
+      <footer className="border-t border-white/5 mt-8">
+        <div className="max-w-5xl mx-auto px-4 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-gradient-to-br from-[#4ade80] to-emerald-600 rounded flex items-center justify-center">
+              <span className="text-xs">🧶</span>
+            </div>
+            <span className="text-white/30 text-sm">MyCrochetKit</span>
+          </div>
+          <p className="text-white/20 text-sm">Made with 💚 for crocheters</p>
+          <p className="text-white/20 text-xs">© 2025 MyCrochetKit</p>
+        </div>
       </footer>
     </div>
   );
