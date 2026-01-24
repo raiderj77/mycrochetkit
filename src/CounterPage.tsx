@@ -1,5 +1,7 @@
+import { useParams } from 'react-router-dom';
 import { VoiceCounter } from './components/VoiceCounter';
 
 export function CounterPage() {
-  return <VoiceCounter />;
+  const { projectId } = useParams();
+  return <VoiceCounter projectId={projectId || 'default'} />;
 }

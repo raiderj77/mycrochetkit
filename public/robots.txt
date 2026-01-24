@@ -1,0 +1,9 @@
+# MyCrochetKit Robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mycrochetkit.com/sitemap.xml
+
+# Crawl-delay (be nice to servers)
+Crawl-delay: 1

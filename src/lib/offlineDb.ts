@@ -1,7 +1,6 @@
 import { openDB } from 'idb';
 import type { DBSchema, IDBPDatabase } from 'idb';
 
-// Define what our database looks like
 interface CrochetDB extends DBSchema {
   projects: {
     key: string;
@@ -10,7 +9,7 @@ interface CrochetDB extends DBSchema {
       counters: Array<{ id: string; name: string; count: number }>;
       activeId: string;
       updatedAt: string;
-      synced: boolean;  // Has this been synced to cloud?
+      synced: boolean;
     };
   };
   pendingSync: {
@@ -22,26 +21,40 @@ interface CrochetDB extends DBSchema {
       timestamp: string;
     };
   };
+  projectsList: {
+    key: string;
+    value: {
+      id: string;
+      odData: Array<{
+        id: string;
+        name: string;
+        notes: string;
+        createdAt: string;
+        updatedAt: string;
+      }>;
+      cachedAt: string;
+    };
+  };
 }
 
 const DB_NAME = 'mycrochetkit-offline';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbInstance: IDBPDatabase<CrochetDB> | null = null;
 
-// Open/create the database
 export async function getDb(): Promise<IDBPDatabase<CrochetDB>> {
   if (dbInstance) return dbInstance;
   
   dbInstance = await openDB<CrochetDB>(DB_NAME, DB_VERSION, {
     upgrade(db) {
-      // Create projects store
       if (!db.objectStoreNames.contains('projects')) {
         db.createObjectStore('projects', { keyPath: 'id' });
       }
-      // Create pending sync store (for offline changes)
       if (!db.objectStoreNames.contains('pendingSync')) {
         db.createObjectStore('pendingSync', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('projectsList')) {
+        db.createObjectStore('projectsList', { keyPath: 'id' });
       }
     },
   });
@@ -49,7 +62,6 @@ export async function getDb(): Promise<IDBPDatabase<CrochetDB>> {
   return dbInstance;
 }
 
-// Save project locally
 export async function saveProjectLocal(
   userId: string,
   projectId: string,
@@ -69,7 +81,6 @@ export async function saveProjectLocal(
   });
 }
 
-// Get project from local storage
 export async function getProjectLocal(
   userId: string,
   projectId: string
@@ -93,7 +104,6 @@ export async function getProjectLocal(
   };
 }
 
-// Mark a project as needing sync
 export async function addPendingSync(
   userId: string,
   projectId: string,
@@ -111,7 +121,6 @@ export async function addPendingSync(
   });
 }
 
-// Get all pending syncs
 export async function getPendingSyncs(): Promise<Array<{
   id: string;
   action: 'update';
@@ -122,13 +131,11 @@ export async function getPendingSyncs(): Promise<Array<{
   return db.getAll('pendingSync');
 }
 
-// Clear a pending sync after successful sync
 export async function clearPendingSync(key: string): Promise<void> {
   const db = await getDb();
   await db.delete('pendingSync', key);
 }
 
-// Mark project as synced
 export async function markProjectSynced(
   userId: string,
   projectId: string
@@ -143,7 +150,38 @@ export async function markProjectSynced(
   }
 }
 
-// Check if online
+export async function saveProjectsListLocal(
+  userId: string,
+  projects: Array<{
+    id: string;
+    name: string;
+    notes: string;
+    createdAt: string;
+    updatedAt: string;
+  }>
+): Promise<void> {
+  const db = await getDb();
+  await db.put('projectsList', {
+    id: userId,
+    odData: projects,
+    cachedAt: new Date().toISOString()
+  });
+}
+
+export async function getProjectsListLocal(
+  userId: string
+): Promise<Array<{
+  id: string;
+  name: string;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
+}> | null> {
+  const db = await getDb();
+  const data = await db.get('projectsList', userId);
+  return data ? data.odData : null;
+}
+
 export function isOnline(): boolean {
   return navigator.onLine;
 }

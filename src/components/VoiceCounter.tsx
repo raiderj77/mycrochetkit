@@ -19,8 +19,13 @@ interface Counter {
   count: number;
 }
 
-export function VoiceCounter() {
+interface VoiceCounterProps {
+  projectId?: string;
+}
+
+export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [projectName, setProjectName] = useState('My Project');
   const [counters, setCounters] = useState<Counter[]>([
     { id: '1', name: 'Row', count: 0 }
   ]);
@@ -32,7 +37,11 @@ export function VoiceCounter() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [online, setOnline] = useState(navigator.onLine);
-  const [pendingChanges, setPendingChanges] = useState(false);
+  const [, setPendingChanges] = useState(false);
+  const [notes, setNotes] = useState('');
+  const [showNotes, setShowNotes] = useState(false);
+  const [editingNotes, setEditingNotes] = useState(false);
+  const [tempNotes, setTempNotes] = useState('');
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const isListeningRef = useRef(false);
@@ -71,17 +80,18 @@ export function VoiceCounter() {
     
     for (const item of pending) {
       try {
-        const [userId, projectId] = item.id.split('_');
-        const docRef = doc(db, 'users', userId, 'projects', projectId);
+        const [userId, projId] = item.id.split('_');
+        const docRef = doc(db, 'users', userId, 'projects', projId);
         
         await setDoc(docRef, {
           counters: item.data.counters,
           activeId: item.data.activeId,
+          notes: item.data.notes || '',
           updatedAt: new Date().toISOString()
-        });
+        }, { merge: true });
         
         await clearPendingSync(item.id);
-        await markProjectSynced(userId, projectId);
+        await markProjectSynced(userId, projId);
         setPendingChanges(false);
       } catch (error) {
         console.error('Error syncing:', error);
@@ -104,7 +114,7 @@ export function VoiceCounter() {
     
     const loadCounters = async () => {
       try {
-        const localData = await getProjectLocal(user.uid, 'default');
+        const localData = await getProjectLocal(user.uid, projectId);
         
         if (localData) {
           setCounters(localData.counters);
@@ -113,11 +123,13 @@ export function VoiceCounter() {
         }
         
         if (isOnline()) {
-          const docRef = doc(db, 'users', user.uid, 'projects', 'default');
+          const docRef = doc(db, 'users', user.uid, 'projects', projectId);
           const docSnap = await getDoc(docRef);
           
           if (docSnap.exists()) {
             const cloudData = docSnap.data();
+            setProjectName(cloudData.name || 'My Project');
+            setNotes(cloudData.notes || '');
             
             if (cloudData.counters && cloudData.counters.length > 0) {
               const cloudTime = new Date(cloudData.updatedAt).getTime();
@@ -128,7 +140,7 @@ export function VoiceCounter() {
                 setActiveId(cloudData.activeId || cloudData.counters[0].id);
                 await saveProjectLocal(
                   user.uid,
-                  'default',
+                  projectId,
                   cloudData.counters,
                   cloudData.activeId,
                   true
@@ -150,7 +162,7 @@ export function VoiceCounter() {
     };
     
     loadCounters();
-  }, [user, syncPendingChanges]);
+  }, [user, projectId, syncPendingChanges]);
 
   useEffect(() => {
     if (!user || loading) return;
@@ -158,25 +170,26 @@ export function VoiceCounter() {
     const saveCounters = async () => {
       setSaving(true);
       try {
-        await saveProjectLocal(user.uid, 'default', counters, activeId, false);
+        await saveProjectLocal(user.uid, projectId, counters, activeId, false);
         
         if (isOnline()) {
-          const docRef = doc(db, 'users', user.uid, 'projects', 'default');
+          const docRef = doc(db, 'users', user.uid, 'projects', projectId);
           await setDoc(docRef, {
             counters,
             activeId,
+            notes,
             updatedAt: new Date().toISOString()
-          });
+          }, { merge: true });
           
-          await markProjectSynced(user.uid, 'default');
+          await markProjectSynced(user.uid, projectId);
           setPendingChanges(false);
         } else {
-          await addPendingSync(user.uid, 'default', counters, activeId);
+          await addPendingSync(user.uid, projectId, counters, activeId);
           setPendingChanges(true);
         }
       } catch (error) {
         console.error('Error saving counters:', error);
-        await addPendingSync(user.uid, 'default', counters, activeId);
+        await addPendingSync(user.uid, projectId, counters, activeId);
         setPendingChanges(true);
       } finally {
         setSaving(false);
@@ -185,7 +198,7 @@ export function VoiceCounter() {
     
     const timeout = setTimeout(saveCounters, 500);
     return () => clearTimeout(timeout);
-  }, [counters, activeId, user, loading]);
+  }, [counters, activeId, notes, user, loading, projectId]);
 
   const activeCounter = counters.find(c => c.id === activeId) || counters[0];
 
@@ -219,6 +232,11 @@ export function VoiceCounter() {
     }
   };
 
+  const saveNotes = () => {
+    setNotes(tempNotes);
+    setEditingNotes(false);
+  };
+
   const setupRecognition = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return null;
@@ -229,18 +247,15 @@ export function VoiceCounter() {
     recognition.lang = 'en-US';
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      // Only process final results
       if (!event.results[0].isFinal) return;
       
       const now = Date.now();
       const transcript = event.results[0][0].transcript.toLowerCase().trim();
       
-      // Debounce: ignore if same transcript within 1.5 seconds
       if (transcript === lastTranscriptRef.current && now - lastProcessedRef.current < 1500) {
         return;
       }
       
-      // Also ignore if ANY command within 800ms
       if (now - lastProcessedRef.current < 800) {
         return;
       }
@@ -251,7 +266,6 @@ export function VoiceCounter() {
       
       const currentActiveId = activeIdRef.current;
       
-      // Only respond to exact commands: next, back, reset
       if (transcript === 'next') {
         updateCount(currentActiveId, 1);
       } else if (transcript === 'back') {
@@ -308,167 +322,197 @@ export function VoiceCounter() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', color: 'white' }}>
-        Loading your counters...
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-[#4ade80]/30 border-t-[#4ade80] rounded-full animate-spin"></div>
+          <p className="text-white/50">Loading project...</p>
+        </div>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', color: 'white', padding: '20px', textAlign: 'center' }}>
-        <h2 style={{ marginBottom: '16px' }}>Sign in to save your progress</h2>
-        <p style={{ opacity: 0.7, marginBottom: '24px' }}>Your counters will be saved automatically.</p>
-        <a href="/" style={{ padding: '12px 24px', background: '#4ade80', color: '#1a1a2e', borderRadius: '12px', textDecoration: 'none', fontWeight: '600' }}>Go to Sign In</a>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e] text-white p-5 text-center">
+        <h2 className="text-2xl font-bold mb-4">Sign in to continue</h2>
+        <p className="text-white/60 mb-6">Your counters will be saved automatically.</p>
+        <a href="/" className="px-6 py-3 bg-[#4ade80] text-[#0f0f1a] font-semibold rounded-full">Go to Sign In</a>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', padding: '16px', color: 'white' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <a href="/" style={{ color: 'white', textDecoration: 'none', fontSize: '1rem' }}>Back</a>
-        <h1 style={{ fontSize: '1.1rem', margin: 0 }}>Voice Counter</h1>
-        <div style={{ fontSize: '0.75rem', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
-          <span style={{ opacity: 0.5 }}>{saving ? 'Saving...' : 'Saved'}</span>
-          <span style={{ color: online ? '#4ade80' : '#fbbf24', fontSize: '0.7rem' }}>
-            {online ? 'Online' : 'Offline'}{pendingChanges && ' (pending)'}
-          </span>
+    <div className="min-h-screen bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#16213e] p-4 text-white">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-5">
+        <a href="/" className="text-white/50 hover:text-white text-sm">← Back</a>
+        <h1 className="text-lg font-semibold truncate max-w-[50%]">{projectName}</h1>
+        <div className="text-right text-xs">
+          <div className="text-white/50">{saving ? 'Saving...' : 'Saved'}</div>
+          <div className={online ? 'text-[#4ade80]' : 'text-yellow-400'}>
+            {online ? '● Online' : '● Offline'}
+          </div>
         </div>
       </header>
 
+      {/* Offline Banner */}
       {!online && (
-        <div style={{ background: 'rgba(251, 191, 36, 0.2)', border: '1px solid #fbbf24', borderRadius: '8px', padding: '10px 16px', marginBottom: '16px', fontSize: '0.85rem', textAlign: 'center' }}>
-          You are offline. Changes will sync when you reconnect.
+        <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-xl p-3 mb-4 text-center text-sm">
+          📴 Offline mode - changes sync when reconnected
         </div>
       )}
 
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
+      {/* Notes Toggle */}
+      <button
+        onClick={() => { setShowNotes(!showNotes); setTempNotes(notes); }}
+        className="w-full mb-4 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white/70 hover:bg-white/10 transition-colors"
+      >
+        📝 {notes ? 'View Notes' : 'Add Notes'} {notes && '•'}
+      </button>
+
+      {/* Notes Panel */}
+      {showNotes && (
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+          {editingNotes ? (
+            <>
+              <textarea
+                value={tempNotes}
+                onChange={(e) => setTempNotes(e.target.value)}
+                placeholder="Add notes... (e.g., decrease every 4th row)"
+                className="w-full h-24 bg-white/5 border border-white/10 rounded-lg p-3 text-white placeholder-white/30 resize-none focus:outline-none focus:border-[#4ade80]/50"
+                maxLength={500}
+              />
+              <div className="flex gap-2 mt-3">
+                <button onClick={saveNotes} className="flex-1 py-2 bg-[#4ade80] text-[#0f0f1a] font-semibold rounded-lg">Save</button>
+                <button onClick={() => setEditingNotes(false)} className="px-4 py-2 bg-white/10 rounded-lg">Cancel</button>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-white/70 text-sm whitespace-pre-wrap">{notes || 'No notes yet'}</p>
+              <button
+                onClick={() => { setEditingNotes(true); setTempNotes(notes); }}
+                className="mt-3 text-[#4ade80] text-sm"
+              >
+                ✏️ Edit Notes
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Counter Tabs */}
+      <div className="flex gap-2 mb-5 flex-wrap">
         {counters.map(counter => (
           <button
             key={counter.id}
             onClick={() => setActiveId(counter.id)}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '20px',
-              border: activeId === counter.id ? '2px solid #4ade80' : '2px solid rgba(255,255,255,0.2)',
-              background: activeId === counter.id ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255,255,255,0.1)',
-              color: 'white',
-              cursor: 'pointer',
-              fontSize: '0.9rem'
-            }}
+            className={`px-4 py-2 rounded-full text-sm transition-all ${
+              activeId === counter.id
+                ? 'bg-[#4ade80]/20 border-2 border-[#4ade80] text-white'
+                : 'bg-white/5 border-2 border-white/10 text-white/70'
+            }`}
           >
             {counter.name}: {counter.count}
           </button>
         ))}
         <button
           onClick={() => setShowAddForm(true)}
-          style={{
-            padding: '8px 16px',
-            borderRadius: '20px',
-            border: '2px dashed rgba(255,255,255,0.3)',
-            background: 'transparent',
-            color: 'rgba(255,255,255,0.7)',
-            cursor: 'pointer',
-            fontSize: '0.9rem'
-          }}
+          className="px-4 py-2 rounded-full text-sm border-2 border-dashed border-white/20 text-white/50"
         >
           + Add
         </button>
       </div>
 
+      {/* Add Counter Form */}
       {showAddForm && (
-        <div style={{ marginBottom: '20px', padding: '16px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-5">
           <input
             type="text"
             value={newCounterName}
             onChange={(e) => setNewCounterName(e.target.value)}
-            placeholder="Counter name (e.g., Pattern Repeat)"
-            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: 'none', marginBottom: '12px', fontSize: '1rem', boxSizing: 'border-box' }}
+            placeholder="Counter name"
+            className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 mb-3"
             autoFocus
           />
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button onClick={addCounter} style={{ flex: 1, padding: '10px', background: '#4ade80', border: 'none', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}>Add Counter</button>
-            <button onClick={() => setShowAddForm(false)} style={{ padding: '10px 20px', background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '8px', color: 'white', cursor: 'pointer' }}>Cancel</button>
+          <div className="flex gap-2">
+            <button onClick={addCounter} className="flex-1 py-2 bg-[#4ade80] text-[#0f0f1a] font-semibold rounded-lg">Add</button>
+            <button onClick={() => setShowAddForm(false)} className="px-4 py-2 bg-white/10 rounded-lg">Cancel</button>
           </div>
         </div>
       )}
 
-      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-        <p style={{ opacity: 0.7, marginBottom: '8px', fontSize: '1rem' }}>{activeCounter.name}</p>
-        <div style={{ fontSize: 'clamp(100px, 25vw, 180px)', fontWeight: '700', lineHeight: 1 }}>
-          {activeCounter.count}
-        </div>
+      {/* Main Counter Display */}
+      <div className="text-center mb-6">
+        <p className="text-white/50 mb-2">{activeCounter.name}</p>
+        <div className="text-8xl md:text-9xl font-bold">{activeCounter.count}</div>
       </div>
 
-      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-        <div style={{
-          display: 'inline-block',
-          padding: '10px 24px',
-          borderRadius: '50px',
-          background: isListening ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255,255,255,0.1)',
-          border: isListening ? '2px solid #4ade80' : '2px solid rgba(255,255,255,0.2)'
-        }}>
-          {isListening ? 'Listening...' : 'Tap to start'}
+      {/* Voice Status */}
+      <div className="text-center mb-6">
+        <div className={`inline-block px-6 py-2 rounded-full text-sm ${
+          isListening 
+            ? 'bg-[#4ade80]/20 border-2 border-[#4ade80] text-[#4ade80]' 
+            : 'bg-white/5 border-2 border-white/10 text-white/50'
+        }`}>
+          {isListening ? '🎤 Listening...' : 'Tap mic to start'}
         </div>
-        {lastHeard && <p style={{ marginTop: '8px', opacity: 0.5, fontSize: '0.85rem' }}>Heard: "{lastHeard}"</p>}
+        {lastHeard && <p className="text-white/30 text-sm mt-2">Heard: "{lastHeard}"</p>}
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
+      {/* Voice Button */}
+      <div className="flex justify-center mb-6">
         <button
           onClick={isListening ? stopListening : startListening}
-          style={{
-            width: '80px',
-            height: '80px',
-            borderRadius: '50%',
-            border: 'none',
-            background: isListening ? '#ef4444' : '#4ade80',
-            color: 'white',
-            fontSize: '2rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
-          }}
+          className={`w-20 h-20 rounded-full text-3xl shadow-lg transition-all ${
+            isListening 
+              ? 'bg-red-500 hover:bg-red-600' 
+              : 'bg-[#4ade80] hover:bg-[#22c55e]'
+          }`}
         >
           {isListening ? '⏹' : '🎤'}
         </button>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginBottom: '24px' }}>
+      {/* Manual Controls */}
+      <div className="flex justify-center gap-4 mb-6">
         <button
           onClick={() => updateCount(activeId, -1)}
-          style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontSize: '2rem', cursor: 'pointer' }}
+          className="w-16 h-16 rounded-full bg-white/5 border-2 border-white/10 text-2xl text-white"
         >
-          -
+          −
         </button>
         <button
           onClick={() => resetCount(activeId)}
-          style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontSize: '1rem', cursor: 'pointer' }}
+          className="w-16 h-16 rounded-full bg-white/5 border-2 border-white/10 text-sm text-white"
         >
           Reset
         </button>
         <button
           onClick={() => updateCount(activeId, 1)}
-          style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.1)', color: 'white', fontSize: '2rem', cursor: 'pointer' }}
+          className="w-16 h-16 rounded-full bg-white/5 border-2 border-white/10 text-2xl text-white"
         >
           +
         </button>
       </div>
 
+      {/* Delete Counter */}
       {counters.length > 1 && (
-        <div style={{ textAlign: 'center' }}>
+        <div className="text-center mb-6">
           <button
             onClick={() => removeCounter(activeId)}
-            style={{ padding: '8px 16px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '0.85rem' }}
+            className="text-white/30 text-sm hover:text-red-400"
           >
-            Delete "{activeCounter.name}" counter
+            Delete "{activeCounter.name}"
           </button>
         </div>
       )}
 
-      <div style={{ marginTop: '32px', padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', textAlign: 'center' }}>
-        <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"next"</strong> = Count up</p>
-        <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"back"</strong> = Count down</p>
-        <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0' }}><strong>"reset"</strong> = Back to zero</p>
+      {/* Help */}
+      <div className="bg-white/5 rounded-xl p-4 text-center text-sm text-white/50">
+        <p><strong>"next"</strong> = count up</p>
+        <p><strong>"back"</strong> = count down</p>
+        <p><strong>"reset"</strong> = zero</p>
       </div>
     </div>
   );
