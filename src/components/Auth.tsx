@@ -1,6 +1,10 @@
 import { signInWithPopup, signOut } from 'firebase/auth';
 import type { User } from 'firebase/auth';
+import { events } from '../analytics';
+import { motion, AnimatePresence } from 'framer-motion';
 import { auth, googleProvider } from '../firebase';
+import { LogOut, ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 
 interface AuthProps {
   user: User | null;
@@ -8,11 +12,24 @@ interface AuthProps {
 }
 
 export function Auth({ user, setUser }: AuthProps) {
-  
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       setUser(result.user);
+      events.signUp();
     } catch (error) {
       console.error('Sign in error:', error);
     }
@@ -22,6 +39,7 @@ export function Auth({ user, setUser }: AuthProps) {
     try {
       await signOut(auth);
       setUser(null);
+      setShowDropdown(false);
     } catch (error) {
       console.error('Sign out error:', error);
     }
@@ -29,37 +47,86 @@ export function Auth({ user, setUser }: AuthProps) {
 
   if (user) {
     return (
-      <div className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-full">
-        <img 
-          src={user.photoURL || ''} 
-          alt="" 
-          className="w-7 h-7 rounded-full"
-        />
-        <span className="text-white text-sm max-w-[70px] truncate hidden sm:inline">
-          {user.displayName?.split(' ')[0]}
-        </span>
-        <button 
-          onClick={handleSignOut}
-          className="px-3 py-1 bg-white/20 rounded-full text-white text-xs hover:bg-white/30 transition-colors"
+      <div className="relative" ref={dropdownRef}>
+        <motion.button
+          onClick={() => setShowDropdown(!showDropdown)}
+          className="flex items-center gap-3 px-2 py-1.5 rounded-full bg-white border border-[#2C1810]/10 hover:border-[#2C1810]/20 transition-all shadow-sm"
+          whileTap={{ scale: 0.98 }}
         >
-          Out
-        </button>
+          {user.photoURL ? (
+            <img
+              src={user.photoURL}
+              alt={user.displayName || 'User'}
+              className="w-8 h-8 rounded-full ring-2 ring-[#E86A58]/20"
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E86A58] to-[#B8A9C9] flex items-center justify-center">
+              <span className="text-white text-sm font-medium">
+                {user.displayName?.charAt(0) || 'U'}
+              </span>
+            </div>
+          )}
+          <span className="text-[#2C1810] text-sm font-medium hidden sm:inline pr-1">
+            {user.displayName?.split(' ')[0]}
+          </span>
+          <ChevronDown
+            className={`w-4 h-4 text-[#2C1810]/50 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
+          />
+        </motion.button>
+
+        <AnimatePresence>
+          {showDropdown && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-[#2C1810]/10 overflow-hidden z-50"
+            >
+              <div className="px-4 py-3 border-b border-[#2C1810]/5">
+                <p className="text-[#2C1810] text-sm font-medium truncate">{user.displayName}</p>
+                <p className="text-[#2C1810]/50 text-xs truncate">{user.email}</p>
+              </div>
+              <button
+                onClick={handleSignOut}
+                className="w-full px-4 py-3 flex items-center gap-3 text-[#2C1810]/70 hover:bg-[#E86A58]/5 hover:text-[#E86A58] transition-colors text-sm"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign out
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
 
   return (
-    <button 
+    <motion.button
       onClick={handleSignIn}
-      className="flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm font-semibold text-gray-800 hover:scale-105 transition-transform active:scale-95"
+      className="btn-primary flex items-center gap-3"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
     >
-      <svg width="16" height="16" viewBox="0 0 48 48">
-        <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.7-.4-3.9z"/>
-        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.5 18.8 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
-        <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2c-2 1.5-4.5 2.4-7.2 2.4-5.2 0-9.6-3.3-11.3-7.9l-6.5 5c3.3 6.5 10 11 17.8 11z"/>
-        <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2c-.4.4 6.6-4.8 6.6-14.8 0-1.3-.1-2.7-.4-3.9z"/>
+      <svg className="w-5 h-5" viewBox="0 0 24 24">
+        <path
+          fill="#fff"
+          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+        />
+        <path
+          fill="#fff"
+          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+        />
+        <path
+          fill="#fff"
+          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+        />
+        <path
+          fill="#fff"
+          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+        />
       </svg>
-      Sign In
-    </button>
+      Sign in with Google
+    </motion.button>
   );
 }
