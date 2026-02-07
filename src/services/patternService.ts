@@ -441,6 +441,43 @@ export function createInlineCounter(
   };
 }
 
+// ─── PATTERN TRACKER DATA (direct on pattern doc) ───────
+
+export async function getPatternTrackerData(
+  uid: string,
+  patternId: string
+): Promise<{
+  progress: PatternProgress | null;
+  annotations: Record<string, StepAnnotation> | null;
+}> {
+  const docRef = getPatternDocRef(uid, patternId);
+  const snapshot = await getDoc(docRef);
+  if (!snapshot.exists()) return { progress: null, annotations: null };
+  const data = snapshot.data();
+  return {
+    progress: data.patternProgress ?? null,
+    annotations: data.stepAnnotations ?? null,
+  };
+}
+
+export async function savePatternProgressDirect(
+  uid: string,
+  patternId: string,
+  progress: PatternProgress
+): Promise<void> {
+  const docRef = getPatternDocRef(uid, patternId);
+  await updateDoc(docRef, { patternProgress: progress });
+}
+
+export async function savePatternAnnotationsDirect(
+  uid: string,
+  patternId: string,
+  annotations: Record<string, StepAnnotation>
+): Promise<void> {
+  const docRef = getPatternDocRef(uid, patternId);
+  await updateDoc(docRef, { stepAnnotations: annotations });
+}
+
 // ─── PATTERN COUNT ──────────────────────────────────────
 
 export async function getPatternCount(uid: string): Promise<number> {

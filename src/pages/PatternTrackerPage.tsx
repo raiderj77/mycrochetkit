@@ -1,16 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
-import type { User } from 'firebase/auth';
 import { auth } from '../firebase';
 import { PatternTracker } from '../components/patterns/PatternTracker';
-import { getPattern } from '../services/patternService';
+import {
+  getPattern,
+  getPatternTrackerData,
+  savePatternProgressDirect,
+  savePatternAnnotationsDirect,
+} from '../services/patternService';
+import { getPatternLocally } from '../db/patternDB';
 import type { Pattern, PatternProgress, StepAnnotation } from '../types/pattern';
+
+const SAVE_DEBOUNCE_MS = 2000;
 
 export function PatternTrackerPage() {
   const { patternId } = useParams<{ patternId: string }>();
   const navigate = useNavigate();
-  const [, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [pattern, setPattern] = useState<Pattern | null>(null);
   const [progress, setProgress] = useState<PatternProgress>({
@@ -21,21 +27,73 @@ export function PatternTrackerPage() {
   });
   const [annotations, setAnnotations] = useState<Record<string, StepAnnotation>>({});
 
+  const uidRef = useRef<string | null>(null);
+  const progressTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const annotationsTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const pendingProgressRef = useRef<PatternProgress | null>(null);
+  const pendingAnnotationsRef = useRef<Record<string, StepAnnotation> | null>(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
       if (!currentUser) {
         navigate('/');
         return;
       }
+      uidRef.current = currentUser.uid;
+
       if (patternId) {
         try {
-          const p = await getPattern(currentUser.uid, patternId);
-          setPattern(p);
-          const savedProgress = localStorage.getItem(`pattern-progress-${patternId}`);
-          if (savedProgress) setProgress(JSON.parse(savedProgress));
-          const savedAnnotations = localStorage.getItem(`pattern-annotations-${patternId}`);
-          if (savedAnnotations) setAnnotations(JSON.parse(savedAnnotations));
+          // Load pattern: Firestore first, IndexedDB fallback
+          let loadedPattern: Pattern | null = null;
+          if (navigator.onLine) {
+            try {
+              loadedPattern = await getPattern(currentUser.uid, patternId);
+            } catch {
+              // Firestore failed, will try IndexedDB below
+            }
+          }
+          if (!loadedPattern) {
+            const local = await getPatternLocally(patternId);
+            if (local) loadedPattern = local;
+          }
+          setPattern(loadedPattern);
+
+          // Load progress/annotations: Firestore first, localStorage fallback
+          let progressLoaded = false;
+          let annotationsLoaded = false;
+
+          if (navigator.onLine && loadedPattern) {
+            try {
+              const trackerData = await getPatternTrackerData(currentUser.uid, patternId);
+              if (trackerData.progress) {
+                setProgress(trackerData.progress);
+                localStorage.setItem(
+                  `pattern-progress-${patternId}`,
+                  JSON.stringify(trackerData.progress)
+                );
+                progressLoaded = true;
+              }
+              if (trackerData.annotations) {
+                setAnnotations(trackerData.annotations);
+                localStorage.setItem(
+                  `pattern-annotations-${patternId}`,
+                  JSON.stringify(trackerData.annotations)
+                );
+                annotationsLoaded = true;
+              }
+            } catch {
+              // Firestore tracker data failed, fall through to localStorage
+            }
+          }
+
+          if (!progressLoaded) {
+            const savedProgress = localStorage.getItem(`pattern-progress-${patternId}`);
+            if (savedProgress) setProgress(JSON.parse(savedProgress));
+          }
+          if (!annotationsLoaded) {
+            const savedAnnotations = localStorage.getItem(`pattern-annotations-${patternId}`);
+            if (savedAnnotations) setAnnotations(JSON.parse(savedAnnotations));
+          }
         } catch (err) {
           console.error('Failed to load pattern:', err);
         }
@@ -45,17 +103,84 @@ export function PatternTrackerPage() {
     return () => unsubscribe();
   }, [navigate, patternId]);
 
-  const handleProgressChange = (updates: Partial<PatternProgress>) => {
-    const newProgress = { ...progress, ...updates };
-    setProgress(newProgress);
-    localStorage.setItem(`pattern-progress-${patternId}`, JSON.stringify(newProgress));
-  };
+  // Flush pending Firestore writes on unmount
+  useEffect(() => {
+    return () => {
+      const uid = uidRef.current;
+      if (!uid || !patternId) return;
 
-  const handleAnnotationChange = (key: string, annotation: Partial<StepAnnotation>) => {
-    const newAnnotations = { ...annotations, [key]: { ...annotations[key], ...annotation } };
-    setAnnotations(newAnnotations);
-    localStorage.setItem(`pattern-annotations-${patternId}`, JSON.stringify(newAnnotations));
-  };
+      if (progressTimeoutRef.current) {
+        clearTimeout(progressTimeoutRef.current);
+      }
+      if (annotationsTimeoutRef.current) {
+        clearTimeout(annotationsTimeoutRef.current);
+      }
+
+      if (pendingProgressRef.current && navigator.onLine) {
+        savePatternProgressDirect(uid, patternId, pendingProgressRef.current).catch(
+          console.error
+        );
+      }
+      if (pendingAnnotationsRef.current && navigator.onLine) {
+        savePatternAnnotationsDirect(uid, patternId, pendingAnnotationsRef.current).catch(
+          console.error
+        );
+      }
+    };
+  }, [patternId]);
+
+  const handleProgressChange = useCallback(
+    (updates: Partial<PatternProgress>) => {
+      setProgress((prev) => {
+        const newProgress = { ...prev, ...updates };
+
+        // Immediate localStorage write
+        localStorage.setItem(`pattern-progress-${patternId}`, JSON.stringify(newProgress));
+
+        // Debounced Firestore write
+        pendingProgressRef.current = newProgress;
+        if (progressTimeoutRef.current) clearTimeout(progressTimeoutRef.current);
+        progressTimeoutRef.current = setTimeout(() => {
+          const uid = uidRef.current;
+          if (uid && patternId && navigator.onLine) {
+            savePatternProgressDirect(uid, patternId, newProgress).catch(console.error);
+            pendingProgressRef.current = null;
+          }
+        }, SAVE_DEBOUNCE_MS);
+
+        return newProgress;
+      });
+    },
+    [patternId]
+  );
+
+  const handleAnnotationChange = useCallback(
+    (key: string, annotation: Partial<StepAnnotation>) => {
+      setAnnotations((prev) => {
+        const newAnnotations = { ...prev, [key]: { ...prev[key], ...annotation } };
+
+        // Immediate localStorage write
+        localStorage.setItem(
+          `pattern-annotations-${patternId}`,
+          JSON.stringify(newAnnotations)
+        );
+
+        // Debounced Firestore write
+        pendingAnnotationsRef.current = newAnnotations;
+        if (annotationsTimeoutRef.current) clearTimeout(annotationsTimeoutRef.current);
+        annotationsTimeoutRef.current = setTimeout(() => {
+          const uid = uidRef.current;
+          if (uid && patternId && navigator.onLine) {
+            savePatternAnnotationsDirect(uid, patternId, newAnnotations).catch(console.error);
+            pendingAnnotationsRef.current = null;
+          }
+        }, SAVE_DEBOUNCE_MS);
+
+        return newAnnotations;
+      });
+    },
+    [patternId]
+  );
 
   if (loading)
     return (
