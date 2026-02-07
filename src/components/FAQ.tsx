@@ -6,7 +6,7 @@ export const FAQ = () => {
           <h2 className="display-font text-4xl md:text-5xl text-[#2C1810] mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-[#2C1810]/60 text-lg">
+          <p className="text-[#2C1810]/75 text-lg">
             Everything you need to know about MyCrochetKit
           </p>
         </div>

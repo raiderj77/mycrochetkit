@@ -154,7 +154,7 @@ export function PatternTracker({
   if (!currentSection || !currentStep) {
     return (
       <div className="min-h-screen bg-[#FFF8F0] flex items-center justify-center">
-        <p className="text-[#2C1810]/50">Pattern has no steps</p>
+        <p className="text-[#2C1810]/70">Pattern has no steps</p>
       </div>
     );
   }
@@ -173,11 +173,11 @@ export function PatternTracker({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setVoiceEnabled(!voiceEnabled)}
-              className={`p-2 rounded-lg ${voiceEnabled ? 'bg-[#E86A58] text-white' : 'text-[#2C1810]/40'}`}
+              className={`p-2 rounded-lg ${voiceEnabled ? 'bg-[#E86A58] text-white' : 'text-[#2C1810]/65'}`}
             >
               {voiceEnabled ? <Mic className="w-5 h-5" /> : <MicOff className="w-5 h-5" />}
             </button>
-            <button onClick={() => setShowAllSteps(true)} className="p-2 text-[#2C1810]/40">
+            <button onClick={() => setShowAllSteps(true)} className="p-2 text-[#2C1810]/65">
               <List className="w-5 h-5" />
             </button>
           </div>
@@ -193,7 +193,7 @@ export function PatternTracker({
 
       <main className="flex-1 flex flex-col p-4">
         <div className="text-center mb-2">
-          <span className="text-sm text-[#2C1810]/50">
+          <span className="text-sm text-[#2C1810]/70">
             {currentSection.name}
             {currentSection.repeatCount > 1 && ` (×${currentSection.repeatCount})`}
           </span>
@@ -204,7 +204,7 @@ export function PatternTracker({
               {currentStep.label || `Step ${progress.currentStepIndex + 1}`}
             </span>
             {currentStep.stitchCountEnd && (
-              <span className="text-sm text-[#2C1810]/50">({currentStep.stitchCountEnd} sts)</span>
+              <span className="text-sm text-[#2C1810]/70">({currentStep.stitchCountEnd} sts)</span>
             )}
           </span>
         </div>
@@ -247,14 +247,14 @@ export function PatternTracker({
             )}
             <button
               onClick={() => setShowAnnotationPanel(true)}
-              className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-white border border-[#2C1810]/10 rounded-full text-sm text-[#2C1810]/50 shadow-sm hover:shadow-md transition-shadow"
+              className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-white border border-[#2C1810]/10 rounded-full text-sm text-[#2C1810]/70 shadow-sm hover:shadow-md transition-shadow"
             >
               + Add note
             </button>
           </div>
         </motion.div>
 
-        <div className="text-center mt-6 text-sm text-[#2C1810]/40">
+        <div className="text-center mt-6 text-sm text-[#2C1810]/65">
           Step {progress.currentStepIndex + 1} of {currentSection.steps.length}
           {pattern.sections.length > 1 && (
             <span>
@@ -271,7 +271,7 @@ export function PatternTracker({
             whileTap={{ scale: 0.95 }}
             onClick={goToPrevStep}
             disabled={!canGoBack}
-            className="w-14 h-14 rounded-2xl bg-[#FFF8F0] text-[#2C1810]/50 flex items-center justify-center disabled:opacity-30"
+            className="w-14 h-14 rounded-2xl bg-[#FFF8F0] text-[#2C1810]/70 flex items-center justify-center disabled:opacity-30"
           >
             <ChevronLeft className="w-6 h-6" />
           </motion.button>
@@ -296,7 +296,7 @@ export function PatternTracker({
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={resetProgress}
-            className="w-14 h-14 rounded-2xl bg-[#FFF8F0] text-[#2C1810]/50 flex items-center justify-center"
+            className="w-14 h-14 rounded-2xl bg-[#FFF8F0] text-[#2C1810]/70 flex items-center justify-center"
           >
             <RotateCcw className="w-5 h-5" />
           </motion.button>
@@ -329,14 +329,14 @@ export function PatternTracker({
             >
               <div className="sticky top-0 bg-white border-b border-[#2C1810]/10 px-4 py-3 flex items-center justify-between">
                 <h2 className="font-semibold text-[#2C1810]">All Steps</h2>
-                <button onClick={() => setShowAllSteps(false)} className="p-2 text-[#2C1810]/40">
+                <button onClick={() => setShowAllSteps(false)} className="p-2 text-[#2C1810]/65">
                   <X className="w-5 h-5" />
                 </button>
               </div>
               <div className="p-4 space-y-4">
                 {pattern.sections.map((section, sIdx) => (
                   <div key={sIdx}>
-                    <h3 className="text-sm font-medium text-[#2C1810]/50 mb-2">{section.name}</h3>
+                    <h3 className="text-sm font-medium text-[#2C1810]/70 mb-2">{section.name}</h3>
                     <div className="space-y-1">
                       {section.steps.map((step, stepIdx) => {
                         const isCurrent =
@@ -421,7 +421,7 @@ function AnnotationPanelInline({
       >
         <div className="sticky top-0 bg-white border-b border-[#2C1810]/10 px-5 py-4 flex items-center justify-between">
           <h2 className="font-semibold text-[#2C1810]">Annotate Step</h2>
-          <button onClick={onClose} className="text-[#2C1810]/40">
+          <button onClick={onClose} className="text-[#2C1810]/65">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -435,7 +435,7 @@ function AnnotationPanelInline({
               onChange={(e) => setNote(e.target.value)}
               placeholder="e.g. Use stitch marker here..."
               rows={3}
-              className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 resize-none"
+              className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 resize-none"
             />
           </div>
           <div>
@@ -463,7 +463,7 @@ function AnnotationPanelInline({
               ✏️ Modify Instruction
             </label>
             <div className="p-3 bg-[#2C1810]/5 rounded-xl mb-2">
-              <p className="text-xs text-[#2C1810]/50 mb-1">Original:</p>
+              <p className="text-xs text-[#2C1810]/70 mb-1">Original:</p>
               <p className="text-sm text-[#2C1810]">{originalInstruction}</p>
             </div>
             <textarea
@@ -471,7 +471,7 @@ function AnnotationPanelInline({
               onChange={(e) => setModification(e.target.value)}
               placeholder="Your modified version..."
               rows={3}
-              className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 resize-none"
+              className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 resize-none"
             />
           </div>
           <button

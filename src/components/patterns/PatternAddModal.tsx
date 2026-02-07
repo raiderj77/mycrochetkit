@@ -180,7 +180,7 @@ export function PatternAddModal({
             {step === 'form' && (
               <button
                 onClick={() => setStep('choose')}
-                className="w-8 h-8 flex items-center justify-center text-[#2C1810]/50 hover:text-[#2C1810] -ml-2"
+                className="w-8 h-8 flex items-center justify-center text-[#2C1810]/70 hover:text-[#2C1810] -ml-2"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -191,7 +191,7 @@ export function PatternAddModal({
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center text-[#2C1810]/40 hover:text-[#2C1810]"
+            className="w-8 h-8 flex items-center justify-center text-[#2C1810]/65 hover:text-[#2C1810]"
           >
             <X className="w-5 h-5" />
           </button>
@@ -211,7 +211,7 @@ export function PatternAddModal({
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-3"
               >
-                <p className="text-[#2C1810]/50 text-sm mb-4">
+                <p className="text-[#2C1810]/70 text-sm mb-4">
                   How do you want to add this pattern?
                 </p>
                 {SOURCE_OPTIONS.map((option) => (
@@ -226,7 +226,7 @@ export function PatternAddModal({
                     </div>
                     <div className="flex-1">
                       <div className="font-medium text-[#2C1810]">{option.label}</div>
-                      <div className="text-sm text-[#2C1810]/50">{option.desc}</div>
+                      <div className="text-sm text-[#2C1810]/70">{option.desc}</div>
                     </div>
                     {option.type === 'generated' && (
                       <span className="px-2 py-0.5 bg-[#B8A9C9]/20 text-[#B8A9C9] text-xs font-medium rounded-full">
@@ -253,7 +253,7 @@ export function PatternAddModal({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Chonky Frog Plushie"
-                    className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
+                    className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
                   />
                 </div>
 
@@ -267,7 +267,7 @@ export function PatternAddModal({
                       value={url}
                       onChange={(e) => setUrl(e.target.value)}
                       placeholder="https://..."
-                      className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
+                      className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
                     />
                   </div>
                 )}
@@ -326,7 +326,7 @@ export function PatternAddModal({
                       value={hookSize}
                       onChange={(e) => setHookSize(e.target.value)}
                       placeholder="e.g. 4.0mm"
-                      className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
+                      className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
                     />
                   </div>
                   <div>
@@ -350,14 +350,14 @@ export function PatternAddModal({
 
                 <div>
                   <label className="block text-sm font-medium text-[#2C1810] mb-1.5">
-                    Tags <span className="font-normal text-[#2C1810]/40">(comma separated)</span>
+                    Tags <span className="font-normal text-[#2C1810]/65">(comma separated)</span>
                   </label>
                   <input
                     type="text"
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
                     placeholder="e.g. cute, gift, quick"
-                    className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
+                    className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
                   />
                 </div>
 
@@ -368,7 +368,7 @@ export function PatternAddModal({
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Any notes about this pattern..."
                     rows={3}
-                    className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 resize-none"
+                    className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 resize-none"
                   />
                 </div>
               </motion.div>

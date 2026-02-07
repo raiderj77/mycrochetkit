@@ -113,7 +113,7 @@ export function StepEditor({ sections, onChange, onSave, onCancel, saving }: Ste
           <div className="text-center py-12">
             <div className="text-5xl mb-4">📝</div>
             <h2 className="text-lg font-medium text-[#2C1810] mb-2">No sections yet</h2>
-            <p className="text-[#2C1810]/50 mb-6">Add a section to start building your pattern</p>
+            <p className="text-[#2C1810]/70 mb-6">Add a section to start building your pattern</p>
             <button
               onClick={addSection}
               className="px-6 py-3 bg-[#E86A58] text-white rounded-xl font-medium"
@@ -133,7 +133,7 @@ export function StepEditor({ sections, onChange, onSave, onCancel, saving }: Ste
                   className="flex items-center gap-3 px-4 py-3 bg-[#FFF8F0] cursor-pointer"
                   onClick={() => toggleSection(sectionIndex)}
                 >
-                  <button className="text-[#2C1810]/30">
+                  <button className="text-[#2C1810]/60">
                     {expandedSections.has(sectionIndex) ? (
                       <ChevronUp className="w-5 h-5" />
                     ) : (
@@ -148,7 +148,7 @@ export function StepEditor({ sections, onChange, onSave, onCancel, saving }: Ste
                     className="flex-1 bg-transparent font-medium text-[#2C1810] focus:outline-none"
                     placeholder="Section name"
                   />
-                  <span className="text-xs text-[#2C1810]/40">
+                  <span className="text-xs text-[#2C1810]/65">
                     {section.steps.length} step{section.steps.length !== 1 ? 's' : ''}
                   </span>
                   <button
@@ -174,7 +174,7 @@ export function StepEditor({ sections, onChange, onSave, onCancel, saving }: Ste
                       <div className="p-3 space-y-2">
                         {/* Repeat count */}
                         <div className="flex items-center gap-2 px-2 py-1 text-sm">
-                          <span className="text-[#2C1810]/50">Repeat section</span>
+                          <span className="text-[#2C1810]/70">Repeat section</span>
                           <input
                             type="number"
                             min={1}
@@ -186,7 +186,7 @@ export function StepEditor({ sections, onChange, onSave, onCancel, saving }: Ste
                             }
                             className="w-16 px-2 py-1 bg-[#FFF8F0] rounded-lg text-center text-[#2C1810]"
                           />
-                          <span className="text-[#2C1810]/50">
+                          <span className="text-[#2C1810]/70">
                             time{section.repeatCount !== 1 ? 's' : ''}
                           </span>
                         </div>
@@ -205,7 +205,7 @@ export function StepEditor({ sections, onChange, onSave, onCancel, saving }: Ste
                               className="bg-[#FFF8F0] rounded-xl p-3"
                             >
                               <div className="flex items-start gap-2">
-                                <div className="mt-2 cursor-grab active:cursor-grabbing text-[#2C1810]/30">
+                                <div className="mt-2 cursor-grab active:cursor-grabbing text-[#2C1810]/60">
                                   <GripVertical className="w-4 h-4" />
                                 </div>
 
@@ -255,7 +255,7 @@ export function StepEditor({ sections, onChange, onSave, onCancel, saving }: Ste
 
                                   {/* Stitch count */}
                                   <div className="flex items-center gap-2">
-                                    <span className="text-xs text-[#2C1810]/50">Stitch count:</span>
+                                    <span className="text-xs text-[#2C1810]/70">Stitch count:</span>
                                     <input
                                       type="number"
                                       value={step.stitchCountEnd ?? ''}

@@ -57,7 +57,7 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
           <span className="text-6xl">{TYPE_ICONS[pattern.type]}</span>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-[#2C1810]/50 hover:text-[#2C1810]"
+            className="absolute top-4 right-4 w-8 h-8 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-[#2C1810]/70 hover:text-[#2C1810]"
           >
             <X className="w-5 h-5" />
           </button>
@@ -116,7 +116,7 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
               {pattern.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 text-xs text-[#2C1810]/50 bg-[#FFF8F0] rounded-full"
+                  className="px-2 py-0.5 text-xs text-[#2C1810]/70 bg-[#FFF8F0] rounded-full"
                 >
                   {tag}
                 </span>
@@ -155,14 +155,14 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
                     className="flex items-center justify-between px-3 py-2 bg-[#FFF8F0] rounded-lg text-sm"
                   >
                     <span className="text-[#2C1810]">{section.name}</span>
-                    <span className="text-[#2C1810]/40">
+                    <span className="text-[#2C1810]/65">
                       {section.steps.length} steps
                       {section.repeatCount > 1 && ` × ${section.repeatCount}`}
                     </span>
                   </div>
                 ))}
                 {pattern.sections.length > 5 && (
-                  <p className="text-xs text-[#2C1810]/40 text-center py-1">
+                  <p className="text-xs text-[#2C1810]/65 text-center py-1">
                     +{pattern.sections.length - 5} more sections
                   </p>
                 )}

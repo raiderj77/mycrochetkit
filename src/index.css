@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* Import distinctive fonts */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Serif+Display&display=swap');
-
 :root {
   /* Warm craft palette */
   --coral: #E86A58;
@@ -44,7 +41,7 @@ body {
       rgba(253, 248, 245, 0.85) 50%,
       rgba(255, 255, 255, 1) 100%
     ),
-    url('/hero-bg.jpg');
+    url('/hero-bg.webp');
   background-size: cover;
   background-position: center top;
   background-attachment: scroll;

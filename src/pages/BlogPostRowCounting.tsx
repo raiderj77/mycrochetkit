@@ -62,7 +62,7 @@ export const BlogPostRowCounting = () => {
 
         {/* Breadcrumbs */}
         <nav
-          className="max-w-3xl mx-auto px-6 pt-6 text-sm text-[#2C1810]/50"
+          className="max-w-3xl mx-auto px-6 pt-6 text-sm text-[#2C1810]/70"
           aria-label="Breadcrumb"
         >
           <Link to="/" className="hover:text-[#E86A58]">
@@ -81,10 +81,10 @@ export const BlogPostRowCounting = () => {
           {/* Meta */}
           <div className="flex items-center gap-4 text-sm text-[#E86A58] mb-4">
             <span className="px-3 py-1 bg-[#E86A58]/10 rounded-full font-medium">Crochet Tips</span>
-            <span className="flex items-center gap-1 text-[#2C1810]/50">
+            <span className="flex items-center gap-1 text-[#2C1810]/70">
               <Calendar className="w-4 h-4" /> Feb 3, 2026
             </span>
-            <span className="flex items-center gap-1 text-[#2C1810]/50">
+            <span className="flex items-center gap-1 text-[#2C1810]/70">
               <Clock className="w-4 h-4" /> 7 min read
             </span>
           </div>
@@ -105,7 +105,7 @@ export const BlogPostRowCounting = () => {
             </div>
             <div>
               <p className="font-semibold text-[#2C1810] text-sm">Jason</p>
-              <p className="text-xs text-[#2C1810]/50">
+              <p className="text-xs text-[#2C1810]/70">
                 Crocheter & developer · Founder of MyCrochetKit
               </p>
             </div>
@@ -187,7 +187,7 @@ export const BlogPostRowCounting = () => {
                     },
                   ].map((step, i) =>
                     step.emoji === '→' ? (
-                      <span key={i} className="text-[#2C1810]/20 text-xl hidden md:block">
+                      <span key={i} className="text-[#2C1810]/65 text-xl hidden md:block">
                         →
                       </span>
                     ) : (
@@ -209,7 +209,7 @@ export const BlogPostRowCounting = () => {
                     )
                   )}
                 </div>
-                <p className="text-center text-sm text-[#2C1810]/50 mt-4 italic">
+                <p className="text-center text-sm text-[#2C1810]/70 mt-4 italic">
                   Every method that requires stopping your hands creates this loop.
                 </p>
               </div>
@@ -384,7 +384,7 @@ export const BlogPostRowCounting = () => {
                   </tbody>
                 </table>
               </div>
-              <p className="text-center text-xs text-[#2C1810]/40 mt-3 italic">
+              <p className="text-center text-xs text-[#2C1810]/65 mt-3 italic">
                 Voice counters are the only method that keeps your hands on your hook the entire
                 time.
               </p>
@@ -448,7 +448,7 @@ export const BlogPostRowCounting = () => {
                     </div>
                   ))}
                 </div>
-                <p className="text-center text-sm text-[#2C1810]/50 mt-4 italic">
+                <p className="text-center text-sm text-[#2C1810]/70 mt-4 italic">
                   Four commands. Hands never leave your hook.
                 </p>
               </div>
@@ -579,7 +579,7 @@ export const BlogPostRowCounting = () => {
           </div>
 
           {/* Footer */}
-          <footer className="mt-8 pt-6 border-t border-[#2C1810]/10 text-sm text-[#2C1810]/50">
+          <footer className="mt-8 pt-6 border-t border-[#2C1810]/10 text-sm text-[#2C1810]/70">
             <p>
               Written by <strong className="text-[#2C1810]/70">Jason</strong>, founder of{' '}
               <Link to="/" className="text-[#E86A58] hover:underline">

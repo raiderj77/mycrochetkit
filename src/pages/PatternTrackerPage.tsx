@@ -68,7 +68,7 @@ export function PatternTrackerPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FFF8F0]">
         <div className="text-center">
-          <p className="text-[#2C1810]/50 mb-4">Pattern not found</p>
+          <p className="text-[#2C1810]/70 mb-4">Pattern not found</p>
           <button onClick={() => navigate('/patterns')} className="text-[#E86A58]">
             Back to Patterns
           </button>
@@ -82,7 +82,7 @@ export function PatternTrackerPage() {
         <div className="text-center">
           <div className="text-5xl mb-4">📝</div>
           <h2 className="text-xl font-semibold text-[#2C1810] mb-2">No steps yet</h2>
-          <p className="text-[#2C1810]/50 mb-6">Add steps to this pattern to start tracking</p>
+          <p className="text-[#2C1810]/70 mb-6">Add steps to this pattern to start tracking</p>
           <button
             onClick={() => navigate(`/patterns/${patternId}/edit`)}
             className="px-6 py-3 bg-[#E86A58] text-white rounded-xl font-medium"

@@ -18,7 +18,7 @@ const links = [
 export function QuickLinks() {
   return (
     <div className="mb-8">
-      <h2 className="text-sm font-medium text-[#2C1810]/50 mb-3">Quick Links</h2>
+      <h2 className="text-sm font-medium text-[#2C1810]/70 mb-3">Quick Links</h2>
       <div className="grid grid-cols-4 gap-3">
         {links.map((link, index) => {
           const content = (

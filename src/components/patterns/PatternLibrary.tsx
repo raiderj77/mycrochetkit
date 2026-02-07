@@ -104,7 +104,7 @@ export function PatternLibrary({
               {onBack && (
                 <button
                   onClick={onBack}
-                  className="w-10 h-10 flex items-center justify-center text-[#2C1810]/50 hover:text-[#2C1810] text-xl"
+                  className="w-10 h-10 flex items-center justify-center text-[#2C1810]/70 hover:text-[#2C1810] text-xl"
                 >
                   ←
                 </button>
@@ -122,18 +122,18 @@ export function PatternLibrary({
 
           <div className="flex gap-2 mb-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#2C1810]/30" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#2C1810]/60" />
               <input
                 type="text"
                 placeholder="Search patterns..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/30 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
+                className="w-full pl-10 pr-4 py-2.5 bg-white rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
               />
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`w-11 h-11 flex items-center justify-center rounded-xl transition-colors relative ${showFilters || activeFiltersCount > 0 ? 'bg-[#E86A58] text-white' : 'bg-white text-[#2C1810]/50'}`}
+              className={`w-11 h-11 flex items-center justify-center rounded-xl transition-colors relative ${showFilters || activeFiltersCount > 0 ? 'bg-[#E86A58] text-white' : 'bg-white text-[#2C1810]/70'}`}
             >
               <Filter className="w-5 h-5" />
               {activeFiltersCount > 0 && (
@@ -205,7 +205,7 @@ export function PatternLibrary({
           </div>
         ) : error ? (
           <div className="text-center py-20">
-            <p className="text-[#2C1810]/50 mb-4">{error}</p>
+            <p className="text-[#2C1810]/70 mb-4">{error}</p>
             <button
               onClick={() => loadPatterns()}
               className="px-4 py-2 bg-[#E86A58] text-white rounded-lg"
@@ -219,7 +219,7 @@ export function PatternLibrary({
               <>
                 <div className="text-6xl mb-4">📚</div>
                 <h2 className="text-xl font-semibold text-[#2C1810] mb-2">No patterns yet</h2>
-                <p className="text-[#2C1810]/50 mb-6">Save your favorite patterns here</p>
+                <p className="text-[#2C1810]/70 mb-6">Save your favorite patterns here</p>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowAddModal(true)}
@@ -232,7 +232,7 @@ export function PatternLibrary({
               <>
                 <div className="text-5xl mb-4">🔍</div>
                 <h2 className="text-lg font-medium text-[#2C1810]/60">No matches</h2>
-                <p className="text-[#2C1810]/40">Try adjusting your search or filters</p>
+                <p className="text-[#2C1810]/65">Try adjusting your search or filters</p>
               </>
             )}
           </div>

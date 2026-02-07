@@ -450,7 +450,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
           >
             <span className="text-4xl">🧶</span>
           </motion.div>
-          <p className="text-white/50 text-lg">Loading project...</p>
+          <p className="text-white/70 text-lg">Loading project...</p>
         </motion.div>
       </div>
     );
@@ -483,7 +483,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       <header className="flex justify-between items-center mb-6">
         <Link
           to="/"
-          className="flex items-center gap-2 text-white/50 hover:text-white transition-colors"
+          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="text-sm font-medium">Back</span>
@@ -496,7 +496,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
             {online ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
             <span className="hidden sm:inline">{online ? 'Online' : 'Offline'}</span>
           </span>
-          <span className="text-white/40 flex items-center gap-1.5">
+          <span className="text-white/65 flex items-center gap-1.5">
             {saving ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin" /> Saving
@@ -553,7 +553,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
                   value={tempNotes}
                   onChange={(e) => setTempNotes(e.target.value)}
                   placeholder="Add notes..."
-                  className="w-full h-28 bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/30 resize-none focus:outline-none focus:border-[#E86A58]/50"
+                  className="w-full h-28 bg-white/5 border border-white/10 rounded-2xl p-4 text-white placeholder-white/50 resize-none focus:outline-none focus:border-[#E86A58]/50"
                   maxLength={500}
                   autoFocus
                 />
@@ -609,7 +609,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
         ))}
         <motion.button
           onClick={() => setShowAddForm(true)}
-          className="counter-tab !border-dashed !border-white/20 !text-white/40 hover:!border-white/40"
+          className="counter-tab !border-dashed !border-white/20 !text-white/65 hover:!border-white/40"
           whileTap={{ scale: 0.95 }}
         >
           <Plus className="w-4 h-4" />
@@ -630,7 +630,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
               value={newCounterName}
               onChange={(e) => setNewCounterName(e.target.value)}
               placeholder="Counter name"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-white/30 mb-4 focus:outline-none focus:border-[#E86A58]/50"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-white/50 mb-4 focus:outline-none focus:border-[#E86A58]/50"
               autoFocus
               onKeyDown={(e) => e.key === 'Enter' && addCounter()}
             />
@@ -656,7 +656,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
 
       {/* Main Counter Display */}
       <div className="text-center mb-8">
-        <p className="text-white/50 mb-4 text-lg">{activeCounter.name}</p>
+        <p className="text-white/70 mb-4 text-lg">{activeCounter.name}</p>
         <motion.div
           className="counter-display"
           key={activeCounter.count}
@@ -686,7 +686,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       {/* Voice Status */}
       <div className="text-center mb-8">
         <motion.div
-          className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium ${isListening ? 'bg-[#E86A58]/20 border-2 border-[#E86A58] text-[#E86A58]' : 'glass-card text-white/50'}`}
+          className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium ${isListening ? 'bg-[#E86A58]/20 border-2 border-[#E86A58] text-[#E86A58]' : 'glass-card text-white/70'}`}
           animate={isListening ? { scale: [1, 1.02, 1] } : {}}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >
@@ -709,7 +709,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
         </motion.div>
         {lastHeard && (
           <motion.p
-            className="text-white/30 text-sm mt-4"
+            className="text-white/60 text-sm mt-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
@@ -764,7 +764,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
         <div className="text-center mb-8">
           <motion.button
             onClick={() => removeCounter(activeId)}
-            className="text-white/30 text-sm hover:text-red-400 transition-colors flex items-center gap-2 mx-auto"
+            className="text-white/60 text-sm hover:text-red-400 transition-colors flex items-center gap-2 mx-auto"
             whileTap={{ scale: 0.95 }}
           >
             <Trash2 className="w-3.5 h-3.5" /> Delete "{activeCounter.name}"
@@ -823,23 +823,23 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
 
                 {/* Advanced commands */}
                 <div className="border-t border-white/10 pt-4">
-                  <p className="text-white/40 text-xs uppercase tracking-wider mb-3">Advanced</p>
+                  <p className="text-white/65 text-xs uppercase tracking-wider mb-3">Advanced</p>
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div className="bg-white/5 rounded-lg p-3">
                       <span className="text-[#7FBFA0]">"add 5"</span>
-                      <span className="text-white/40 ml-2">→ +5</span>
+                      <span className="text-white/65 ml-2">→ +5</span>
                     </div>
                     <div className="bg-white/5 rounded-lg p-3">
                       <span className="text-[#B8A9C9]">"minus 3"</span>
-                      <span className="text-white/40 ml-2">→ -3</span>
+                      <span className="text-white/65 ml-2">→ -3</span>
                     </div>
                     <div className="bg-white/5 rounded-lg p-3">
                       <span className="text-[#E86A58]">"set 47"</span>
-                      <span className="text-white/40 ml-2">→ jump to 47</span>
+                      <span className="text-white/65 ml-2">→ jump to 47</span>
                     </div>
                     <div className="bg-white/5 rounded-lg p-3">
                       <span className="text-white/70">"undo"</span>
-                      <span className="text-white/40 ml-2">→ go back 1</span>
+                      <span className="text-white/65 ml-2">→ go back 1</span>
                     </div>
                   </div>
                 </div>

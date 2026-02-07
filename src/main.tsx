@@ -48,7 +48,7 @@ createRoot(document.getElementById('root')!).render(
             <div className="min-h-screen flex items-center justify-center bg-[#FFF8F0]">
               <div className="text-center">
                 <div className="w-12 h-12 mx-auto mb-4 rounded-full border-3 border-[#E86A58]/20 border-t-[#E86A58] animate-spin" />
-                <p className="text-[#2C1810]/50">Loading...</p>
+                <p className="text-[#2C1810]/70">Loading...</p>
               </div>
             </div>
           }

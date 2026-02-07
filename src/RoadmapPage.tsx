@@ -67,7 +67,7 @@ export function RoadmapPage() {
       case 'in-progress':
         return 'bg-[#B8A9C9]/15 text-[#6B5B7A] border-[#B8A9C9]/30';
       case 'planned':
-        return 'bg-[#2C1810]/5 text-[#2C1810]/60 border-[#2C1810]/10';
+        return 'bg-[#2C1810]/5 text-[#2C1810]/75 border-[#2C1810]/10';
     }
   };
 
@@ -77,7 +77,7 @@ export function RoadmapPage() {
         <div className="max-w-4xl mx-auto flex justify-between items-center px-6 py-4">
           <Link
             to="/"
-            className="flex items-center gap-2 text-[#2C1810]/50 hover:text-[#2C1810] transition-colors"
+            className="flex items-center gap-2 text-[#2C1810]/70 hover:text-[#2C1810] transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-sm font-medium">Back</span>
@@ -99,7 +99,7 @@ export function RoadmapPage() {
           className="text-center mb-16"
         >
           <h1 className="display-font text-4xl md:text-5xl text-[#2C1810] mb-4">Feature Roadmap</h1>
-          <p className="text-[#2C1810]/60 max-w-md mx-auto">
+          <p className="text-[#2C1810]/75 max-w-md mx-auto">
             See what we've built and what's coming next.
           </p>
         </motion.div>
@@ -124,7 +124,7 @@ export function RoadmapPage() {
             >
               <div>
                 <h3 className="font-semibold text-[#2C1810] mb-1">{item.title}</h3>
-                <p className="text-[#2C1810]/50 text-sm">{item.description}</p>
+                <p className="text-[#2C1810]/70 text-sm">{item.description}</p>
               </div>
               <span className={`badge text-xs whitespace-nowrap ${getStatusStyles(item.status)}`}>
                 {getStatusIcon(item.status)}
@@ -145,7 +145,7 @@ export function RoadmapPage() {
           transition={{ delay: 0.5 }}
         >
           <h2 className="display-font text-2xl text-[#2C1810] mb-4">Have a feature request?</h2>
-          <p className="text-[#2C1810]/60 mb-6">
+          <p className="text-[#2C1810]/75 mb-6">
             We'd love to hear what would make your crochet life easier.
           </p>
           <a
@@ -159,10 +159,10 @@ export function RoadmapPage() {
 
       <footer className="border-t border-[#2C1810]/5">
         <div className="max-w-4xl mx-auto px-6 py-8 flex justify-between items-center">
-          <span className="text-[#2C1810]/40 text-sm">MyCrochetKit</span>
+          <span className="text-[#2C1810]/65 text-sm">MyCrochetKit</span>
           <Link
             to="/"
-            className="text-[#2C1810]/40 hover:text-[#E86A58] text-sm transition-colors flex items-center gap-1"
+            className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors flex items-center gap-1"
           >
             Home <ArrowRight className="w-3 h-3" />
           </Link>

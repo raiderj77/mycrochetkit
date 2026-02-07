@@ -30,7 +30,7 @@ export const BlogPostTrueCost = () => {
           </div>
         </header>
 
-        <nav className="max-w-3xl mx-auto px-6 pt-6 text-sm text-[#2C1810]/50">
+        <nav className="max-w-3xl mx-auto px-6 pt-6 text-sm text-[#2C1810]/70">
           <Link to="/" className="hover:text-[#E86A58]">
             Home
           </Link>
@@ -45,10 +45,10 @@ export const BlogPostTrueCost = () => {
         <article className="max-w-3xl mx-auto px-6 py-8">
           <div className="flex items-center gap-4 text-sm text-[#E86A58] mb-4">
             <span className="px-3 py-1 bg-[#E86A58]/10 rounded-full font-medium">Crochet Life</span>
-            <span className="flex items-center gap-1 text-[#2C1810]/50">
+            <span className="flex items-center gap-1 text-[#2C1810]/70">
               <Calendar className="w-4 h-4" /> Feb 5, 2026
             </span>
-            <span className="flex items-center gap-1 text-[#2C1810]/50">
+            <span className="flex items-center gap-1 text-[#2C1810]/70">
               <Clock className="w-4 h-4" /> 5 min read
             </span>
           </div>
@@ -67,7 +67,7 @@ export const BlogPostTrueCost = () => {
             </div>
             <div>
               <p className="font-semibold text-[#2C1810] text-sm">Jason</p>
-              <p className="text-xs text-[#2C1810]/50">
+              <p className="text-xs text-[#2C1810]/70">
                 Crocheter & developer · Founder of MyCrochetKit
               </p>
             </div>
@@ -255,7 +255,7 @@ export const BlogPostTrueCost = () => {
             />
           </div>
 
-          <footer className="mt-8 pt-6 border-t border-[#2C1810]/10 text-sm text-[#2C1810]/50">
+          <footer className="mt-8 pt-6 border-t border-[#2C1810]/10 text-sm text-[#2C1810]/70">
             <p>
               Written by <strong className="text-[#2C1810]/70">Jason</strong>, founder of{' '}
               <Link to="/" className="text-[#E86A58] hover:underline">

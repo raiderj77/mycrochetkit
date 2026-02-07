@@ -70,7 +70,7 @@ export function Auth({ user, setUser }: AuthProps) {
             {user.displayName?.split(' ')[0]}
           </span>
           <ChevronDown
-            className={`w-4 h-4 text-[#2C1810]/50 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 text-[#2C1810]/70 transition-transform ${showDropdown ? 'rotate-180' : ''}`}
           />
         </motion.button>
 
@@ -85,7 +85,7 @@ export function Auth({ user, setUser }: AuthProps) {
             >
               <div className="px-4 py-3 border-b border-[#2C1810]/5">
                 <p className="text-[#2C1810] text-sm font-medium truncate">{user.displayName}</p>
-                <p className="text-[#2C1810]/50 text-xs truncate">{user.email}</p>
+                <p className="text-[#2C1810]/70 text-xs truncate">{user.email}</p>
               </div>
               <button
                 onClick={handleSignOut}

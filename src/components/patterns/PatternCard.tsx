@@ -130,20 +130,20 @@ export function PatternCard({ pattern, projectCount = 0, onClick, onLongPress }:
             {displayTags.map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-0.5 text-xs text-[#2C1810]/50 bg-[#FFF8F0] rounded-full"
+                className="px-2 py-0.5 text-xs text-[#2C1810]/70 bg-[#FFF8F0] rounded-full"
               >
                 {tag}
               </span>
             ))}
             {hasMoreTags && (
-              <span className="px-2 py-0.5 text-xs text-[#2C1810]/30">
+              <span className="px-2 py-0.5 text-xs text-[#2C1810]/60">
                 +{pattern.tags.length - 3}
               </span>
             )}
           </div>
         )}
 
-        <div className="flex items-center justify-between text-xs text-[#2C1810]/40">
+        <div className="flex items-center justify-between text-xs text-[#2C1810]/65">
           {projectCount > 0 ? (
             <div className="flex items-center gap-1">
               <span>📋</span>

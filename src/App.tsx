@@ -62,7 +62,7 @@ function App() {
             >
               <span className="text-4xl">🧶</span>
             </motion.div>
-            <p className="text-[#2C1810]/50 text-lg">Loading your projects...</p>
+            <p className="text-[#2C1810]/70 text-lg">Loading your projects...</p>
           </motion.div>
         </div>
       </>
@@ -116,7 +116,7 @@ function App() {
                   👋
                 </motion.span>
               </h1>
-              <p className="text-[#2C1810]/50 text-lg">Ready to keep counting?</p>
+              <p className="text-[#2C1810]/70 text-lg">Ready to keep counting?</p>
             </motion.div>
 
             <QuickLinks />
@@ -125,21 +125,21 @@ function App() {
 
           {/* Footer */}
           <footer className="max-w-5xl mx-auto px-6 py-12 text-center">
-            <p className="text-[#2C1810]/30 text-sm mb-2">
+            <p className="text-[#2C1810]/75 text-sm mb-2">
               Made with <span className="text-[#E86A58]">♥</span> for crocheters
             </p>
             <Link
               to="/roadmap"
-              className="text-[#2C1810]/40 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
+              className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
             >
               Feature Roadmap <ArrowRight className="w-3 h-3" />
             </Link>
-            <span className="text-[#2C1810]/20 mx-3">·</span>
+            <span className="text-[#2C1810]/65 mx-3">·</span>
             <a
               href="https://www.reddit.com/r/crochetkitapp/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#2C1810]/40 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
+              className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
             >
               Join Community <ArrowRight className="w-3 h-3" />
             </a>
@@ -217,7 +217,7 @@ function App() {
 
             {/* Subheadline */}
             <motion.p
-              className="text-xl md:text-2xl text-[#2C1810]/60 mb-12 max-w-xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-[#2C1810]/75 mb-12 max-w-xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
@@ -238,7 +238,7 @@ function App() {
 
             {/* Trust badges */}
             <motion.div
-              className="flex flex-wrap justify-center gap-6 text-sm text-[#2C1810]/50"
+              className="flex flex-wrap justify-center gap-6 text-sm text-[#2C1810]/70"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
@@ -337,7 +337,7 @@ function App() {
                   Just say it.
                 </h2>
 
-                <p className="text-[#2C1810]/60 text-lg mb-8">
+                <p className="text-[#2C1810]/75 text-lg mb-8">
                   Keep your hands on your hook. Voice commands count your rows while you crochet. No
                   stopping. No tapping. No losing your place.
                 </p>
@@ -375,7 +375,7 @@ function App() {
                   {/* Decorative gradient */}
                   <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-[#E86A58]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
 
-                  <p className="text-[#2C1810]/50 text-sm mb-2">Row Counter</p>
+                  <p className="text-[#2C1810]/70 text-sm mb-2">Row Counter</p>
                   <div className="display-font text-8xl md:text-9xl text-[#2C1810] mb-6">47</div>
 
                   {/* Listening indicator */}
@@ -390,7 +390,7 @@ function App() {
                     <span className="text-[#E86A58] font-medium text-sm">Listening...</span>
                   </div>
 
-                  <p className="text-[#2C1810]/30 text-sm mt-4">Heard: "next"</p>
+                  <p className="text-[#2C1810]/75 text-sm mt-4">Heard: "next"</p>
                 </div>
               </motion.div>
             </div>
@@ -439,7 +439,7 @@ function App() {
                     <span className="text-2xl">{item.icon}</span>
                   </div>
                   <h3 className="text-[#2C1810] font-semibold text-lg mb-2">{item.title}</h3>
-                  <p className="text-[#2C1810]/50 text-sm">{item.desc}</p>
+                  <p className="text-[#2C1810]/70 text-sm">{item.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -457,13 +457,13 @@ function App() {
             <h2 className="display-font text-3xl md:text-4xl text-[#2C1810] mb-4">
               Ready to never lose count?
             </h2>
-            <p className="text-[#2C1810]/50 text-lg mb-10">
+            <p className="text-[#2C1810]/70 text-lg mb-10">
               Join crocheters who've made the switch.
             </p>
 
             <div className="feature-card p-10">
               <Auth user={user} setUser={setUser} />
-              <p className="text-[#2C1810]/30 text-sm mt-8">
+              <p className="text-[#2C1810]/75 text-sm mt-8">
                 Start free. Upgrade when you need more.
               </p>
             </div>
@@ -478,23 +478,23 @@ function App() {
               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#E86A58] to-[#D35A4A] flex items-center justify-center">
                 <span className="text-sm">🧶</span>
               </div>
-              <span className="text-[#2C1810]/40 text-sm">MyCrochetKit</span>
+              <span className="text-[#2C1810]/65 text-sm">MyCrochetKit</span>
             </div>
             <a
               href="https://www.reddit.com/r/crochetkitapp/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#2C1810]/40 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
+              className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
             >
               Join Community <ArrowRight className="w-3 h-3" />
             </a>
             <Link
               to="/roadmap"
-              className="text-[#2C1810]/40 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
+              className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
             >
               Feature Roadmap <ArrowRight className="w-3 h-3" />
             </Link>
-            <p className="text-[#2C1810]/30 text-xs">© 2026 MyCrochetKit</p>
+            <p className="text-[#2C1810]/75 text-xs">© 2026 MyCrochetKit</p>
           </div>
         </footer>
       </div>

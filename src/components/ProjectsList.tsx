@@ -124,7 +124,7 @@ export function ProjectsList({ user }: { user: User }) {
               🧶
             </motion.span>
           </div>
-          <p className="text-[#2C1810]/50">Loading projects...</p>
+          <p className="text-[#2C1810]/70">Loading projects...</p>
         </motion.div>
       </div>
     );
@@ -146,7 +146,7 @@ export function ProjectsList({ user }: { user: User }) {
             </div>
             <div>
               <p className="text-[#2C1810] font-medium">Offline mode</p>
-              <p className="text-[#2C1810]/50 text-sm">
+              <p className="text-[#2C1810]/70 text-sm">
                 Showing cached projects. Changes sync when reconnected.
               </p>
             </div>
@@ -158,7 +158,7 @@ export function ProjectsList({ user }: { user: User }) {
       <div className="flex justify-between items-start mb-8">
         <div>
           <h2 className="text-2xl font-semibold text-[#2C1810] mb-1">Your Projects</h2>
-          <p className="text-[#2C1810]/50">{projects.length} of 3 free projects</p>
+          <p className="text-[#2C1810]/70">{projects.length} of 3 free projects</p>
         </div>
         {projects.length < 3 && online && (
           <motion.button
@@ -188,7 +188,7 @@ export function ProjectsList({ user }: { user: User }) {
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="e.g., Baby Blanket, Cozy Sweater..."
-              className="w-full p-4 bg-[#FFF8F0] border border-[#2C1810]/10 rounded-xl text-[#2C1810] placeholder-[#2C1810]/30 focus:outline-none focus:border-[#E86A58]/50 focus:ring-2 focus:ring-[#E86A58]/10 transition-all mb-4"
+              className="w-full p-4 bg-[#FFF8F0] border border-[#2C1810]/10 rounded-xl text-[#2C1810] placeholder-[#2C1810]/50 focus:outline-none focus:border-[#E86A58]/50 focus:ring-2 focus:ring-[#E86A58]/10 transition-all mb-4"
               autoFocus
             />
             <div className="flex gap-3">
@@ -240,7 +240,7 @@ export function ProjectsList({ user }: { user: User }) {
           <h3 className="text-[#2C1810] text-xl font-semibold mb-2">
             {online ? 'No projects yet' : 'No cached projects'}
           </h3>
-          <p className="text-[#2C1810]/50 mb-8 max-w-sm mx-auto">
+          <p className="text-[#2C1810]/70 mb-8 max-w-sm mx-auto">
             {online
               ? 'Create your first project and start counting those rows!'
               : 'Connect to the internet to load your projects.'}
@@ -316,7 +316,7 @@ export function ProjectsList({ user }: { user: User }) {
                     </div>
                     <div>
                       <h3 className="font-semibold text-[#2C1810] text-lg">{project.name}</h3>
-                      <p className="text-[#2C1810]/40 text-sm flex items-center gap-1">
+                      <p className="text-[#2C1810]/65 text-sm flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {formatDate(project.updatedAt)}
                       </p>
@@ -325,7 +325,7 @@ export function ProjectsList({ user }: { user: User }) {
                   {online && (
                     <motion.button
                       onClick={() => setDeleteConfirm(project.id)}
-                      className="p-2 text-[#2C1810]/20 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                      className="p-2 text-[#2C1810]/40 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
                       whileTap={{ scale: 0.9 }}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -334,7 +334,7 @@ export function ProjectsList({ user }: { user: User }) {
                 </div>
 
                 {project.notes && (
-                  <p className="text-[#2C1810]/50 text-sm mb-4 line-clamp-2">{project.notes}</p>
+                  <p className="text-[#2C1810]/70 text-sm mb-4 line-clamp-2">{project.notes}</p>
                 )}
 
                 <Link
