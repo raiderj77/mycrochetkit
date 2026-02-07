@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { X, ExternalLink, Edit3, Trash2, Copy, Play, Clock, Ruler } from 'lucide-react';
 import type { Pattern, PatternType, Difficulty } from '../../types/pattern';
@@ -31,6 +32,8 @@ interface PatternDetailProps {
 }
 
 export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: PatternDetailProps) {
+  const navigate = useNavigate();
+
   const handleDelete = () => {
     if (confirm('Delete this pattern? This cannot be undone.')) {
       onDelete?.();
@@ -124,6 +127,22 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
             </div>
           )}
 
+          {pattern.materials.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-sm font-medium text-[#2C1810] mb-2">Materials</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {pattern.materials.map((m) => (
+                  <span
+                    key={m}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FFF8F0] text-sm text-[#2C1810]/70 rounded-full"
+                  >
+                    🧶 {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {pattern.source.type === 'link' && pattern.source.url && (
             <a
               href={pattern.source.url}
@@ -172,7 +191,7 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
 
           <div className="grid grid-cols-3 gap-2 pt-4 border-t border-[#2C1810]/10">
             <button
-              onClick={() => (window.location.href = `/patterns/${pattern.id}/edit`)}
+              onClick={() => { onClose(); navigate(`/patterns/${pattern.id}/edit`); }}
               className="flex flex-col items-center gap-1 py-3 text-[#2C1810]/60 hover:text-[#2C1810] hover:bg-[#FFF8F0] rounded-xl transition-colors"
             >
               <Edit3 className="w-5 h-5" />
@@ -197,7 +216,7 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
 
         <div className="px-5 py-4 border-t border-[#2C1810]/10 flex-shrink-0">
           <button
-            onClick={() => (window.location.href = `/patterns/${pattern.id}/track`)}
+            onClick={() => { onClose(); navigate(`/patterns/${pattern.id}/track`); }}
             className="w-full flex items-center justify-center gap-2 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-medium rounded-xl transition-colors"
           >
             <Play className="w-5 h-5" />

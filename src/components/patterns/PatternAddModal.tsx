@@ -1,13 +1,17 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, Link, Edit3, Sparkles } from 'lucide-react';
+import { X, ChevronLeft, ChevronDown, ChevronUp, Link, Edit3, Sparkles } from 'lucide-react';
 import { usePatterns } from '../../hooks/usePatterns';
 import type {
   PatternFormData,
+  PatternSection,
+  PatternStep,
   PatternType,
   Difficulty,
   YarnWeight,
   PatternSourceType,
+  StepKind,
 } from '../../types/pattern';
 
 const SOURCE_OPTIONS: {
@@ -78,6 +82,7 @@ export function PatternAddModal({
   onClose,
   onPatternAdded,
 }: PatternAddModalProps) {
+  const navigate = useNavigate();
   const { createPattern, checkCanCreate } = usePatterns(uid);
 
   const [step, setStep] = useState<'choose' | 'form'>('choose');
@@ -93,6 +98,96 @@ export function PatternAddModal({
   const [url, setUrl] = useState('');
   const [tags, setTags] = useState('');
   const [notes, setNotes] = useState('');
+  const [materials, setMaterials] = useState<string[]>([]);
+  const [materialsInput, setMaterialsInput] = useState('');
+  const [pastedText, setPastedText] = useState('');
+  const [showPasteSection, setShowPasteSection] = useState(false);
+
+  const addMaterial = () => {
+    const val = materialsInput.trim();
+    if (val && !materials.includes(val)) {
+      setMaterials([...materials, val]);
+    }
+    setMaterialsInput('');
+  };
+
+  const removeMaterial = (m: string) => {
+    setMaterials(materials.filter((x) => x !== m));
+  };
+
+  const parsePatternText = (rawText: string): PatternSection[] => {
+    const lines = rawText.split('\n').filter((l) => l.trim());
+    const sections: PatternSection[] = [];
+    let currentSection: PatternSection = { name: 'Main', repeatCount: 1, steps: [] };
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+
+      // Detect section headers: "# Header", "Section X:", "Part X:"
+      if (/^#+\s+/.test(trimmed) || /^(section|part)\s*\d*\s*:/i.test(trimmed)) {
+        if (currentSection.steps.length > 0) {
+          sections.push(currentSection);
+        }
+        const name = trimmed.replace(/^#+\s*/, '').replace(/^(section|part)\s*\d*\s*:\s*/i, '').trim();
+        currentSection = { name: name || `Section ${sections.length + 1}`, repeatCount: 1, steps: [] };
+        continue;
+      }
+
+      // Parse step
+      let kind: StepKind = 'instruction';
+      let label = `Step ${currentSection.steps.length + 1}`;
+      let instruction = trimmed;
+
+      // Detect "Rnd X:" or "Round X:"
+      const rndMatch = trimmed.match(/^(rnd|round)\s*(\d+)\s*[:.]\s*/i);
+      if (rndMatch) {
+        kind = 'round';
+        label = `Rnd ${rndMatch[2]}`;
+        instruction = trimmed.slice(rndMatch[0].length).trim();
+      }
+
+      // Detect "Row X:"
+      const rowMatch = !rndMatch && trimmed.match(/^row\s*(\d+)\s*[:.]\s*/i);
+      if (rowMatch) {
+        kind = 'row';
+        label = `Row ${rowMatch[1]}`;
+        instruction = trimmed.slice(rowMatch[0].length).trim();
+      }
+
+      // Detect numbered step "1." or "1)"
+      const numMatch = !rndMatch && !rowMatch && trimmed.match(/^(\d+)[.)]\s*/);
+      if (numMatch) {
+        label = `Step ${numMatch[1]}`;
+        instruction = trimmed.slice(numMatch[0].length).trim();
+      }
+
+      // Extract trailing stitch count: (12) or (12 sts)
+      let stitchCount: number | null = null;
+      const stitchMatch = instruction.match(/\((\d+)\s*(?:sts?|stitches?)?\)\s*$/i);
+      if (stitchMatch) {
+        stitchCount = parseInt(stitchMatch[1]);
+        instruction = instruction.slice(0, instruction.lastIndexOf(stitchMatch[0])).trim();
+      }
+
+      if (instruction) {
+        const step: PatternStep = {
+          kind,
+          label,
+          instruction,
+          stitchCountEnd: stitchCount,
+          repeat: null,
+          trackable: true,
+        };
+        currentSection.steps.push(step);
+      }
+    }
+
+    if (currentSection.steps.length > 0) {
+      sections.push(currentSection);
+    }
+
+    return sections;
+  };
 
   const handleSourceSelect = async (selected: PatternSourceType) => {
     const canCreate = await checkCanCreate(isPro);
@@ -125,19 +220,22 @@ export function PatternAddModal({
     setError(null);
 
     try {
+      // Parse pasted text into sections if present
+      const parsedSections = pastedText.trim() ? parsePatternText(pastedText) : [];
+
       const formData: PatternFormData = {
         name: name.trim(),
         type,
         difficulty: difficulty || undefined,
         hookSize: hookSize || undefined,
         yarnWeight: yarnWeight || undefined,
-        materials: [],
+        materials,
         tags: tags
           .split(',')
           .map((t) => t.trim())
           .filter(Boolean),
         source: sourceType === 'link' ? { type: 'link', url: url.trim() } : { type: 'typed' },
-        sections: [],
+        sections: parsedSections,
         abbreviations: {},
         notes: notes || undefined,
       };
@@ -145,9 +243,8 @@ export function PatternAddModal({
       const pattern = await createPattern(formData);
 
       if (pattern) {
-        if (sourceType === 'typed') {
-          // Redirect to step editor for typed patterns
-          window.location.href = `/patterns/${pattern.id}/edit`;
+        if (sourceType === 'typed' || parsedSections.length > 0) {
+          navigate(`/patterns/${pattern.id}/edit`);
         } else {
           onPatternAdded(pattern.id);
         }
@@ -258,18 +355,46 @@ export function PatternAddModal({
                 </div>
 
                 {sourceType === 'link' && (
-                  <div>
-                    <label className="block text-sm font-medium text-[#2C1810] mb-1.5">
-                      Pattern URL *
-                    </label>
-                    <input
-                      type="url"
-                      value={url}
-                      onChange={(e) => setUrl(e.target.value)}
-                      placeholder="https://..."
-                      className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
-                    />
-                  </div>
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-[#2C1810] mb-1.5">
+                        Pattern URL *
+                      </label>
+                      <input
+                        type="url"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                        placeholder="https://..."
+                        className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
+                      />
+                    </div>
+
+                    {/* Paste pattern text */}
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => setShowPasteSection(!showPasteSection)}
+                        className="flex items-center gap-1 text-sm text-[#2C1810]/60 hover:text-[#2C1810] transition-colors"
+                      >
+                        {showPasteSection ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        Paste pattern text
+                      </button>
+                      {showPasteSection && (
+                        <div className="mt-2">
+                          <textarea
+                            value={pastedText}
+                            onChange={(e) => setPastedText(e.target.value)}
+                            placeholder={"Rnd 1: 6 sc in magic ring (6)\nRnd 2: inc in each st (12)\nRnd 3: [sc, inc] x6 (18)"}
+                            rows={6}
+                            className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/40 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 resize-none font-mono text-sm"
+                          />
+                          <p className="text-xs text-[#2C1810]/40 mt-1">
+                            Each line becomes a step. Rnd/Row prefixes are auto-detected.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
 
                 <div>
@@ -362,6 +487,55 @@ export function PatternAddModal({
                 </div>
 
                 <div>
+                  <label className="block text-sm font-medium text-[#2C1810] mb-1.5">
+                    Materials
+                  </label>
+                  {materials.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {materials.map((m) => (
+                        <span
+                          key={m}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FFF8F0] text-sm text-[#2C1810] rounded-full"
+                        >
+                          🧶 {m}
+                          <button
+                            type="button"
+                            onClick={() => removeMaterial(m)}
+                            className="text-[#2C1810]/30 hover:text-red-400"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={materialsInput}
+                      onChange={(e) => setMaterialsInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ',') {
+                          e.preventDefault();
+                          addMaterial();
+                        }
+                      }}
+                      placeholder="e.g. Worsted weight yarn, 4mm hook"
+                      className="flex-1 px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/60 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50"
+                    />
+                    <button
+                      type="button"
+                      onClick={addMaterial}
+                      disabled={!materialsInput.trim()}
+                      className="px-4 py-3 bg-[#E86A58] text-white rounded-xl text-sm font-medium disabled:opacity-40"
+                    >
+                      Add
+                    </button>
+                  </div>
+                  <p className="text-xs text-[#2C1810]/40 mt-1">Press Enter or comma to add each material</p>
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium text-[#2C1810] mb-1.5">Notes</label>
                   <textarea
                     value={notes}
@@ -383,7 +557,13 @@ export function PatternAddModal({
               disabled={saving}
               className="w-full py-3 bg-[#E86A58] hover:bg-[#D35A4A] disabled:bg-[#E86A58]/50 text-white font-medium rounded-xl transition-colors"
             >
-              {saving ? 'Saving...' : sourceType === 'typed' ? 'Save & Add Steps' : 'Save Pattern'}
+              {saving
+                ? 'Saving...'
+                : sourceType === 'typed'
+                  ? 'Save & Add Steps'
+                  : pastedText.trim()
+                    ? 'Save & Review Steps'
+                    : 'Save Pattern'}
             </button>
           </div>
         )}
