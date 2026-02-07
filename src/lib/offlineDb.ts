@@ -17,7 +17,11 @@ interface CrochetDB extends DBSchema {
     value: {
       id: string;
       action: 'update';
-      data: any;
+      data: {
+        counters: Array<{ id: string; name: string; count: number }>;
+        activeId: string;
+        notes?: string;
+      };
       timestamp: string;
     };
   };
@@ -44,7 +48,7 @@ let dbInstance: IDBPDatabase<CrochetDB> | null = null;
 
 export async function getDb(): Promise<IDBPDatabase<CrochetDB>> {
   if (dbInstance) return dbInstance;
-  
+
   dbInstance = await openDB<CrochetDB>(DB_NAME, DB_VERSION, {
     upgrade(db) {
       if (!db.objectStoreNames.contains('projects')) {
@@ -58,7 +62,7 @@ export async function getDb(): Promise<IDBPDatabase<CrochetDB>> {
       }
     },
   });
-  
+
   return dbInstance;
 }
 
@@ -71,13 +75,13 @@ export async function saveProjectLocal(
 ): Promise<void> {
   const db = await getDb();
   const key = `${userId}_${projectId}`;
-  
+
   await db.put('projects', {
     id: key,
     counters,
     activeId,
     updatedAt: new Date().toISOString(),
-    synced
+    synced,
   });
 }
 
@@ -93,14 +97,14 @@ export async function getProjectLocal(
   const db = await getDb();
   const key = `${userId}_${projectId}`;
   const project = await db.get('projects', key);
-  
+
   if (!project) return null;
-  
+
   return {
     counters: project.counters,
     activeId: project.activeId,
     updatedAt: project.updatedAt,
-    synced: project.synced
+    synced: project.synced,
   };
 }
 
@@ -112,21 +116,27 @@ export async function addPendingSync(
 ): Promise<void> {
   const db = await getDb();
   const key = `${userId}_${projectId}`;
-  
+
   await db.put('pendingSync', {
     id: key,
     action: 'update',
     data: { counters, activeId },
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 }
 
-export async function getPendingSyncs(): Promise<Array<{
-  id: string;
-  action: 'update';
-  data: any;
-  timestamp: string;
-}>> {
+export async function getPendingSyncs(): Promise<
+  Array<{
+    id: string;
+    action: 'update';
+    data: {
+      counters: Array<{ id: string; name: string; count: number }>;
+      activeId: string;
+      notes?: string;
+    };
+    timestamp: string;
+  }>
+> {
   const db = await getDb();
   return db.getAll('pendingSync');
 }
@@ -136,14 +146,11 @@ export async function clearPendingSync(key: string): Promise<void> {
   await db.delete('pendingSync', key);
 }
 
-export async function markProjectSynced(
-  userId: string,
-  projectId: string
-): Promise<void> {
+export async function markProjectSynced(userId: string, projectId: string): Promise<void> {
   const db = await getDb();
   const key = `${userId}_${projectId}`;
   const project = await db.get('projects', key);
-  
+
   if (project) {
     project.synced = true;
     await db.put('projects', project);
@@ -164,13 +171,11 @@ export async function saveProjectsListLocal(
   await db.put('projectsList', {
     id: userId,
     odData: projects,
-    cachedAt: new Date().toISOString()
+    cachedAt: new Date().toISOString(),
   });
 }
 
-export async function getProjectsListLocal(
-  userId: string
-): Promise<Array<{
+export async function getProjectsListLocal(userId: string): Promise<Array<{
   id: string;
   name: string;
   notes: string;

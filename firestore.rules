@@ -1,11 +1,14 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read/write their own data
+    // Users can read/write their own data (includes projects, patterns, versions)
+    // Path: users/{userId}/patterns/{patternId}
+    // Path: users/{userId}/patterns/{patternId}/versions/{versionId}
+    // Path: users/{userId}/projects/{projectId}
     match /users/{userId}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
-    
+
     // Roadmap - anyone can read, authenticated users can create and vote
     match /roadmap/{ideaId} {
       allow read: if true;

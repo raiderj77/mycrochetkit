@@ -3,12 +3,12 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB1YawXigzNaaj6l1N08Bn9CXfEWu9LWVk",
-  authDomain: "mycrochet-kit.firebaseapp.com",
-  projectId: "mycrochet-kit",
-  storageBucket: "mycrochet-kit.firebasestorage.app",
-  messagingSenderId: "784533445064",
-  appId: "1:784533445064:web:8a6c74e88927d3413048fd"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
