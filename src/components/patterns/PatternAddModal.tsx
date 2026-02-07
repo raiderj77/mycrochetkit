@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronDown, ChevronUp, Link, Edit3, Sparkles } from 'lucide-react';
+import { X, ChevronLeft, ChevronDown, ChevronUp, Link, Edit3, Sparkles, FileUp, Loader } from 'lucide-react';
 import { usePatterns } from '../../hooks/usePatterns';
 import type {
   PatternFormData,
@@ -25,6 +25,12 @@ const SOURCE_OPTIONS: {
     icon: <Link className="w-6 h-6" />,
     label: 'Link',
     desc: 'Save a URL to a pattern',
+  },
+  {
+    type: 'pdf',
+    icon: <FileUp className="w-6 h-6" />,
+    label: 'Upload',
+    desc: 'Import a PDF pattern',
   },
   {
     type: 'typed',
@@ -102,6 +108,10 @@ export function PatternAddModal({
   const [materialsInput, setMaterialsInput] = useState('');
   const [pastedText, setPastedText] = useState('');
   const [showPasteSection, setShowPasteSection] = useState(false);
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [pdfExtracting, setPdfExtracting] = useState(false);
+  const [pdfExtractedText, setPdfExtractedText] = useState('');
+  const [pdfError, setPdfError] = useState<string | null>(null);
 
   const addMaterial = () => {
     const val = materialsInput.trim();
@@ -113,6 +123,44 @@ export function PatternAddModal({
 
   const removeMaterial = (m: string) => {
     setMaterials(materials.filter((x) => x !== m));
+  };
+
+  const handlePdfFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      setPdfError('Please select a PDF file');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setPdfError('File must be smaller than 10 MB');
+      return;
+    }
+
+    setPdfFile(file);
+    setPdfError(null);
+    setPdfExtracting(true);
+    setPdfExtractedText('');
+
+    try {
+      const { extractTextFromPdf } = await import('../../lib/pdfParser');
+      const text = await extractTextFromPdf(file);
+
+      if (!text.trim()) {
+        setPdfError('No text found — this PDF may contain only images or scanned pages');
+        setPdfExtracting(false);
+        return;
+      }
+
+      setPdfExtractedText(text);
+    } catch (err) {
+      console.error('PDF extraction error:', err);
+      setPdfError(err instanceof Error ? err.message : 'Failed to read PDF');
+    } finally {
+      setPdfExtracting(false);
+    }
   };
 
   const parsePatternText = (rawText: string): PatternSection[] => {
@@ -216,12 +264,18 @@ export function PatternAddModal({
       return;
     }
 
+    if (sourceType === 'pdf' && !pdfExtractedText.trim()) {
+      setError('Please upload a PDF and wait for text extraction');
+      return;
+    }
+
     setSaving(true);
     setError(null);
 
     try {
-      // Parse pasted text into sections if present
-      const parsedSections = pastedText.trim() ? parsePatternText(pastedText) : [];
+      // Parse pasted text or PDF extracted text into sections if present
+      const textToParse = sourceType === 'pdf' ? pdfExtractedText : pastedText;
+      const parsedSections = textToParse.trim() ? parsePatternText(textToParse) : [];
 
       const formData: PatternFormData = {
         name: name.trim(),
@@ -234,7 +288,12 @@ export function PatternAddModal({
           .split(',')
           .map((t) => t.trim())
           .filter(Boolean),
-        source: sourceType === 'link' ? { type: 'link', url: url.trim() } : { type: 'typed' },
+        source:
+          sourceType === 'link'
+            ? { type: 'link', url: url.trim() }
+            : sourceType === 'pdf'
+              ? { type: 'pdf', content: pdfExtractedText }
+              : { type: 'typed' },
         sections: parsedSections,
         abbreviations: {},
         notes: notes || undefined,
@@ -243,7 +302,7 @@ export function PatternAddModal({
       const pattern = await createPattern(formData);
 
       if (pattern) {
-        if (sourceType === 'typed' || parsedSections.length > 0) {
+        if (sourceType === 'typed' || sourceType === 'pdf' || parsedSections.length > 0) {
           navigate(`/patterns/${pattern.id}/edit`);
         } else {
           onPatternAdded(pattern.id);
@@ -395,6 +454,56 @@ export function PatternAddModal({
                       )}
                     </div>
                   </>
+                )}
+
+                {sourceType === 'pdf' && (
+                  <div className="space-y-3">
+                    <label
+                      className="flex flex-col items-center gap-2 px-4 py-6 border-2 border-dashed border-[#2C1810]/20 rounded-xl cursor-pointer hover:border-[#E86A58]/50 hover:bg-[#FFF8F0] transition-colors"
+                    >
+                      <FileUp className="w-8 h-8 text-[#2C1810]/40" />
+                      <span className="text-sm text-[#2C1810]/60">
+                        {pdfFile ? pdfFile.name : 'Choose a PDF file'}
+                      </span>
+                      <span className="text-xs text-[#2C1810]/40">Max 10 MB</span>
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={handlePdfFileChange}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {pdfExtracting && (
+                      <div className="flex items-center gap-2 px-4 py-3 bg-[#FFF8F0] rounded-xl text-sm text-[#2C1810]/70">
+                        <Loader className="w-4 h-4 animate-spin" />
+                        Extracting text from PDF...
+                      </div>
+                    )}
+
+                    {pdfError && (
+                      <div className="px-4 py-3 bg-amber-50 text-amber-700 rounded-xl text-sm">
+                        {pdfError}
+                      </div>
+                    )}
+
+                    {pdfExtractedText && (
+                      <div>
+                        <label className="block text-sm font-medium text-[#2C1810] mb-1.5">
+                          Extracted Text
+                        </label>
+                        <textarea
+                          value={pdfExtractedText}
+                          onChange={(e) => setPdfExtractedText(e.target.value)}
+                          rows={8}
+                          className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 resize-none font-mono text-sm"
+                        />
+                        <p className="text-xs text-[#2C1810]/40 mt-1">
+                          You can edit the text above to fix any extraction issues before saving.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 )}
 
                 <div>
@@ -561,9 +670,11 @@ export function PatternAddModal({
                 ? 'Saving...'
                 : sourceType === 'typed'
                   ? 'Save & Add Steps'
-                  : pastedText.trim()
+                  : sourceType === 'pdf' && pdfExtractedText.trim()
                     ? 'Save & Review Steps'
-                    : 'Save Pattern'}
+                    : pastedText.trim()
+                      ? 'Save & Review Steps'
+                      : 'Save Pattern'}
             </button>
           </div>
         )}

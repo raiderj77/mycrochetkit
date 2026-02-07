@@ -35,6 +35,7 @@ interface CrochetDB extends DBSchema {
         notes: string;
         createdAt: string;
         updatedAt: string;
+        patternId?: string;
       }>;
       cachedAt: string;
     };
@@ -165,6 +166,7 @@ export async function saveProjectsListLocal(
     notes: string;
     createdAt: string;
     updatedAt: string;
+    patternId?: string;
   }>
 ): Promise<void> {
   const db = await getDb();
@@ -181,6 +183,7 @@ export async function getProjectsListLocal(userId: string): Promise<Array<{
   notes: string;
   createdAt: string;
   updatedAt: string;
+  patternId?: string;
 }> | null> {
   const db = await getDb();
   const data = await db.get('projectsList', userId);

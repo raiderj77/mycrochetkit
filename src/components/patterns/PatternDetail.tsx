@@ -31,7 +31,7 @@ interface PatternDetailProps {
   onStartProject?: () => void;
 }
 
-export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: PatternDetailProps) {
+export function PatternDetail({ pattern, onClose, onDelete, onDuplicate, onStartProject }: PatternDetailProps) {
   const navigate = useNavigate();
 
   const handleDelete = () => {
@@ -155,6 +155,13 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
             </a>
           )}
 
+          {pattern.source.type === 'pdf' && (
+            <div className="flex items-center gap-2 px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810]/70 text-sm mb-4">
+              <span>📄</span>
+              <span>Imported from PDF</span>
+            </div>
+          )}
+
           {pattern.notes && (
             <div className="mb-4">
               <h3 className="text-sm font-medium text-[#2C1810] mb-1">Notes</h3>
@@ -216,7 +223,14 @@ export function PatternDetail({ pattern, onClose, onDelete, onDuplicate }: Patte
 
         <div className="px-5 py-4 border-t border-[#2C1810]/10 flex-shrink-0">
           <button
-            onClick={() => { onClose(); navigate(`/patterns/${pattern.id}/track`); }}
+            onClick={() => {
+              onClose();
+              if (onStartProject) {
+                onStartProject();
+              } else {
+                navigate(`/patterns/${pattern.id}/track`);
+              }
+            }}
             className="w-full flex items-center justify-center gap-2 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-medium rounded-xl transition-colors"
           >
             <Play className="w-5 h-5" />

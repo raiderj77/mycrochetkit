@@ -29,7 +29,12 @@ import {
   Loader2,
   X,
   ChevronDown,
+  BookOpen,
+  Unlink,
 } from 'lucide-react';
+import { getPattern, linkPatternToProject, unlinkPatternFromProject } from '../services/patternService';
+import { PatternPicker } from './PatternPicker';
+import type { Pattern } from '../types/pattern';
 
 interface Counter {
   id: string;
@@ -59,6 +64,9 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   const [tempNotes, setTempNotes] = useState('');
   const [showHelp, setShowHelp] = useState(false);
   const [lastAction, setLastAction] = useState<{ type: string; value: number } | null>(null);
+  const [linkedPatternId, setLinkedPatternId] = useState<string | null>(null);
+  const [linkedPattern, setLinkedPattern] = useState<Pattern | null>(null);
+  const [showPatternPicker, setShowPatternPicker] = useState(false);
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const isListeningRef = useRef(false);
@@ -137,6 +145,9 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
             const cloudData = docSnap.data();
             setProjectName(cloudData.name || 'My Project');
             setNotes(cloudData.notes || '');
+            if (cloudData.patternId) {
+              setLinkedPatternId(cloudData.patternId);
+            }
             if (cloudData.counters?.length > 0) {
               const cloudTime = new Date(cloudData.updatedAt).getTime();
               const localTime = localData ? new Date(localData.updatedAt).getTime() : 0;
@@ -166,6 +177,16 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
     };
     loadCounters();
   }, [user, projectId, syncPendingChanges]);
+
+  useEffect(() => {
+    if (!user || !linkedPatternId) {
+      setLinkedPattern(null);
+      return;
+    }
+    getPattern(user.uid, linkedPatternId)
+      .then((p) => setLinkedPattern(p))
+      .catch(() => setLinkedPattern(null));
+  }, [user, linkedPatternId]);
 
   useEffect(() => {
     if (!user || loading) return;
@@ -592,6 +613,82 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
               </>
             )}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Linked Pattern Card */}
+      {linkedPattern ? (
+        <motion.div
+          className="glass-card p-4 mb-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-white/70" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-medium text-sm truncate">{linkedPattern.name}</p>
+              <p className="text-white/50 text-xs">
+                {linkedPattern.sections.length} section{linkedPattern.sections.length !== 1 ? 's' : ''}
+                {' · '}
+                {linkedPattern.sections.reduce((sum, s) => sum + s.steps.length, 0)} steps
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Link
+              to={`/patterns/${linkedPatternId}/track`}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#E86A58]/20 border border-[#E86A58]/30 text-[#E86A58] text-sm font-medium rounded-xl hover:bg-[#E86A58]/30 transition-colors"
+            >
+              Continue Pattern
+            </Link>
+            <motion.button
+              onClick={async () => {
+                if (!user) return;
+                try {
+                  await unlinkPatternFromProject(user.uid, projectId);
+                  setLinkedPatternId(null);
+                  setLinkedPattern(null);
+                } catch (err) {
+                  console.error('Failed to unlink pattern:', err);
+                }
+              }}
+              className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-white/5 border border-white/10 text-white/60 text-sm rounded-xl hover:text-white/80 hover:border-white/20 transition-colors"
+              whileTap={{ scale: 0.95 }}
+            >
+              <Unlink className="w-3.5 h-3.5" />
+              Unlink
+            </motion.button>
+          </div>
+        </motion.div>
+      ) : !loading && user && (
+        <motion.button
+          onClick={() => setShowPatternPicker(true)}
+          className="w-full mb-4 py-3 glass-card text-sm text-white/50 hover:text-white/70 transition-colors flex items-center justify-center gap-2"
+          whileTap={{ scale: 0.99 }}
+        >
+          <BookOpen className="w-4 h-4" />
+          Link a Pattern
+        </motion.button>
+      )}
+
+      {/* Pattern Picker Modal */}
+      <AnimatePresence>
+        {showPatternPicker && user && (
+          <PatternPicker
+            uid={user.uid}
+            onSelect={async (selectedPatternId) => {
+              try {
+                await linkPatternToProject(user.uid, projectId, selectedPatternId);
+                setLinkedPatternId(selectedPatternId);
+                setShowPatternPicker(false);
+              } catch (err) {
+                console.error('Failed to link pattern:', err);
+              }
+            }}
+            onClose={() => setShowPatternPicker(false)}
+          />
         )}
       </AnimatePresence>
 

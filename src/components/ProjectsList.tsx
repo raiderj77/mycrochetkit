@@ -14,6 +14,7 @@ interface Project {
   notes: string;
   createdAt: string;
   updatedAt: string;
+  patternId?: string;
 }
 
 export function ProjectsList({ user }: { user: User }) {
@@ -60,6 +61,7 @@ export function ProjectsList({ user }: { user: User }) {
             notes: data.notes || '',
             createdAt: data.createdAt || '',
             updatedAt: data.updatedAt || '',
+            patternId: data.patternId || undefined,
           });
         });
         setProjects(list);
@@ -332,6 +334,14 @@ export function ProjectsList({ user }: { user: User }) {
                     </motion.button>
                   )}
                 </div>
+
+                {project.patternId && (
+                  <div className="flex items-center gap-1.5 mb-3">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#B8A9C9]/15 text-[#B8A9C9] text-xs font-medium rounded-full">
+                      Pattern linked
+                    </span>
+                  </div>
+                )}
 
                 {project.notes && (
                   <p className="text-[#2C1810]/70 text-sm mb-4 line-clamp-2">{project.notes}</p>

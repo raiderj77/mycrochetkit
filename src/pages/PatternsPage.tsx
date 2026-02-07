@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import type { User } from 'firebase/auth';
-import { auth } from '../firebase';
+import { addDoc, collection } from 'firebase/firestore';
+import { auth, db } from '../firebase';
+import { linkPatternToProject, getPattern } from '../services/patternService';
 import { PatternLibrary } from '../components/patterns/PatternLibrary';
 
 export function PatternsPage() {
@@ -39,9 +41,23 @@ export function PatternsPage() {
       uid={user.uid}
       isPro={false}
       onBack={() => navigate('/')}
-      onStartProject={() => {
-        // TODO: Create project with pattern linked
-        navigate('/');
+      onStartProject={async (patternId: string) => {
+        if (!user) return;
+        try {
+          const pattern = await getPattern(user.uid, patternId);
+          const projectRef = await addDoc(collection(db, 'users', user.uid, 'projects'), {
+            name: pattern?.name || 'New Project',
+            notes: '',
+            counters: [{ id: '1', name: 'Row', count: 0 }],
+            activeId: '1',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+          await linkPatternToProject(user.uid, projectRef.id, patternId);
+          navigate(`/counter/${projectRef.id}`);
+        } catch (err) {
+          console.error('Failed to create project with pattern:', err);
+        }
       }}
     />
   );
