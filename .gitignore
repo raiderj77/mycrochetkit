@@ -15,6 +15,9 @@ dist-ssr
 # Firebase
 .firebase/
 
+# Lighthouse reports
+lighthouse-report.*
+
 # Claude Code
 .claude/
 
