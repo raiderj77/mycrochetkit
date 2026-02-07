@@ -24,12 +24,12 @@ export const Blog = () => {
     },
     {
       slug: 'crochet-trends-2026',
-      title: "Top Crochet Trends 2026: What's Hot in the Crochet Community",
+      title: "Crochet Trends 2026: What I'm Actually Seeing (and Making)",
       excerpt:
-        'From granny square revivals to sustainable yarn choices, discover what crocheters are actually making in 2026.',
+        "From the granny square evolution to crochet on high-fashion runways, here's what's actually trending in crochet right now.",
       date: '2026-02-01',
       readTime: '8 min read',
-      category: 'Trends',
+      category: 'Crochet Trends',
     },
   ];
 

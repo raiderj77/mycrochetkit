@@ -10,6 +10,35 @@ export const BlogPostTrueCost = () => {
         title="The Real Cost of a Handmade Crochet Blanket (The Math Will Hurt) | MyCrochetKit"
         description="Someone asked me to make them a blanket. I did the math. Here's why handmade crochet items cost what they cost — and why most of us only make things for people we love."
         canonicalUrl="https://mycrochetkit.com/blog/real-cost-handmade-crochet-blanket"
+        schema={{
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: 'The Real Cost of a Handmade Crochet Blanket',
+          description:
+            "Someone asked me to make them a blanket. I did the math. Here's why handmade crochet items cost what they cost.",
+          author: {
+            '@type': 'Person',
+            name: 'Jason',
+            description: 'Crocheter and developer. Founder of MyCrochetKit.',
+            url: 'https://mycrochetkit.com/about',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'MyCrochetKit',
+            url: 'https://mycrochetkit.com',
+          },
+          datePublished: '2026-02-05',
+          dateModified: '2026-02-07',
+          mainEntityOfPage: 'https://mycrochetkit.com/blog/real-cost-handmade-crochet-blanket',
+          articleSection: 'Crochet Life',
+          keywords: [
+            'cost of handmade crochet blanket',
+            'crochet blanket pricing',
+            'handmade vs store bought blanket',
+            'crochet labor cost',
+            'why handmade costs more',
+          ],
+        }}
       />
 
       <div className="min-h-screen bg-[#FFF8F0]">
@@ -30,7 +59,7 @@ export const BlogPostTrueCost = () => {
           </div>
         </header>
 
-        <nav className="max-w-3xl mx-auto px-6 pt-6 text-sm text-[#2C1810]/70">
+        <nav className="max-w-3xl mx-auto px-6 pt-6 text-sm text-[#2C1810]/70" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-[#E86A58]">
             Home
           </Link>
@@ -108,15 +137,15 @@ export const BlogPostTrueCost = () => {
               <div className="space-y-3">
                 <div className="flex justify-between py-2 border-b border-[#D4C4B0] border-dashed">
                   <span className="text-[#5C574F]">Yarn (medium weight, decent quality)</span>
-                  <span className="font-semibold">$70</span>
+                  <span className="font-semibold">$55</span>
                 </div>
                 <div className="flex justify-between py-2 border-b border-[#D4C4B0] border-dashed">
-                  <span className="text-[#5C574F]">Time (50 hours at minimum wage)</span>
-                  <span className="font-semibold">$725</span>
+                  <span className="text-[#5C574F]">Time (50 hours at CA minimum wage, $16.90/hr)</span>
+                  <span className="font-semibold">$845</span>
                 </div>
                 <div className="flex justify-between py-3 border-t-2 border-[#2C1810] mt-2">
                   <span className="font-bold text-lg">Total</span>
-                  <span className="font-bold text-lg text-[#E86A58]">$795</span>
+                  <span className="font-bold text-lg text-[#E86A58]">$900</span>
                 </div>
               </div>
             </div>
@@ -124,8 +153,9 @@ export const BlogPostTrueCost = () => {
             <p>Mind you I just started crocheting. Let's say 50 hours. HA.</p>
 
             <p>
-              If I paid myself minimum wage that's $725 in labor. I live in Cali, Central Coast to
-              be exact. Plus the $70 in yarn. That's $795 for a basic blanket.
+              If I paid myself California minimum wage — $16.90 an hour as of 2026 — that's $845 in
+              labor. I live in Cali, Central Coast to be exact. Plus the $55 in yarn. That's $900
+              for a basic blanket.
             </p>
 
             {/* Reaction Box */}
@@ -134,7 +164,7 @@ export const BlogPostTrueCost = () => {
                 <strong>What they expected:</strong> $50
               </p>
               <p className="mb-0">
-                <strong>What it actually costs:</strong> $795
+                <strong>What it actually costs:</strong> $900
               </p>
             </div>
 
@@ -165,7 +195,7 @@ export const BlogPostTrueCost = () => {
                   </div>
                   <p className="font-semibold text-[#E86A58] mb-1">Handmade</p>
                   <p className="text-sm text-[#5C574F]">Time: 50+ hours</p>
-                  <p className="text-sm font-semibold text-[#E86A58]">Cost: $795</p>
+                  <p className="text-sm font-semibold text-[#E86A58]">Cost: $900</p>
                 </div>
               </div>
               <p className="text-center text-sm text-[#5C574F] mt-4 italic">
