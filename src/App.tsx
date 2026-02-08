@@ -13,7 +13,47 @@ import { trackPageView } from './analytics';
 import { SEOHead } from './seo/components/SEOHead';
 import { organizationSchema } from './seo/schemas/organization';
 import { softwareApplicationSchema } from './seo/schemas/software-application';
-import { Mic, Zap, Cloud, Heart, ArrowRight, Sparkles, WifiOff } from 'lucide-react';
+import { Mic, Zap, Cloud, Heart, ArrowRight, Sparkles, WifiOff, Mail, Play } from 'lucide-react';
+
+function FoundersEmailForm() {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    // TODO: wire to email collection backend
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="px-4 py-3 bg-[#7FBFA0]/10 text-[#7FBFA0] rounded-xl text-sm font-medium">
+        You&apos;re on the list! We&apos;ll email you when it&apos;s ready.
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="your@email.com"
+        required
+        className="flex-1 px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/40 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 text-sm"
+      />
+      <button
+        type="submit"
+        className="px-5 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-medium rounded-xl transition-colors text-sm flex items-center gap-1.5 flex-shrink-0"
+      >
+        <Mail className="w-4 h-4" />
+        Join Waitlist
+      </button>
+    </form>
+  );
+}
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -234,23 +274,32 @@ function App() {
               transition={{ delay: 0.5 }}
             >
               <Auth user={user} setUser={setUser} />
+              <button
+                disabled
+                className="flex items-center gap-2 px-6 py-3 rounded-xl border border-[#2C1810]/15 text-[#2C1810]/40 font-medium cursor-not-allowed"
+              >
+                <Play className="w-4 h-4" />
+                Watch Demo
+              </button>
             </motion.div>
 
             {/* Trust badges */}
             <motion.div
-              className="flex flex-wrap justify-center gap-6 text-sm text-[#2C1810]/70"
+              className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-[#2C1810]/70"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <span className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-[#B8A9C9]" /> No credit card
+              <span className="flex items-center gap-1.5">
+                <span className="text-[#7FBFA0]">&#10003;</span> No credit card required
               </span>
-              <span className="flex items-center gap-2">
-                <Cloud className="w-4 h-4 text-[#7FBFA0]" /> Works offline
+              <span className="text-[#2C1810]/30">&#183;</span>
+              <span className="flex items-center gap-1.5">
+                <span className="text-[#7FBFA0]">&#10003;</span> Works offline
               </span>
-              <span className="flex items-center gap-2">
-                <Heart className="w-4 h-4 text-[#E86A58]" /> Currently in beta
+              <span className="text-[#2C1810]/30">&#183;</span>
+              <span className="flex items-center gap-1.5">
+                <span className="text-[#7FBFA0]">&#10003;</span> Free forever
               </span>
             </motion.div>
           </motion.div>
@@ -313,6 +362,16 @@ function App() {
                 </motion.div>
               ))}
             </div>
+
+            <motion.p
+              className="text-center text-[#2C1810]/60 text-lg mt-10 italic"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              You shouldn&apos;t need five apps and a spreadsheet to enjoy crocheting.
+            </motion.p>
           </div>
         </section>
 
@@ -446,8 +505,67 @@ function App() {
           </div>
         </section>
 
-        {/* Final CTA */}
+        {/* Founders Offer Section */}
         <section className="px-6 py-24 bg-[#FFF8F0]">
+          <motion.div
+            className="max-w-lg mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center mb-8">
+              <span className="inline-block px-3 py-1 bg-[#E86A58]/10 text-[#E86A58] text-xs font-semibold rounded-full mb-4 uppercase tracking-wide">
+                Founders Offer
+              </span>
+              <h2 className="display-font text-3xl md:text-4xl text-[#2C1810] mb-3">
+                Lifetime access. One price.
+              </h2>
+              <p className="text-[#2C1810]/70">
+                Lock in the lowest price we&apos;ll ever offer.
+              </p>
+            </div>
+
+            <div className="feature-card p-8 text-center relative overflow-hidden">
+              {/* Decorative corner */}
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#E86A58]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
+
+              <div className="mb-6">
+                <span className="text-[#2C1810]/40 line-through text-lg">$99</span>
+                <div className="display-font text-5xl text-[#2C1810] mt-1">
+                  $59<span className="text-2xl">.99</span>
+                </div>
+                <p className="text-[#2C1810]/60 text-sm mt-1">one-time payment</p>
+              </div>
+
+              <ul className="text-left space-y-3 mb-8 max-w-xs mx-auto">
+                {[
+                  'Unlimited projects forever',
+                  'Voice counter + all Pro features',
+                  'All future updates included',
+                  'Priority support',
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2 text-[#2C1810]/80 text-sm">
+                    <span className="text-[#7FBFA0] flex-shrink-0">&#10003;</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="text-[#E86A58] text-sm font-medium mb-4">
+                500 of 500 spots remaining
+              </div>
+
+              <FoundersEmailForm />
+
+              <p className="text-[#2C1810]/50 text-xs mt-4">
+                Refer a friend and both get 10% off
+              </p>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Final CTA */}
+        <section className="px-6 py-24 bg-white">
           <motion.div
             className="max-w-lg mx-auto text-center"
             initial={{ opacity: 0, y: 30 }}
@@ -458,7 +576,7 @@ function App() {
               Ready to never lose count?
             </h2>
             <p className="text-[#2C1810]/70 text-lg mb-10">
-              Join crocheters who've made the switch.
+              Join crocheters who&apos;ve made the switch.
             </p>
 
             <div className="feature-card p-10">
