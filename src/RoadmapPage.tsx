@@ -87,6 +87,30 @@ const roadmapItems: RoadmapItem[] = [
       'Unified pattern storage across PDF imports, links, and manual entry. Tag, search, and organize your entire collection.',
     status: 'planned',
   },
+  {
+    title: 'Pattern markup & highlighting',
+    description:
+      'Highlight, cross out, or mark up rows and sections as you complete them. Visual progress tracking right on the pattern.',
+    status: 'planned',
+  },
+  {
+    title: 'Planned projects section',
+    description:
+      'Separate section for projects you want to make next, distinct from active WIPs on your dashboard.',
+    status: 'planned',
+  },
+  {
+    title: 'Pattern organization by category',
+    description:
+      'Organize your pattern library with tags, folders, or categories for easy browsing.',
+    status: 'planned',
+  },
+  {
+    title: 'Within-round stitch tracking',
+    description:
+      "Track your position within a round — know you're on stitch 4 of 18, not just which round you're on. Pairs with stitch counter.",
+    status: 'planned',
+  },
 ];
 
 export function RoadmapPage() {
