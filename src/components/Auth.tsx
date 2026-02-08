@@ -12,6 +12,7 @@ interface AuthProps {
   user: User | null;
   setUser: (user: User | null) => void;
   variant?: 'compact' | 'inline';
+  cta?: boolean;
 }
 
 function getDisplayName(user: User): string {
@@ -22,7 +23,7 @@ function getDisplayDetail(user: User): string {
   return user.email || user.phoneNumber || '';
 }
 
-export function Auth({ user, setUser, variant = 'inline' }: AuthProps) {
+export function Auth({ user, setUser, variant = 'inline', cta = false }: AuthProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -121,10 +122,14 @@ export function Auth({ user, setUser, variant = 'inline' }: AuthProps) {
       <>
         <motion.button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 rounded-xl bg-white border border-[#2C1810]/10 hover:border-[#E86A58]/30 text-[#2C1810] text-sm font-medium transition-colors shadow-sm"
+          className={
+            cta
+              ? 'px-6 py-3 rounded-xl bg-gradient-to-r from-[#E86A58] to-[#D35A4A] text-white font-medium text-sm shadow-md hover:shadow-lg transition-all'
+              : 'px-4 py-2 rounded-xl bg-white border border-[#2C1810]/10 hover:border-[#E86A58]/30 text-[#2C1810] text-sm font-medium transition-colors shadow-sm'
+          }
           whileTap={{ scale: 0.98 }}
         >
-          Sign in
+          {cta ? 'Get Started Free' : 'Sign in'}
         </motion.button>
         <AuthModal open={showModal} onClose={() => setShowModal(false)} setUser={setUser} />
       </>

@@ -273,7 +273,7 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Auth user={user} setUser={setUser} />
+              <Auth user={user} setUser={setUser} variant="compact" cta />
               <button
                 disabled
                 className="flex items-center gap-2 px-6 py-3 rounded-xl border border-[#2C1810]/15 text-[#2C1810]/40 font-medium cursor-not-allowed"

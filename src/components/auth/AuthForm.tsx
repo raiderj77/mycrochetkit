@@ -71,14 +71,14 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
       </button>
 
       {/* Divider */}
-      <div className="flex items-center gap-3 my-4">
+      <div className="flex items-center gap-3 my-3">
         <div className="flex-1 h-px bg-[#2C1810]/10" />
         <span className="text-[#2C1810]/40 text-sm">or</span>
         <div className="flex-1 h-px bg-[#2C1810]/10" />
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-[#2C1810]/5 rounded-xl mb-4">
+      <div className="flex gap-1 p-1 bg-[#2C1810]/5 rounded-xl mb-3">
         <button
           type="button"
           onClick={() => setActiveTab('email')}
