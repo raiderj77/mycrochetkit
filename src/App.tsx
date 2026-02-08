@@ -13,7 +13,7 @@ import { trackPageView } from './analytics';
 import { SEOHead } from './seo/components/SEOHead';
 import { organizationSchema } from './seo/schemas/organization';
 import { softwareApplicationSchema } from './seo/schemas/software-application';
-import { Mic, Zap, Cloud, Heart, ArrowRight, Sparkles, WifiOff, Mail, Play, FileText } from 'lucide-react';
+import { Mic, ArrowRight, Sparkles, WifiOff, Mail, Play, FileText } from 'lucide-react';
 
 function FoundersEmailForm() {
   const [email, setEmail] = useState('');

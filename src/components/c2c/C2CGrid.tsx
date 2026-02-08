@@ -4,12 +4,11 @@ import type { C2CColor } from './c2cAlgorithm';
 interface C2CGridProps {
   grid: number[][];
   palette: C2CColor[];
-  activeColor: number;
   onCellPaint: (row: number, col: number) => void;
   onPaintEnd: () => void;
 }
 
-export function C2CGrid({ grid, palette, activeColor, onCellPaint, onPaintEnd }: C2CGridProps) {
+export function C2CGrid({ grid, palette, onCellPaint, onPaintEnd }: C2CGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isPainting = useRef(false);

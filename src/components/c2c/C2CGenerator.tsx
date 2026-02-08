@@ -216,7 +216,6 @@ export function C2CGenerator({ uid, onBack }: C2CGeneratorProps) {
             <C2CGrid
               grid={grid}
               palette={palette}
-              activeColor={activeColor}
               onCellPaint={handleCellPaint}
               onPaintEnd={handlePaintEnd}
             />
