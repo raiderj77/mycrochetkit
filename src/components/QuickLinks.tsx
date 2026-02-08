@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Newspaper, Map, MessageCircle } from 'lucide-react';
+import { BookOpen, Newspaper, Map, MessageCircle, Grid3X3 } from 'lucide-react';
 
 const links = [
   { to: '/patterns', icon: BookOpen, label: 'Patterns', color: 'bg-[#E86A58]', emoji: '📚' },
   { to: '/blog', icon: Newspaper, label: 'Blog', color: 'bg-[#7FBFA0]', emoji: '📝' },
-  { to: '/roadmap', icon: Map, label: 'Roadmap', color: 'bg-[#B8A9C9]', emoji: '🗺️' },
+  { to: '/tools/c2c-generator', icon: Grid3X3, label: 'C2C Tool', color: 'bg-[#B8A9C9]', emoji: '🔲' },
+  { to: '/roadmap', icon: Map, label: 'Roadmap', color: 'bg-[#E86A58]/70', emoji: '🗺️' },
   {
     href: 'https://www.reddit.com/r/crochetkitapp/',
     icon: MessageCircle,
@@ -19,7 +20,7 @@ export function QuickLinks() {
   return (
     <div className="mb-8">
       <h2 className="text-sm font-medium text-[#2C1810]/70 mb-3">Quick Links</h2>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
         {links.map((link, index) => {
           const content = (
             <motion.div
