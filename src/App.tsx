@@ -607,8 +607,8 @@ function App() {
                 },
                 {
                   icon: '💝',
-                  title: 'Generous free tier',
-                  desc: '3 projects free forever. No bait-and-switch. No surprise paywalls.',
+                  title: 'Free during beta',
+                  desc: 'Unlimited projects while we\'re in beta. No bait-and-switch. No surprise paywalls.',
                 },
               ].map((item, index) => (
                 <motion.div
@@ -707,7 +707,7 @@ function App() {
             <div className="feature-card px-5 py-8 sm:p-10">
               <Auth user={user} setUser={setUser} />
               <p className="text-[#2C1810]/75 text-sm mt-8">
-                Start free. Upgrade when you need more.
+                Free and unlimited during beta.
               </p>
             </div>
           </motion.div>

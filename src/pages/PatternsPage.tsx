@@ -39,7 +39,7 @@ export function PatternsPage() {
   return (
     <PatternLibrary
       uid={user.uid}
-      isPro={false}
+      isPro={true}
       onBack={() => navigate('/')}
       onStartProject={async (patternId: string) => {
         if (!user) return;

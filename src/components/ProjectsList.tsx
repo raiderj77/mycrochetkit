@@ -360,22 +360,6 @@ export function ProjectsList({ user }: { user: User }) {
         </motion.div>
       )}
 
-      {/* Upgrade hint */}
-      {projects.length >= 3 && online && (
-        <motion.div
-          className="mt-8 bg-[#F5E6E0] rounded-2xl p-6 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <p className="text-[#2C1810]/70">
-            You've reached the free tier limit.
-            <span className="text-[#E86A58] font-medium ml-1 cursor-pointer hover:underline">
-              Upgrade to Pro
-            </span>{' '}
-            for unlimited projects.
-          </p>
-        </motion.div>
-      )}
     </div>
   );
 }
