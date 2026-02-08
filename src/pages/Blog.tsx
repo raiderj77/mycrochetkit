@@ -5,6 +5,15 @@ import { SEOHead } from '../seo/components/SEOHead';
 export const Blog = () => {
   const posts = [
     {
+      slug: 'c2c-crochet-patterns-complete-guide',
+      title: 'C2C Crochet Patterns: The Complete Corner-to-Corner Guide',
+      excerpt:
+        'Learn corner-to-corner crochet from scratch. How C2C works, reading color graphs, managing yarn, and using a free pattern generator to create your own designs.',
+      date: '2026-02-07',
+      readTime: '10 min read',
+      category: 'Crochet Techniques',
+    },
+    {
       slug: 'real-cost-handmade-crochet-blanket',
       title: 'The Real Cost of a Handmade Crochet Blanket (The Math Will Hurt)',
       excerpt:

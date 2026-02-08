@@ -35,6 +35,9 @@ const BlogPostRowCounting = lazy(() =>
 const BlogPostTrueCost = lazy(() =>
   import('./pages/BlogPostTrueCost.tsx').then((m) => ({ default: m.BlogPostTrueCost }))
 );
+const BlogPostC2CPatterns = lazy(() =>
+  import('./pages/BlogPostC2CPatterns.tsx').then((m) => ({ default: m.BlogPostC2CPatterns }))
+);
 const C2CGeneratorPage = lazy(() =>
   import('./pages/C2CGeneratorPage.tsx').then((m) => ({ default: m.C2CGeneratorPage }))
 );
@@ -72,6 +75,10 @@ createRoot(document.getElementById('root')!).render(
               element={<BlogPostRowCounting />}
             />
             <Route path="/blog/real-cost-handmade-crochet-blanket" element={<BlogPostTrueCost />} />
+            <Route
+              path="/blog/c2c-crochet-patterns-complete-guide"
+              element={<BlogPostC2CPatterns />}
+            />
             <Route path="/tools/c2c-generator" element={<C2CGeneratorPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
