@@ -41,7 +41,7 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
       <button
         onClick={handleGoogleSignIn}
         disabled={googleLoading}
-        className="w-full flex items-center justify-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-[#E86A58] to-[#D35A4A] text-white font-medium text-sm shadow-md hover:shadow-lg transition-all disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-3 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#E86A58] to-[#D35A4A] text-white font-medium text-sm shadow-md hover:shadow-lg transition-all disabled:opacity-50"
       >
         {googleLoading ? (
           <Loader2 className="w-4 h-4 animate-spin" />
@@ -71,14 +71,14 @@ export function AuthForm({ onSuccess }: AuthFormProps) {
       </button>
 
       {/* Divider */}
-      <div className="flex items-center gap-3 my-3">
+      <div className="flex items-center gap-3 my-2">
         <div className="flex-1 h-px bg-[#2C1810]/10" />
         <span className="text-[#2C1810]/40 text-sm">or</span>
         <div className="flex-1 h-px bg-[#2C1810]/10" />
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-[#2C1810]/5 rounded-xl mb-3">
+      <div className="flex gap-1 p-1 bg-[#2C1810]/5 rounded-xl mb-2">
         <button
           type="button"
           onClick={() => setActiveTab('email')}

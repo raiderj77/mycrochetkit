@@ -31,10 +31,10 @@ export function AuthModal({ open, onClose, setUser }: AuthModalProps) {
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full sm:max-w-sm bg-white rounded-t-3xl sm:rounded-2xl max-h-[80vh] flex flex-col"
+            className="w-full sm:max-w-sm bg-white rounded-t-3xl sm:rounded-2xl max-h-[70vh] sm:max-h-[80vh] flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#2C1810]/10">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[#2C1810]/10">
               <h2 className="text-lg font-semibold text-[#2C1810]">Sign In</h2>
               <button
                 onClick={onClose}
@@ -45,7 +45,7 @@ export function AuthModal({ open, onClose, setUser }: AuthModalProps) {
             </div>
 
             {/* Body */}
-            <div className="px-5 py-5 overflow-y-auto flex-1">
+            <div className="px-5 py-3 overflow-y-auto flex-1">
               <AuthForm onSuccess={handleSuccess} />
             </div>
           </motion.div>
