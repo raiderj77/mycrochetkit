@@ -95,6 +95,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   const [editingNameValue, setEditingNameValue] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [customIncrementInput, setCustomIncrementInput] = useState('');
+  const [newCounterType, setNewCounterType] = useState<'row' | 'stitch'>('row');
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const isListeningRef = useRef(false);
@@ -271,9 +272,10 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
     const newId = Date.now().toString();
     setCounters((prev) => [
       ...prev,
-      { id: newId, name: newCounterName.trim(), count: 0, increment: 1, type: 'row', target: null },
+      { id: newId, name: newCounterName.trim(), count: 0, increment: 1, type: newCounterType, target: null },
     ]);
     setNewCounterName('');
+    setNewCounterType('row');
     setShowAddForm(false);
     setActiveId(newId);
   };
@@ -302,6 +304,18 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
     const val = Math.max(1, Math.min(100, inc));
     setCounters((prev) =>
       prev.map((c) => (c.id === id ? { ...c, increment: val } : c))
+    );
+  };
+
+  const setCounterTarget = (id: string, target: number | null) => {
+    setCounters((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, target } : c))
+    );
+  };
+
+  const setCounterType = (id: string, type: 'row' | 'stitch') => {
+    setCounters((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, type } : c))
     );
   };
 
@@ -788,6 +802,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
                 }}
                 title="Double-tap to rename"
               >
+                {counter.type === 'stitch' && <span className="text-[#B8A9C9] mr-1">•</span>}
                 {counter.name}
               </span>
             )}
@@ -825,7 +840,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
           >
             <div className="flex items-center justify-between mb-3">
               <p className="text-white/70 text-sm font-medium">
-                Increment for "{activeCounter.name}"
+                Settings for "{activeCounter.name}"
               </p>
               <motion.button
                 onClick={() => setShowSettings(false)}
@@ -835,6 +850,46 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
                 <X className="w-4 h-4" />
               </motion.button>
             </div>
+
+            {/* Counter Type */}
+            <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Type</p>
+            <div className="flex gap-2 mb-4">
+              {(['row', 'stitch'] as const).map((t) => (
+                <motion.button
+                  key={t}
+                  onClick={() => setCounterType(activeId, t)}
+                  className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
+                    activeCounter.type === t
+                      ? 'bg-[#E86A58] text-white'
+                      : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {t === 'row' ? 'Row' : 'Stitch'}
+                </motion.button>
+              ))}
+            </div>
+
+            {/* Target (for stitch counters) */}
+            {activeCounter.type === 'stitch' && (
+              <div className="mb-4">
+                <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Target</p>
+                <input
+                  type="number"
+                  min={0}
+                  value={activeCounter.target ?? ''}
+                  onChange={(e) => {
+                    const val = e.target.value ? parseInt(e.target.value, 10) : null;
+                    setCounterTarget(activeId, val && val > 0 ? val : null);
+                  }}
+                  placeholder="e.g. 18 stitches"
+                  className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#E86A58]/50"
+                />
+              </div>
+            )}
+
+            {/* Increment */}
+            <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Increment</p>
             <div className="flex gap-2 mb-3">
               {[1, 2, 5, 10].map((n) => (
                 <motion.button
@@ -897,11 +952,27 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
           >
+            <div className="flex gap-2 mb-4">
+              {(['row', 'stitch'] as const).map((t) => (
+                <motion.button
+                  key={t}
+                  onClick={() => setNewCounterType(t)}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    newCounterType === t
+                      ? 'bg-[#E86A58] text-white'
+                      : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {t === 'row' ? 'Row Counter' : 'Stitch Counter'}
+                </motion.button>
+              ))}
+            </div>
             <input
               type="text"
               value={newCounterName}
               onChange={(e) => setNewCounterName(e.target.value)}
-              placeholder="Counter name"
+              placeholder={newCounterType === 'stitch' ? 'e.g. Round 3 stitches' : 'Counter name'}
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-white/50 mb-4 focus:outline-none focus:border-[#E86A58]/50"
               autoFocus
               onKeyDown={(e) => e.key === 'Enter' && addCounter()}
@@ -928,16 +999,36 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
 
       {/* Main Counter Display */}
       <div className="text-center mb-8">
-        <p className="text-white/70 mb-4 text-lg">{activeCounter.name}</p>
+        <p className="text-white/70 mb-4 text-lg">
+          {activeCounter.name}
+          {activeCounter.type === 'stitch' && (
+            <span className="ml-2 text-sm text-[#B8A9C9]">(stitch)</span>
+          )}
+        </p>
         <motion.div
-          className="counter-display"
+          className={`counter-display ${
+            activeCounter.type === 'stitch' && activeCounter.target && activeCounter.count >= activeCounter.target
+              ? '!text-[#7FBFA0]'
+              : ''
+          }`}
           key={activeCounter.count}
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         >
-          {activeCounter.count}
+          {activeCounter.type === 'stitch' && activeCounter.target
+            ? `${activeCounter.count} / ${activeCounter.target}`
+            : activeCounter.count}
         </motion.div>
+        {activeCounter.type === 'stitch' && activeCounter.target && activeCounter.count >= activeCounter.target && (
+          <motion.p
+            className="text-[#7FBFA0] text-sm font-medium mt-2"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            Target reached!
+          </motion.p>
+        )}
         <AnimatePresence>
           {lastAction && (
             <motion.div
