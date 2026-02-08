@@ -35,7 +35,7 @@ function FoundersEmailForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
       <input
         type="email"
         value={email}
@@ -46,7 +46,7 @@ function FoundersEmailForm() {
       />
       <button
         type="submit"
-        className="px-5 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-medium rounded-xl transition-colors text-sm flex items-center gap-1.5 flex-shrink-0"
+        className="w-full sm:w-auto px-5 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-medium rounded-xl transition-colors text-sm flex items-center justify-center gap-1.5 flex-shrink-0"
       >
         <Mail className="w-4 h-4" />
         Join Waitlist
@@ -650,7 +650,7 @@ function App() {
               </p>
             </div>
 
-            <div className="feature-card p-8 text-center relative overflow-hidden">
+            <div className="feature-card px-5 py-8 sm:p-8 text-center relative overflow-hidden">
               {/* Decorative corner */}
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#E86A58]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
 
