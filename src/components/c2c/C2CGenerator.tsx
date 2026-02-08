@@ -180,7 +180,7 @@ export function C2CGenerator({ uid, onBack }: C2CGeneratorProps) {
     <div className="min-h-screen bg-[#FFF8F0]">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#FFF8F0]/80 backdrop-blur-xl border-b border-[#2C1810]/5">
-        <div className="max-w-6xl mx-auto flex items-center gap-3 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center gap-3 px-4 sm:px-6 py-4">
           <button
             onClick={onBack}
             className="w-9 h-9 rounded-xl bg-white border border-[#2C1810]/10 flex items-center justify-center text-[#2C1810]/60 hover:text-[#2C1810] transition-colors"
@@ -193,7 +193,7 @@ export function C2CGenerator({ uid, onBack }: C2CGeneratorProps) {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <div className="grid md:grid-cols-2 gap-8">
           {/* Left Column: Controls + Grid */}
           <div className="space-y-6">
@@ -314,7 +314,7 @@ export function C2CGenerator({ uid, onBack }: C2CGeneratorProps) {
                 key="empty"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex items-center justify-center h-64 md:h-full"
+                className="hidden md:flex items-center justify-center h-full"
               >
                 <div className="text-center text-[#2C1810]/40">
                   <div className="text-4xl mb-3">🎨</div>

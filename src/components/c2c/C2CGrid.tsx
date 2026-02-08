@@ -98,11 +98,11 @@ export function C2CGrid({ grid, palette, activeColor, onCellPaint, onPaintEnd }:
   return (
     <div
       ref={containerRef}
-      className="overflow-auto max-h-[60vh] rounded-xl border border-[#2C1810]/10 bg-white touch-none"
+      className="overflow-auto max-h-[60vh] rounded-xl border border-[#2C1810]/10 bg-white"
     >
       <canvas
         ref={canvasRef}
-        className="block cursor-crosshair"
+        className="block cursor-crosshair touch-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
