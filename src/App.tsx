@@ -474,7 +474,7 @@ function App() {
                           </span>
                         </div>
                         <span
-                          className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                          className={`hidden sm:inline text-xs font-medium px-2 py-0.5 rounded-full ${
                             index === 0
                               ? 'bg-[#7FBFA0]/20 text-[#7FBFA0]'
                               : 'bg-[#2C1810]/[0.06] text-[#2C1810]/40'
@@ -704,7 +704,7 @@ function App() {
               Join crocheters who&apos;ve made the switch.
             </p>
 
-            <div className="feature-card p-10">
+            <div className="feature-card px-5 py-8 sm:p-10">
               <Auth user={user} setUser={setUser} />
               <p className="text-[#2C1810]/75 text-sm mt-8">
                 Start free. Upgrade when you need more.
