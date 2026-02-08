@@ -1,7 +1,7 @@
 import { StrictMode, lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.tsx';
 import { initGA } from './analytics';
 import './index.css';
@@ -41,6 +41,9 @@ const BlogPostC2CPatterns = lazy(() =>
 const C2CGeneratorPage = lazy(() =>
   import('./pages/C2CGeneratorPage.tsx').then((m) => ({ default: m.C2CGeneratorPage }))
 );
+const QuickCounterPage = lazy(() =>
+  import('./pages/QuickCounterPage.tsx').then((m) => ({ default: m.QuickCounterPage }))
+);
 const NotFound = lazy(() => import('./pages/NotFound.tsx').then((m) => ({ default: m.NotFound })));
 
 initGA();
@@ -61,7 +64,7 @@ createRoot(document.getElementById('root')!).render(
         >
           <Routes>
             <Route path="/" element={<App />} />
-            <Route path="/counter" element={<Navigate to="/" replace />} />
+            <Route path="/counter" element={<QuickCounterPage />} />
             <Route path="/counter/:projectId" element={<CounterPage />} />
             <Route path="/roadmap" element={<RoadmapPage />} />
             <Route path="/patterns" element={<PatternsPage />} />
