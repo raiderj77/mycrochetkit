@@ -124,11 +124,27 @@ export function PatternAddModal({
     setMaterials(materials.filter((x) => x !== m));
   };
 
-  const handlePdfFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const switchToPaste = () => {
+    setSourceType('link');
+    setPdfFile(null);
+    setPdfError(null);
+    setPdfExtracting(false);
+    setPdfExtractedText('');
+  };
 
-    if (file.type !== 'application/pdf') {
+  const handlePdfFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('[pdf-modal] file input changed');
+    const file = e.target.files?.[0];
+    if (!file) {
+      console.log('[pdf-modal] no file selected');
+      return;
+    }
+
+    console.log('[pdf-modal] file selected:', file.name, 'type:', file.type, 'size:', file.size);
+
+    // Accept application/pdf or any file with .pdf extension (iOS often reports wrong MIME)
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+    if (!isPdf) {
       setPdfError('Please select a PDF file');
       return;
     }
@@ -144,19 +160,26 @@ export function PatternAddModal({
     setPdfExtractedText('');
 
     try {
+      console.log('[pdf-modal] importing pdfParser...');
       const { extractTextFromPdf } = await import('../../lib/pdfParser');
+      console.log('[pdf-modal] pdfParser loaded, extracting...');
       const text = await extractTextFromPdf(file);
 
       if (!text.trim()) {
+        console.log('[pdf-modal] extraction returned empty text');
         setPdfError('No text found — this PDF may contain only images or scanned pages');
         setPdfExtracting(false);
         return;
       }
 
+      console.log('[pdf-modal] extraction success, chars:', text.length);
       setPdfExtractedText(text);
     } catch (err) {
-      console.error('PDF extraction error:', err);
-      setPdfError(err instanceof Error ? err.message : 'Failed to read PDF');
+      console.error('[pdf-modal] PDF extraction error:', err);
+      const message = err instanceof Error ? err.message : 'Failed to read PDF';
+      setPdfError(
+        `PDF import isn't supported on this device yet. Try pasting your pattern text instead.\n\nTechnical: ${message}`
+      );
     } finally {
       setPdfExtracting(false);
     }
@@ -253,6 +276,8 @@ export function PatternAddModal({
   };
 
   const handleSubmit = async () => {
+    console.log('[submit] handleSubmit called, sourceType:', sourceType, 'name:', name.trim());
+
     if (!name.trim()) {
       setError('Pattern name is required');
       return;
@@ -264,7 +289,10 @@ export function PatternAddModal({
     }
 
     if (sourceType === 'pdf' && !pdfExtractedText.trim()) {
-      setError('Please upload a PDF and wait for text extraction');
+      console.log('[submit] PDF text empty, pdfExtracting:', pdfExtracting, 'pdfError:', pdfError);
+      setError(pdfError
+        ? 'PDF extraction failed — try pasting the pattern text instead'
+        : 'Please upload a PDF and wait for text extraction');
       return;
     }
 
@@ -462,7 +490,7 @@ export function PatternAddModal({
                       <span className="text-xs text-[#2C1810]/40">Max 10 MB</span>
                       <input
                         type="file"
-                        accept="application/pdf"
+                        accept="application/pdf,.pdf"
                         onChange={handlePdfFileChange}
                         className="hidden"
                       />
@@ -476,8 +504,15 @@ export function PatternAddModal({
                     )}
 
                     {pdfError && (
-                      <div className="px-4 py-3 bg-amber-50 text-amber-700 rounded-xl text-sm">
-                        {pdfError}
+                      <div className="px-4 py-3 bg-amber-50 text-amber-700 rounded-xl text-sm space-y-2">
+                        <p className="whitespace-pre-line">{pdfError}</p>
+                        <button
+                          type="button"
+                          onClick={switchToPaste}
+                          className="w-full py-2 bg-[#E86A58] text-white text-sm font-medium rounded-lg hover:bg-[#D35A4A] transition-colors"
+                        >
+                          Paste Pattern Text Instead
+                        </button>
                       </div>
                     )}
 
