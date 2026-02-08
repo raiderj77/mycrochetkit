@@ -27,6 +27,12 @@ const roadmapItems: RoadmapItem[] = [
   },
   { title: 'Cloud sync', description: 'Access your projects from any device', status: 'done' },
   {
+    title: 'C2C Pattern Generator',
+    description:
+      'Input a color grid and get written row-by-row C2C instructions. Paint cells, assign colors, copy or save the generated pattern.',
+    status: 'done',
+  },
+  {
     title: 'Pattern reader',
     description: 'Import patterns and track progress line-by-line',
     status: 'in-progress',
@@ -73,6 +79,12 @@ const roadmapItems: RoadmapItem[] = [
     title: 'Gauge-based pattern resizing (AI-assisted)',
     description:
       'Resize patterns for different hook sizes or yarn weights. Recalculates stitch counts based on gauge — future AI-assisted feature',
+    status: 'planned',
+  },
+  {
+    title: 'Pattern library enhancements',
+    description:
+      'Unified pattern storage across PDF imports, links, and manual entry. Tag, search, and organize your entire collection.',
     status: 'planned',
   },
 ];
