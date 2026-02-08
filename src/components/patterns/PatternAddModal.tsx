@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronLeft, ChevronDown, ChevronUp, Link, Edit3, Sparkles, FileUp, Loader } from 'lucide-react';
+import { X, ChevronLeft, Link, Edit3, Sparkles, FileUp, Loader } from 'lucide-react';
 import { usePatterns } from '../../hooks/usePatterns';
 import type {
   PatternFormData,
@@ -107,7 +107,6 @@ export function PatternAddModal({
   const [materials, setMaterials] = useState<string[]>([]);
   const [materialsInput, setMaterialsInput] = useState('');
   const [pastedText, setPastedText] = useState('');
-  const [showPasteSection, setShowPasteSection] = useState(false);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfExtracting, setPdfExtracting] = useState(false);
   const [pdfExtractedText, setPdfExtractedText] = useState('');
@@ -431,28 +430,22 @@ export function PatternAddModal({
 
                     {/* Paste pattern text */}
                     <div>
-                      <button
-                        type="button"
-                        onClick={() => setShowPasteSection(!showPasteSection)}
-                        className="flex items-center gap-1 text-sm text-[#2C1810]/60 hover:text-[#2C1810] transition-colors"
-                      >
-                        {showPasteSection ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                        Paste pattern text
-                      </button>
-                      {showPasteSection && (
-                        <div className="mt-2">
-                          <textarea
-                            value={pastedText}
-                            onChange={(e) => setPastedText(e.target.value)}
-                            placeholder={"Rnd 1: 6 sc in magic ring (6)\nRnd 2: inc in each st (12)\nRnd 3: [sc, inc] x6 (18)"}
-                            rows={6}
-                            className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/40 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 resize-none font-mono text-sm"
-                          />
-                          <p className="text-xs text-[#2C1810]/40 mt-1">
-                            Each line becomes a step. Rnd/Row prefixes are auto-detected.
-                          </p>
-                        </div>
-                      )}
+                      <label className="block text-sm font-medium text-[#2C1810] mb-1.5">
+                        Pattern Instructions
+                      </label>
+                      <p className="text-xs text-[#2C1810]/50 mb-2">
+                        Paste the pattern instructions here and we&apos;ll parse them into trackable steps
+                      </p>
+                      <textarea
+                        value={pastedText}
+                        onChange={(e) => setPastedText(e.target.value)}
+                        placeholder={"Rnd 1: 6 sc in magic ring (6)\nRnd 2: inc in each st (12)\nRnd 3: [sc, inc] x6 (18)"}
+                        rows={6}
+                        className="w-full px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/40 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 resize-none font-mono text-sm"
+                      />
+                      <p className="text-xs text-[#2C1810]/40 mt-1">
+                        Each line becomes a step. Rnd/Row prefixes are auto-detected.
+                      </p>
                     </div>
                   </>
                 )}
