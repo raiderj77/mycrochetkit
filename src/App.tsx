@@ -135,7 +135,7 @@ function App() {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#E86A58] animate-pulse"></span>
                 Beta
               </span>
-              <Auth user={user} setUser={setUser} />
+              <Auth user={user} setUser={setUser} variant="compact" />
             </div>
           </header>
 
@@ -219,7 +219,7 @@ function App() {
               <span className="w-1.5 h-1.5 rounded-full bg-[#E86A58] animate-pulse"></span>
               Beta
             </span>
-            <Auth user={user} setUser={setUser} />
+            <Auth user={user} setUser={setUser} variant="compact" />
           </div>
         </header>
 
