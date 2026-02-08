@@ -13,7 +13,7 @@ import { trackPageView } from './analytics';
 import { SEOHead } from './seo/components/SEOHead';
 import { organizationSchema } from './seo/schemas/organization';
 import { softwareApplicationSchema } from './seo/schemas/software-application';
-import { Mic, Zap, Cloud, Heart, ArrowRight, Sparkles, WifiOff, Mail, Play } from 'lucide-react';
+import { Mic, Zap, Cloud, Heart, ArrowRight, Sparkles, WifiOff, Mail, Play, FileText } from 'lucide-react';
 
 function FoundersEmailForm() {
   const [email, setEmail] = useState('');
@@ -224,7 +224,7 @@ function App() {
         </header>
 
         {/* Hero Section */}
-        <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-32 relative">
+        <section className="flex flex-col items-center justify-center px-6 pt-20 pb-8 relative" style={{ minHeight: 'calc(100vh - 64px)' }}>
           <motion.div
             className="text-center max-w-3xl mx-auto"
             initial={{ opacity: 0 }}
@@ -233,7 +233,7 @@ function App() {
           >
             {/* Badge */}
             <motion.div
-              className="badge badge-success mb-8 mx-auto w-fit"
+              className="badge badge-success mb-4 mx-auto w-fit"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -245,7 +245,7 @@ function App() {
 
             {/* Headline */}
             <motion.h1
-              className="display-font text-5xl md:text-7xl lg:text-8xl text-[#2C1810] mb-6 leading-[1.1]"
+              className="display-font text-5xl md:text-7xl lg:text-8xl text-[#2C1810] mb-4 leading-[1.1]"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -257,18 +257,18 @@ function App() {
 
             {/* Subheadline */}
             <motion.p
-              className="text-xl md:text-2xl text-[#2C1810]/75 mb-12 max-w-xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-[#2C1810]/75 mb-8 max-w-xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              Voice-activated counters. Bulletproof project tracking.
+              Upload a PDF. We parse it into steps you can actually follow on your phone. Voice-activated counting.
               <span className="text-[#E86A58] font-medium"> Your data, actually safe.</span>
             </motion.p>
 
             {/* CTA */}
             <motion.div
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -375,8 +375,133 @@ function App() {
           </div>
         </section>
 
-        {/* Voice Feature Section */}
+        {/* Pattern Import Section */}
         <section className="px-6 py-24 bg-[#FFF8F0]">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              {/* Left - Text */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="badge mb-6 w-fit">
+                  <FileText className="w-4 h-4 text-[#B8A9C9]" />
+                  <span className="text-[#2C1810]/70">Pattern Import</span>
+                </div>
+
+                <h2 className="display-font text-4xl md:text-5xl text-[#2C1810] mb-6 leading-tight">
+                  Your patterns.
+                  <br />
+                  <span className="text-[#B8A9C9]">Actually readable.</span>
+                </h2>
+
+                <p className="text-[#2C1810]/75 text-lg mb-8">
+                  Upload a PDF or paste pattern text — MyCrochetKit parses it into trackable steps.
+                  No more zooming and scrolling on your phone. Each round, row, and stitch count is
+                  broken out so you can follow along step by step.
+                </p>
+
+                <div className="space-y-3">
+                  {[
+                    'PDF import with automatic step parsing',
+                    'Inline abbreviation definitions',
+                    'Step-by-step progress tracking',
+                    'Works on any pattern format',
+                  ].map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      className="flex items-center gap-3 text-[#2C1810]/70"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.2 + index * 0.1 }}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[#7FBFA0]/20 flex items-center justify-center flex-shrink-0">
+                        <span className="text-[#7FBFA0] text-sm">✓</span>
+                      </div>
+                      {feature}
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Right - Parsed Steps Mockup */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="feature-card relative overflow-hidden">
+                  {/* Decorative gradient */}
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-[#B8A9C9]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
+
+                  <p className="text-[#2C1810]/50 text-xs font-medium uppercase tracking-wider mb-4">
+                    Parsed Pattern
+                  </p>
+
+                  <div className="space-y-2.5">
+                    {[
+                      { step: 'Rnd 1', instruction: '6 sc in magic ring', count: '6' },
+                      { step: 'Rnd 2', instruction: 'inc in each st around', count: '12' },
+                      { step: 'Rnd 3', instruction: '(sc, inc) x 6', count: '18' },
+                      { step: 'Rnd 4', instruction: '(sc 2, inc) x 6', count: '24' },
+                    ].map((item, index) => (
+                      <div
+                        key={index}
+                        className={`flex items-center justify-between p-3 rounded-xl ${
+                          index === 0
+                            ? 'bg-[#B8A9C9]/10 border border-[#B8A9C9]/20'
+                            : 'bg-[#2C1810]/[0.03]'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`text-xs font-bold px-2 py-1 rounded-lg ${
+                              index === 0
+                                ? 'bg-[#B8A9C9]/20 text-[#B8A9C9]'
+                                : 'bg-[#2C1810]/[0.06] text-[#2C1810]/50'
+                            }`}
+                          >
+                            {item.step}
+                          </span>
+                          <span
+                            className={`text-sm ${
+                              index === 0 ? 'text-[#2C1810]' : 'text-[#2C1810]/70'
+                            }`}
+                          >
+                            {item.instruction}
+                          </span>
+                        </div>
+                        <span
+                          className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                            index === 0
+                              ? 'bg-[#7FBFA0]/20 text-[#7FBFA0]'
+                              : 'bg-[#2C1810]/[0.06] text-[#2C1810]/40'
+                          }`}
+                        >
+                          ({item.count})
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Progress indicator */}
+                  <div className="mt-4 flex items-center justify-between text-xs text-[#2C1810]/50">
+                    <span>Step 1 of 24</span>
+                    <span className="text-[#7FBFA0] font-medium">4%</span>
+                  </div>
+                  <div className="mt-1.5 h-1.5 bg-[#2C1810]/[0.06] rounded-full overflow-hidden">
+                    <div className="h-full w-[4%] bg-[#7FBFA0] rounded-full" />
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Voice Feature Section */}
+        <section className="px-6 py-24 bg-white">
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               {/* Left - Text */}
