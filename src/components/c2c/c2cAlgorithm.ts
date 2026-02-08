@@ -16,6 +16,9 @@ export interface C2CDiagonal {
   number: number; // 1-indexed row number
   totalTiles: number;
   blocks: C2CBlock[];
+  phase: 'increase' | 'maintain' | 'decrease';
+  side: 'RS' | 'WS';
+  direction: '↙' | '↗';
 }
 
 export interface C2CInstructions {
@@ -44,25 +47,57 @@ export function generateC2CInstructions(
   grid: number[][],
   palette: C2CColor[]
 ): C2CInstructions {
-  const height = grid.length;
-  const width = height > 0 ? grid[0].length : 0;
-  const totalDiagonals = width + height - 1;
+  const H = grid.length;
+  const W = H > 0 ? grid[0].length : 0;
+  const totalDiagonals = W + H - 1;
   const usedColors = new Set<number>();
   const diagonals: C2CDiagonal[] = [];
 
-  for (let d = 0; d < totalDiagonals; d++) {
-    const rowMax = Math.min(d, height - 1);
-    const rowMin = Math.max(0, d - width + 1);
+  const minDim = Math.min(W, H);
+  const maxDim = Math.max(W, H);
 
+  for (let d = 1; d <= totalDiagonals; d++) {
+    // Anti-diagonal sum: d=1 → bottom-right, d=totalDiagonals → top-left
+    const s = H + W - 1 - d;
+    const rowMin = Math.max(0, s - (W - 1));
+    const rowMax = Math.min(H - 1, s);
+
+    // Direction alternation
+    const isOdd = d % 2 === 1;
+    const side: 'RS' | 'WS' = isOdd ? 'RS' : 'WS';
+    const direction: '↙' | '↗' = isOdd ? '↙' : '↗';
+
+    // Phase
+    let phase: 'increase' | 'maintain' | 'decrease';
+    if (d <= minDim) {
+      phase = 'increase';
+    } else if (d <= maxDim) {
+      phase = 'maintain';
+    } else {
+      phase = 'decrease';
+    }
+
+    // Collect cells in traversal order
+    const cells: Array<{ row: number; col: number }> = [];
+    if (isOdd) {
+      // RS ↙: rowMin → rowMax (top-right to bottom-left)
+      for (let r = rowMin; r <= rowMax; r++) {
+        cells.push({ row: r, col: s - r });
+      }
+    } else {
+      // WS ↗: rowMax → rowMin (bottom-left to top-right)
+      for (let r = rowMax; r >= rowMin; r--) {
+        cells.push({ row: r, col: s - r });
+      }
+    }
+
+    // Run-length encoding
     const blocks: C2CBlock[] = [];
     let currentColorIdx = -1;
     let currentCount = 0;
 
-    // Traverse diagonal: top-right to bottom-left
-    // In C2C, we work from the starting corner along each diagonal
-    for (let row = rowMax; row >= rowMin; row--) {
-      const col = d - row;
-      const colorIdx = grid[row][col];
+    for (const cell of cells) {
+      const colorIdx = grid[cell.row][cell.col];
       usedColors.add(colorIdx);
 
       if (colorIdx === currentColorIdx) {
@@ -79,7 +114,6 @@ export function generateC2CInstructions(
       }
     }
 
-    // Push last group
     if (currentCount > 0) {
       blocks.push({
         colorName: palette[currentColorIdx]?.name ?? `Color ${currentColorIdx}`,
@@ -88,38 +122,98 @@ export function generateC2CInstructions(
     }
 
     diagonals.push({
-      number: d + 1,
-      totalTiles: rowMax - rowMin + 1,
+      number: d,
+      totalTiles: cells.length,
       blocks,
+      phase,
+      side,
+      direction,
     });
   }
 
-  const colors = Array.from(usedColors).map((i) => palette[i] ?? { name: `Color ${i}`, hex: '#888888' });
+  const colors = Array.from(usedColors).map(
+    (i) => palette[i] ?? { name: `Color ${i}`, hex: '#888888' }
+  );
 
-  return { width, height, colors, diagonals };
+  return { width: W, height: H, colors, diagonals };
 }
 
 // ─── Text formatter ─────────────────────────────────────
 
 export function formatC2CText(instructions: C2CInstructions): string {
   const lines: string[] = [];
-  const { width, height, diagonals } = instructions;
-  const maxDiag = Math.min(width, height);
+  const { width: W, height: H, diagonals } = instructions;
+  const totalRows = diagonals.length;
+  const minDim = Math.min(W, H);
+  const maxDim = Math.max(W, H);
 
-  lines.push(`C2C Pattern — ${width} × ${height}`);
+  lines.push(`C2C Pattern — ${W} × ${H}`);
+  lines.push(`Total rows: ${totalRows}`);
   lines.push('');
-  lines.push('Each "tile" = ch 6, dc in 4th ch from hook, dc in next 2 ch.');
-  lines.push('Join tiles with sl st to adjacent tile, then ch 3 to start next tile.');
+  lines.push('Each block = ch 6, dc in 4th ch from hook, dc in next 2 ch.');
+  lines.push(
+    'Color changes: Always change color on the last yarn over of the previous block\'s last dc.'
+  );
   lines.push('');
 
+  // Row 1 stitch instruction
+  lines.push('Row 1: Ch 6, dc in 4th ch from hook, dc in next 2 ch.');
+  lines.push(
+    'Increase rows: Turn. Ch 6, dc in 4th ch from hook, dc in next 2 ch, [sl st in next ch-3 sp, ch 3, 3 dc in same sp] for remaining blocks.'
+  );
+  lines.push(
+    'Decrease rows: Turn. Sl st across first block, sl st into ch-3 sp, ch 3, 3 dc in same sp, [sl st in next ch-3 sp, ch 3, 3 dc in same sp] for remaining blocks.'
+  );
+  lines.push('');
+
+  // Group by phase
+  const phases: Array<{ label: string; start: number; end: number }> = [];
+  phases.push({ label: 'Increase', start: 1, end: minDim });
+  if (minDim < maxDim) {
+    phases.push({ label: 'Maintain', start: minDim + 1, end: maxDim });
+  }
+  phases.push({ label: 'Decrease', start: maxDim + 1, end: totalRows });
+
+  for (const phase of phases) {
+    if (phase.start > phase.end) continue;
+    lines.push(`--- ${phase.label} rows (${phase.start}–${phase.end}) ---`);
+
+    for (const diag of diagonals) {
+      if (diag.number < phase.start || diag.number > phase.end) continue;
+
+      const blocksStr = diag.blocks
+        .map((b) => `(${b.colorName}) x ${b.count}`)
+        .join(', ');
+
+      lines.push(
+        `${diag.direction} Row ${diag.number} [${diag.side}]: ${blocksStr} (${diag.totalTiles} block${diag.totalTiles !== 1 ? 's' : ''})`
+      );
+    }
+    lines.push('');
+  }
+
+  // Summary
+  lines.push('--- Summary ---');
+  lines.push(`Total rows: ${totalRows}`);
+  lines.push(`Increase: rows 1–${minDim}`);
+  if (minDim < maxDim) {
+    lines.push(`Maintain: rows ${minDim + 1}–${maxDim}`);
+  }
+  if (maxDim + 1 <= totalRows) {
+    lines.push(`Decrease: rows ${maxDim + 1}–${totalRows}`);
+  }
+
+  // Blocks per color
+  const colorCounts: Record<string, number> = {};
   for (const diag of diagonals) {
-    const phase = diag.number <= maxDiag ? 'increase' : 'decrease';
-    const blocksStr = diag.blocks
-      .map((b) => `${b.count} ${b.colorName}`)
-      .join(', ');
-    lines.push(
-      `Row ${diag.number} (${diag.totalTiles} tile${diag.totalTiles !== 1 ? 's' : ''}, ${phase}): ${blocksStr}`
-    );
+    for (const block of diag.blocks) {
+      colorCounts[block.colorName] = (colorCounts[block.colorName] || 0) + block.count;
+    }
+  }
+  lines.push('');
+  lines.push('Blocks per color:');
+  for (const [name, count] of Object.entries(colorCounts)) {
+    lines.push(`  ${name}: ${count} block${count !== 1 ? 's' : ''}`);
   }
 
   lines.push('');
@@ -138,12 +232,12 @@ export function c2cToPatternSections(
 ): { sections: PatternSection[]; abbreviations: Record<string, string> } {
   const steps: PatternStep[] = instructions.diagonals.map((diag) => {
     const blocksStr = diag.blocks
-      .map((b) => `${b.count} ${b.colorName}`)
+      .map((b) => `(${b.colorName}) x ${b.count}`)
       .join(', ');
 
     return {
       kind: 'row' as const,
-      label: `Row ${diag.number}`,
+      label: `${diag.direction} Row ${diag.number} [${diag.side}]`,
       instruction: blocksStr,
       stitchCountEnd: diag.totalTiles,
       repeat: null,
@@ -151,11 +245,20 @@ export function c2cToPatternSections(
     };
   });
 
+  const { width: W, height: H } = instructions;
+  const minDim = Math.min(W, H);
+  const maxDim = Math.max(W, H);
+  const totalRows = instructions.diagonals.length;
+
+  let phaseNote = `Increase: rows 1–${minDim}`;
+  if (minDim < maxDim) phaseNote += `, Maintain: rows ${minDim + 1}–${maxDim}`;
+  if (maxDim + 1 <= totalRows) phaseNote += `, Decrease: rows ${maxDim + 1}–${totalRows}`;
+
   const sections: PatternSection[] = [
     {
       name: 'C2C Pattern',
       repeatCount: 1,
-      notes: `${instructions.width} × ${instructions.height} grid. Each tile = ch 6, dc in 4th ch from hook, dc in next 2 ch. Join tiles with sl st, ch 3 for next tile.`,
+      notes: `${W} × ${H} grid (${totalRows} rows). ${phaseNote}. Each block = ch 6, dc in 4th ch from hook, dc in next 2 ch. Color changes on last yo of previous block's last dc.`,
       steps,
     },
   ];
@@ -165,6 +268,10 @@ export function c2cToPatternSections(
     ch: 'chain',
     dc: 'double crochet',
     'sl st': 'slip stitch',
+    RS: 'Right Side',
+    WS: 'Wrong Side',
+    yo: 'yarn over',
+    sp: 'space',
   };
 
   return { sections, abbreviations };
