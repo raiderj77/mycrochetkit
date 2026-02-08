@@ -6,7 +6,7 @@ interface CrochetDB extends DBSchema {
     key: string;
     value: {
       id: string;
-      counters: Array<{ id: string; name: string; count: number }>;
+      counters: Array<{ id: string; name: string; count: number; increment?: number; type?: 'row' | 'stitch'; target?: number | null }>;
       activeId: string;
       updatedAt: string;
       synced: boolean;
@@ -18,7 +18,7 @@ interface CrochetDB extends DBSchema {
       id: string;
       action: 'update';
       data: {
-        counters: Array<{ id: string; name: string; count: number }>;
+        counters: Array<{ id: string; name: string; count: number; increment?: number; type?: 'row' | 'stitch'; target?: number | null }>;
         activeId: string;
         notes?: string;
       };
@@ -70,7 +70,7 @@ export async function getDb(): Promise<IDBPDatabase<CrochetDB>> {
 export async function saveProjectLocal(
   userId: string,
   projectId: string,
-  counters: Array<{ id: string; name: string; count: number }>,
+  counters: Array<{ id: string; name: string; count: number; increment?: number; type?: 'row' | 'stitch'; target?: number | null }>,
   activeId: string,
   synced: boolean = false
 ): Promise<void> {
@@ -90,7 +90,7 @@ export async function getProjectLocal(
   userId: string,
   projectId: string
 ): Promise<{
-  counters: Array<{ id: string; name: string; count: number }>;
+  counters: Array<{ id: string; name: string; count: number; increment?: number; type?: 'row' | 'stitch'; target?: number | null }>;
   activeId: string;
   updatedAt: string;
   synced: boolean;
@@ -112,7 +112,7 @@ export async function getProjectLocal(
 export async function addPendingSync(
   userId: string,
   projectId: string,
-  counters: Array<{ id: string; name: string; count: number }>,
+  counters: Array<{ id: string; name: string; count: number; increment?: number; type?: 'row' | 'stitch'; target?: number | null }>,
   activeId: string
 ): Promise<void> {
   const db = await getDb();
@@ -131,7 +131,7 @@ export async function getPendingSyncs(): Promise<
     id: string;
     action: 'update';
     data: {
-      counters: Array<{ id: string; name: string; count: number }>;
+      counters: Array<{ id: string; name: string; count: number; increment?: number; type?: 'row' | 'stitch'; target?: number | null }>;
       activeId: string;
       notes?: string;
     };

@@ -40,7 +40,30 @@ interface Counter {
   id: string;
   name: string;
   count: number;
+  increment: number;
+  type: 'row' | 'stitch';
+  target: number | null;
 }
+
+const DEFAULT_COUNTER: Counter = {
+  id: '1',
+  name: 'Row',
+  count: 0,
+  increment: 1,
+  type: 'row',
+  target: null,
+};
+
+// Backward compat: fill missing fields for counters from old data
+const normalizeCounter = (c: Record<string, unknown>): Counter => ({
+  id: (c.id as string) ?? '1',
+  name: (c.name as string) ?? 'Row',
+  count: (c.count as number) ?? 0,
+  increment: (c.increment as number) ?? 1,
+  type: (c.type as 'row' | 'stitch') ?? 'row',
+  target: (c.target as number | null) ?? null,
+});
+
 interface VoiceCounterProps {
   projectId?: string;
 }
@@ -48,7 +71,7 @@ interface VoiceCounterProps {
 export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   const [user, setUser] = useState<User | null>(null);
   const [projectName, setProjectName] = useState('My Project');
-  const [counters, setCounters] = useState<Counter[]>([{ id: '1', name: 'Row', count: 0 }]);
+  const [counters, setCounters] = useState<Counter[]>([{ ...DEFAULT_COUNTER }]);
   const [activeId, setActiveId] = useState('1');
   const [isListening, setIsListening] = useState(false);
   const [lastHeard, setLastHeard] = useState('');
@@ -67,6 +90,8 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   const [linkedPatternId, setLinkedPatternId] = useState<string | null>(null);
   const [linkedPattern, setLinkedPattern] = useState<Pattern | null>(null);
   const [showPatternPicker, setShowPatternPicker] = useState(false);
+  const [editingNameId, setEditingNameId] = useState<string | null>(null);
+  const [editingNameValue, setEditingNameValue] = useState('');
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const isListeningRef = useRef(false);
@@ -135,7 +160,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       try {
         const localData = await getProjectLocal(user.uid, projectId);
         if (localData) {
-          setCounters(localData.counters);
+          setCounters(localData.counters.map(normalizeCounter));
           setActiveId(localData.activeId);
           setPendingChanges(!localData.synced);
         }
@@ -152,7 +177,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
               const cloudTime = new Date(cloudData.updatedAt).getTime();
               const localTime = localData ? new Date(localData.updatedAt).getTime() : 0;
               if (cloudTime > localTime) {
-                setCounters(cloudData.counters);
+                setCounters(cloudData.counters.map(normalizeCounter));
                 setActiveId(cloudData.activeId || cloudData.counters[0].id);
                 await saveProjectLocal(
                   user.uid,
@@ -164,7 +189,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
               }
             }
           } else if (!localData) {
-            setCounters([{ id: '1', name: 'Row', count: 0 }]);
+            setCounters([{ ...DEFAULT_COUNTER }]);
             setActiveId('1');
           }
           syncPendingChanges();
@@ -237,10 +262,33 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   const addCounter = () => {
     if (!newCounterName.trim()) return;
     const newId = Date.now().toString();
-    setCounters((prev) => [...prev, { id: newId, name: newCounterName.trim(), count: 0 }]);
+    setCounters((prev) => [
+      ...prev,
+      { id: newId, name: newCounterName.trim(), count: 0, increment: 1, type: 'row', target: null },
+    ]);
     setNewCounterName('');
     setShowAddForm(false);
     setActiveId(newId);
+  };
+
+  const startRename = (counter: Counter) => {
+    setEditingNameId(counter.id);
+    setEditingNameValue(counter.name);
+  };
+
+  const saveRename = () => {
+    if (!editingNameId) return;
+    const trimmed = editingNameValue.trim();
+    if (trimmed) {
+      setCounters((prev) =>
+        prev.map((c) => (c.id === editingNameId ? { ...c, name: trimmed } : c))
+      );
+    }
+    setEditingNameId(null);
+  };
+
+  const cancelRename = () => {
+    setEditingNameId(null);
   };
 
   const removeCounter = (id: string) => {
@@ -701,7 +749,32 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
             className={`counter-tab ${activeId === counter.id ? 'active' : ''}`}
             whileTap={{ scale: 0.95 }}
           >
-            {counter.name}: {counter.count}
+            {editingNameId === counter.id ? (
+              <input
+                type="text"
+                value={editingNameValue}
+                onChange={(e) => setEditingNameValue(e.target.value)}
+                onBlur={saveRename}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') saveRename();
+                  if (e.key === 'Escape') cancelRename();
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-transparent border-b border-white/50 text-white text-sm w-16 outline-none text-center"
+                autoFocus
+              />
+            ) : (
+              <span
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  startRename(counter);
+                }}
+                title="Double-tap to rename"
+              >
+                {counter.name}
+              </span>
+            )}
+            : {counter.count}
           </motion.button>
         ))}
         <motion.button
