@@ -46,6 +46,35 @@ const roadmapItems: RoadmapItem[] = [
     description: 'Document your journey with timestamped photos',
     status: 'planned',
   },
+  {
+    title: 'Stitch counter (separate from row counter)',
+    description:
+      'Dedicated stitch counter distinct from row counters, with custom increment amounts (1, 5, 10) for repeat sections',
+    status: 'planned',
+  },
+  {
+    title: 'Chained/linked counters',
+    description:
+      'Nest counters together — e.g. 6-row repeat → 16 repeats → main section counter. When one hits its target, it resets and ticks up the next',
+    status: 'planned',
+  },
+  {
+    title: 'Counter renaming',
+    description: 'Give your counters custom names instead of generic labels',
+    status: 'planned',
+  },
+  {
+    title: 'Standalone quick counter',
+    description:
+      'A counter not tied to any project — for foundation chains, quick counts, whatever you need',
+    status: 'planned',
+  },
+  {
+    title: 'Gauge-based pattern resizing (AI-assisted)',
+    description:
+      'Resize patterns for different hook sizes or yarn weights. Recalculates stitch counts based on gauge — future AI-assisted feature',
+    status: 'planned',
+  },
 ];
 
 export function RoadmapPage() {
