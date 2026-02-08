@@ -655,7 +655,7 @@ function App() {
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#E86A58]/10 to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
 
               <div className="mb-6">
-                <span className="text-[#2C1810]/40 line-through text-lg">$99</span>
+                <span className="text-[#2C1810]/40 line-through text-lg">$79</span>
                 <div className="display-font text-5xl text-[#2C1810] mt-1">
                   $59<span className="text-2xl">.99</span>
                 </div>
