@@ -28,8 +28,8 @@ export function PatternTrackerPage() {
   const [annotations, setAnnotations] = useState<Record<string, StepAnnotation>>({});
 
   const uidRef = useRef<string | null>(null);
-  const progressTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
-  const annotationsTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const progressTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const annotationsTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const pendingProgressRef = useRef<PatternProgress | null>(null);
   const pendingAnnotationsRef = useRef<Record<string, StepAnnotation> | null>(null);
 

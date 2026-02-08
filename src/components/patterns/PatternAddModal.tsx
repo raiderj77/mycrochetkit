@@ -311,6 +311,7 @@ export function PatternAddModal({
     } catch (err: unknown) {
       console.error('Save error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save pattern');
+    } finally {
       setSaving(false);
     }
   };
