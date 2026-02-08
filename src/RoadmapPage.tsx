@@ -76,9 +76,9 @@ const roadmapItems: RoadmapItem[] = [
     status: 'planned',
   },
   {
-    title: 'Gauge-based pattern resizing (AI-assisted)',
+    title: 'Smart pattern scaling (find/replace)',
     description:
-      'Resize patterns for different hook sizes or yarn weights. Recalculates stitch counts based on gauge — future AI-assisted feature',
+      "Enter your gauge difference and the app scans your pattern for stitch counts, suggesting scaled numbers one at a time. Accept or skip each suggestion — you stay in control. No black-box AI rewriting.",
     status: 'planned',
   },
   {
@@ -109,6 +109,18 @@ const roadmapItems: RoadmapItem[] = [
     title: 'Within-round stitch tracking',
     description:
       "Track your position within a round — know you're on stitch 4 of 18, not just which round you're on. Pairs with stitch counter.",
+    status: 'planned',
+  },
+  {
+    title: 'Custom project statuses',
+    description:
+      "Set custom statuses on projects like 'need supplies', 'ready to start', 'on the hook', 'stuck', 'needs finishing'. Filter and sort your WIP list by status.",
+    status: 'planned',
+  },
+  {
+    title: 'Visual pattern builder',
+    description:
+      'Drag-and-drop symbol-based pattern building with templates for granny squares, in-the-round, and straight work. Design patterns visually.',
     status: 'planned',
   },
 ];
