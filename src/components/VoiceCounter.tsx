@@ -31,6 +31,7 @@ import {
   ChevronDown,
   BookOpen,
   Unlink,
+  Settings,
 } from 'lucide-react';
 import { getPattern, linkPatternToProject, unlinkPatternFromProject } from '../services/patternService';
 import { PatternPicker } from './PatternPicker';
@@ -92,10 +93,13 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   const [showPatternPicker, setShowPatternPicker] = useState(false);
   const [editingNameId, setEditingNameId] = useState<string | null>(null);
   const [editingNameValue, setEditingNameValue] = useState('');
+  const [showSettings, setShowSettings] = useState(false);
+  const [customIncrementInput, setCustomIncrementInput] = useState('');
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const isListeningRef = useRef(false);
   const activeIdRef = useRef(activeId);
+  const countersRef = useRef(counters);
   const lastProcessedRef = useRef<number>(0);
   const lastTranscriptRef = useRef<string>('');
 
@@ -105,6 +109,9 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
   useEffect(() => {
     activeIdRef.current = activeId;
   }, [activeId]);
+  useEffect(() => {
+    countersRef.current = counters;
+  }, [counters]);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -291,6 +298,13 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
     setEditingNameId(null);
   };
 
+  const setCounterIncrement = (id: string, inc: number) => {
+    const val = Math.max(1, Math.min(100, inc));
+    setCounters((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, increment: val } : c))
+    );
+  };
+
   const removeCounter = (id: string) => {
     if (counters.length <= 1) return;
     const newCounters = counters.filter((c) => c.id !== id);
@@ -360,17 +374,20 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
         return;
       }
 
-      // Increment commands
+      // Get the active counter's configured increment
+      const activeInc = countersRef.current.find((c) => c.id === currentActiveId)?.increment ?? 1;
+
+      // Increment commands — use configured increment
       if (
         ['next', 'up', 'plus', 'add', '1', 'plus 1', 'add 1', 'next row', 'row'].includes(
           transcript
         )
       ) {
-        updateCount(currentActiveId, 1);
+        updateCount(currentActiveId, activeInc);
         return;
       }
 
-      // Decrement commands
+      // Decrement commands — use configured increment
       if (
         [
           'back',
@@ -385,7 +402,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
           'previous',
         ].includes(transcript)
       ) {
-        updateCount(currentActiveId, -1);
+        updateCount(currentActiveId, -activeInc);
         return;
       }
 
@@ -775,8 +792,19 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
               </span>
             )}
             : {counter.count}
+            {counter.increment > 1 && (
+              <span className="ml-1 text-[10px] text-[#7FBFA0] opacity-70">+{counter.increment}</span>
+            )}
           </motion.button>
         ))}
+        <motion.button
+          onClick={() => setShowSettings(!showSettings)}
+          className="counter-tab !border-white/10 !text-white/50 hover:!text-white/80"
+          whileTap={{ scale: 0.95 }}
+          title="Counter settings"
+        >
+          <Settings className="w-4 h-4" />
+        </motion.button>
         <motion.button
           onClick={() => setShowAddForm(true)}
           className="counter-tab !border-dashed !border-white/20 !text-white/65 hover:!border-white/40"
@@ -785,6 +813,80 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
           <Plus className="w-4 h-4" />
         </motion.button>
       </div>
+
+      {/* Increment Settings Panel */}
+      <AnimatePresence>
+        {showSettings && (
+          <motion.div
+            className="glass-card p-5 mb-8"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-white/70 text-sm font-medium">
+                Increment for "{activeCounter.name}"
+              </p>
+              <motion.button
+                onClick={() => setShowSettings(false)}
+                className="text-white/50 hover:text-white/80"
+                whileTap={{ scale: 0.95 }}
+              >
+                <X className="w-4 h-4" />
+              </motion.button>
+            </div>
+            <div className="flex gap-2 mb-3">
+              {[1, 2, 5, 10].map((n) => (
+                <motion.button
+                  key={n}
+                  onClick={() => setCounterIncrement(activeId, n)}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    activeCounter.increment === n
+                      ? 'bg-[#E86A58] text-white'
+                      : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  +{n}
+                </motion.button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                min={1}
+                max={100}
+                value={customIncrementInput}
+                onChange={(e) => setCustomIncrementInput(e.target.value)}
+                placeholder="Custom..."
+                className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#E86A58]/50"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const val = parseInt(customIncrementInput, 10);
+                    if (val > 0) {
+                      setCounterIncrement(activeId, val);
+                      setCustomIncrementInput('');
+                    }
+                  }
+                }}
+              />
+              <motion.button
+                onClick={() => {
+                  const val = parseInt(customIncrementInput, 10);
+                  if (val > 0) {
+                    setCounterIncrement(activeId, val);
+                    setCustomIncrementInput('');
+                  }
+                }}
+                className="px-4 py-2.5 bg-[#E86A58] text-white text-sm font-medium rounded-xl"
+                whileTap={{ scale: 0.95 }}
+              >
+                Set
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Add Counter Form */}
       <AnimatePresence>
@@ -907,7 +1009,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       {/* Manual Controls */}
       <div className="flex justify-center gap-4 mb-8">
         <motion.button
-          onClick={() => updateCount(activeId, -1)}
+          onClick={() => updateCount(activeId, -activeCounter.increment)}
           className="control-button"
           whileTap={{ scale: 0.9 }}
         >
@@ -921,7 +1023,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
           <RotateCcw className="w-5 h-5" />
         </motion.button>
         <motion.button
-          onClick={() => updateCount(activeId, 1)}
+          onClick={() => updateCount(activeId, activeCounter.increment)}
           className="control-button"
           whileTap={{ scale: 0.9 }}
         >
