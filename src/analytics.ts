@@ -3,9 +3,17 @@ import ReactGA from 'react-ga4';
 const MEASUREMENT_ID = 'G-23B576BHEZ';
 
 export const initGA = () => {
+  // Only initialize GA in production, and handle Firebase subdomain
+  if (typeof window === 'undefined') return;
+  
+  const isFirebaseSubdomain = window.location.hostname.endsWith('.web.app');
+  
   ReactGA.initialize(MEASUREMENT_ID, {
     gaOptions: {
       anonymizeIp: true,
+      // Allow cookies on Firebase subdomain
+      cookieDomain: isFirebaseSubdomain ? window.location.hostname : 'auto',
+      cookieFlags: 'SameSite=None;Secure',
     },
   });
 };
