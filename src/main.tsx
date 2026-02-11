@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App.tsx';
 import { initGA } from './analytics';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
 
 // Lazy-load route-level components to reduce initial bundle
@@ -76,58 +77,60 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
       <BrowserRouter>
-        <Suspense
-          fallback={
-            <div className="min-h-screen flex items-center justify-center bg-[#FFF8F0]">
-              <div className="text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full border-3 border-[#E86A58]/20 border-t-[#E86A58] animate-spin" />
-                <p className="text-[#2C1810]/70">Loading...</p>
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <div className="min-h-screen bg-[#FFF8F0] flex items-center justify-center">
+                <div className="text-center">
+                  <div className="inline-block w-12 h-12 border-4 border-[#E86A58] border-t-transparent rounded-full animate-spin mb-4"></div>
+                  <p className="text-[#2C1810]/60">Loading...</p>
+                </div>
               </div>
-            </div>
-          }
-        >
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/counter" element={<QuickCounterPage />} />
-            <Route path="/counter/:projectId" element={<CounterPage />} />
-            <Route path="/roadmap" element={<RoadmapPage />} />
-            <Route path="/patterns" element={<PatternsPage />} />
-            <Route path="/patterns/:patternId/edit" element={<StepEditorPage />} />
-            <Route path="/patterns/:patternId/track" element={<PatternTrackerPage />} />
-            <Route path="/vs/ravelry" element={<VsRavelry />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/crochet-trends-2026" element={<BlogPost2026Trends />} />
-            <Route
-              path="/blog/how-to-never-lose-row-count-crochet"
-              element={<BlogPostRowCounting />}
-            />
-            <Route path="/blog/real-cost-handmade-crochet-blanket" element={<BlogPostTrueCost />} />
-            <Route
-              path="/blog/c2c-crochet-patterns-complete-guide"
-              element={<BlogPostC2CPatterns />}
-            />
-            <Route
-              path="/blog/best-crochet-apps-offline"
-              element={<BlogPostOfflineApps />}
-            />
-            <Route
-              path="/blog/why-i-left-ravelry"
-              element={<BlogPostWhyILeftRavelry />}
-            />
-            <Route
-              path="/blog/free-voice-activated-row-counter-crochet"
-              element={<BlogPostVoiceCounter />}
-            />
-            <Route path="/tools/c2c-generator" element={<C2CGeneratorPage />} />
-            <Route path="/tools" element={<FreeToolsPage />} />
-            <Route path="/yarn-calculator" element={<YarnCalculatorPage />} />
-            <Route path="/hook-converter" element={<HookConverterPage />} />
-            <Route path="/stitch-glossary" element={<StitchGlossaryPage />} />
-            <Route path="/quick-counter" element={<QuickCounterPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <FeedbackButton />
-        </Suspense>
+            }
+          >
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/counter" element={<CounterPage />} />
+              <Route path="/counter/:projectId" element={<CounterPage />} />
+              <Route path="/roadmap" element={<RoadmapPage />} />
+              <Route path="/patterns" element={<PatternsPage />} />
+              <Route path="/patterns/:patternId/edit" element={<StepEditorPage />} />
+              <Route path="/patterns/:patternId/track" element={<PatternTrackerPage />} />
+              <Route path="/vs/ravelry" element={<VsRavelry />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/crochet-trends-2026" element={<BlogPost2026Trends />} />
+              <Route
+                path="/blog/how-to-never-lose-row-count-crochet"
+                element={<BlogPostRowCounting />}
+              />
+              <Route path="/blog/real-cost-handmade-crochet-blanket" element={<BlogPostTrueCost />} />
+              <Route
+                path="/blog/c2c-crochet-patterns-complete-guide"
+                element={<BlogPostC2CPatterns />}
+              />
+              <Route
+                path="/blog/best-crochet-apps-offline"
+                element={<BlogPostOfflineApps />}
+              />
+              <Route
+                path="/blog/why-i-left-ravelry"
+                element={<BlogPostWhyILeftRavelry />}
+              />
+              <Route
+                path="/blog/free-voice-activated-row-counter-crochet"
+                element={<BlogPostVoiceCounter />}
+              />
+              <Route path="/tools/c2c-generator" element={<C2CGeneratorPage />} />
+              <Route path="/tools" element={<FreeToolsPage />} />
+              <Route path="/yarn-calculator" element={<YarnCalculatorPage />} />
+              <Route path="/hook-converter" element={<HookConverterPage />} />
+              <Route path="/stitch-glossary" element={<StitchGlossaryPage />} />
+              <Route path="/quick-counter" element={<QuickCounterPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <FeedbackButton />
+          </Suspense>
+        </ErrorBoundary>
       </BrowserRouter>
     </HelmetProvider>
   </StrictMode>

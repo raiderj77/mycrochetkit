@@ -3,16 +3,16 @@ import ReactGA from 'react-ga4';
 const MEASUREMENT_ID = 'G-23B576BHEZ';
 
 export const initGA = () => {
-  // Only initialize GA in production, and handle Firebase subdomain
   if (typeof window === 'undefined') return;
   
-  const isFirebaseSubdomain = window.location.hostname.endsWith('.web.app');
+  // Fix for Firebase hosting subdomain cookie issues
+  const isFirebase = window.location.hostname.endsWith('.web.app') || 
+                     window.location.hostname.endsWith('.firebaseapp.com');
   
   ReactGA.initialize(MEASUREMENT_ID, {
     gaOptions: {
       anonymizeIp: true,
-      // Allow cookies on Firebase subdomain
-      cookieDomain: isFirebaseSubdomain ? window.location.hostname : 'auto',
+      cookieDomain: isFirebase ? 'auto' : window.location.hostname,
       cookieFlags: 'SameSite=None;Secure',
     },
   });
@@ -48,4 +48,15 @@ export const events = {
   // Navigation
   visitRoadmap: () => trackEvent('Navigation', 'Visit Roadmap'),
   visitCommunity: () => trackEvent('Navigation', 'Visit Community', 'Reddit'),
+  
+  // New tool events
+  useStitchGlossary: () => trackEvent('Tools', 'Stitch Glossary', 'View'),
+  useYarnCalculator: () => trackEvent('Tools', 'Yarn Calculator', 'Calculate'),
+  useHookConverter: () => trackEvent('Tools', 'Hook Converter', 'Convert'),
+  
+  // Blog engagement
+  readBlogPost: (title: string) => trackEvent('Blog', 'Read Post', title),
+  
+  // Referral tracking
+  referralSignup: (code: string) => trackEvent('Referral', 'Signup', code),
 };

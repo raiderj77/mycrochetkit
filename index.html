@@ -12,7 +12,7 @@
     <meta name="author" content="MyCrochetKit" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://mycrochetkit.com/" />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://mycrochetkit.com/" />
@@ -23,20 +23,20 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="MyCrochetKit" />
     <meta property="og:locale" content="en_US" />
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://mycrochetkit.com/" />
     <meta name="twitter:title" content="MyCrochetKit - Free Voice-Activated Row Counter" />
     <meta name="twitter:description" content="Stop losing count! Voice-activated row counter that works offline. Say 'next' to count rows hands-free." />
     <meta name="twitter:image" content="https://mycrochetkit.com/og-image.png" />
-    
+
     <!-- Favicon & Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/pwa-192x192.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/pwa-192x192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="mask-icon" href="/pwa-512x512.svg" color="#4ade80" />
-    
+
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#0f0f1a" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -44,10 +44,10 @@
     <meta name="apple-mobile-web-app-title" content="MyCrochetKit" />
     <meta name="application-name" content="MyCrochetKit" />
     <meta name="msapplication-TileColor" content="#0f0f1a" />
-    
+
     <!-- Prevent phone number detection (iOS) -->
     <meta name="format-detection" content="telephone=no" />
-    
+
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,12 +55,6 @@
     <!-- Google Fonts (non-render-blocking via HTML, not CSS @import) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=DM+Serif+Display&display=swap" />
 
-    <!-- 
-      Hero image preload removed - it caused warnings for logged-in users 
-      who see the dashboard instead of landing page. LCP is still good 
-      because the image is small and cached after first visit.
-    -->
-    
     <!-- JSON-LD Structured Data (Schema.org) -->
     <script type="application/ld+json">
     {
@@ -97,7 +91,7 @@
       }
     }
     </script>
-    
+
     <!-- FAQ Schema for AEO (Answer Engine Optimization) -->
     <script type="application/ld+json">
     {
@@ -147,7 +141,7 @@
       ]
     }
     </script>
-    
+
     <!-- HowTo Schema -->
     <script type="application/ld+json">
     {
@@ -186,22 +180,6 @@
     </script>
   </head>
   <body>
-    <!-- No-JS Fallback for SEO crawlers -->
-    <noscript>
-      <div style="padding: 20px; text-align: center; font-family: sans-serif;">
-        <h1>MyCrochetKit - Voice-Activated Row Counter</h1>
-        <p>MyCrochetKit is a free voice-activated row counter app for crocheters and knitters.</p>
-        <h2>Features</h2>
-        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
-          <li>Voice-activated counting - say "next" to count rows</li>
-          <li>Works offline - even in airplane mode</li>
-          <li>Multiple counters per project</li>
-          <li>Auto-sync across devices</li>
-          <li>Free to use</li>
-        </ul>
-        <p>Please enable JavaScript to use the app.</p>
-      </div>
-    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
