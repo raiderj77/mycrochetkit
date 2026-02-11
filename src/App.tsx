@@ -774,28 +774,65 @@ function App() {
         <FAQ />
         {/* Footer */}
         <footer className="border-t border-[#2C1810]/5 bg-white">
-          <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#E86A58] to-[#D35A4A] flex items-center justify-center">
-                <span className="text-sm">🧶</span>
+          <div className="max-w-6xl mx-auto px-6 py-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+              {/* Brand */}
+              <div className="col-span-2 md:col-span-1">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E86A58] to-[#D35A4A] flex items-center justify-center">
+                    <span className="text-lg">🧶</span>
+                  </div>
+                  <span className="font-semibold text-[#2C1810]">MyCrochetKit</span>
+                </div>
+                <p className="text-sm text-[#2C1810]/60">
+                  Voice-activated row counter for crocheters. Works offline.
+                </p>
               </div>
-              <span className="text-[#2C1810]/65 text-sm">MyCrochetKit</span>
+
+              {/* Free Tools */}
+              <div>
+                <h4 className="font-semibold text-[#2C1810] mb-3 text-sm">Free Tools</h4>
+                <ul className="space-y-2 text-sm">
+                  <li><Link to="/quick-counter" className="text-[#2C1810]/60 hover:text-[#E86A58]">Voice Counter</Link></li>
+                  <li><Link to="/stitch-glossary" className="text-[#2C1810]/60 hover:text-[#E86A58]">Stitch Glossary</Link></li>
+                  <li><Link to="/yarn-calculator" className="text-[#2C1810]/60 hover:text-[#E86A58]">Yarn Calculator</Link></li>
+                  <li><Link to="/hook-converter" className="text-[#2C1810]/60 hover:text-[#E86A58]">Hook Converter</Link></li>
+                  <li><Link to="/tools/c2c-generator" className="text-[#2C1810]/60 hover:text-[#E86A58]">C2C Generator</Link></li>
+                </ul>
+              </div>
+
+              {/* Resources */}
+              <div>
+                <h4 className="font-semibold text-[#2C1810] mb-3 text-sm">Resources</h4>
+                <ul className="space-y-2 text-sm">
+                  <li><Link to="/blog" className="text-[#2C1810]/60 hover:text-[#E86A58]">Blog</Link></li>
+                  <li><Link to="/vs/ravelry" className="text-[#2C1810]/60 hover:text-[#E86A58]">vs Ravelry</Link></li>
+                  <li><Link to="/roadmap" className="text-[#2C1810]/60 hover:text-[#E86A58]">Roadmap</Link></li>
+                </ul>
+              </div>
+
+              {/* Community */}
+              <div>
+                <h4 className="font-semibold text-[#2C1810] mb-3 text-sm">Community</h4>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <a href="https://www.reddit.com/r/crochetkitapp/" target="_blank" rel="noopener noreferrer" className="text-[#2C1810]/60 hover:text-[#E86A58]">
+                      Reddit
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <a
-              href="https://www.reddit.com/r/crochetkitapp/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
-            >
-              Join Community <ArrowRight className="w-3 h-3" />
-            </a>
-            <Link
-              to="/roadmap"
-              className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors inline-flex items-center gap-1"
-            >
-              Feature Roadmap <ArrowRight className="w-3 h-3" />
-            </Link>
-            <p className="text-[#2C1810]/75 text-xs">© 2026 MyCrochetKit</p>
+
+            {/* Bottom */}
+            <div className="pt-8 border-t border-[#2C1810]/5 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <p className="text-[#2C1810]/50 text-xs">© 2026 MyCrochetKit. Made with ♥ for crocheters.</p>
+              <div className="flex gap-4 text-xs text-[#2C1810]/50">
+                <Link to="/tools" className="hover:text-[#E86A58]">All Tools</Link>
+                <span>·</span>
+                <a href="/llms.txt" className="hover:text-[#E86A58]">llms.txt</a>
+              </div>
+            </div>
           </div>
         </footer>
       </div>
