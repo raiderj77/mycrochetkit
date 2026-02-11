@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Calendar, Clock, Wifi, WifiOff, Check, X, Smartphone } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Calendar, Clock, WifiOff, Check, X, Smartphone } from 'lucide-react';
 import { SEOHead } from '../seo/components/SEOHead';
 import { ShareButtons } from '../components/ShareButtons';
 
