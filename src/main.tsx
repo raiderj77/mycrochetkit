@@ -38,6 +38,15 @@ const BlogPostTrueCost = lazy(() =>
 const BlogPostC2CPatterns = lazy(() =>
   import('./pages/BlogPostC2CPatterns.tsx').then((m) => ({ default: m.BlogPostC2CPatterns }))
 );
+const BlogPostOfflineApps = lazy(() =>
+  import('./pages/BlogPostOfflineApps.tsx').then((m) => ({ default: m.BlogPostOfflineApps }))
+);
+const BlogPostWhyILeftRavelry = lazy(() =>
+  import('./pages/BlogPostWhyILeftRavelry.tsx').then((m) => ({ default: m.BlogPostWhyILeftRavelry }))
+);
+const BlogPostVoiceCounter = lazy(() =>
+  import('./pages/BlogPostVoiceCounter.tsx').then((m) => ({ default: m.BlogPostVoiceCounter }))
+);
 const C2CGeneratorPage = lazy(() =>
   import('./pages/C2CGeneratorPage.tsx').then((m) => ({ default: m.C2CGeneratorPage }))
 );
@@ -96,6 +105,18 @@ createRoot(document.getElementById('root')!).render(
             <Route
               path="/blog/c2c-crochet-patterns-complete-guide"
               element={<BlogPostC2CPatterns />}
+            />
+            <Route
+              path="/blog/best-crochet-apps-offline"
+              element={<BlogPostOfflineApps />}
+            />
+            <Route
+              path="/blog/why-i-left-ravelry"
+              element={<BlogPostWhyILeftRavelry />}
+            />
+            <Route
+              path="/blog/free-voice-activated-row-counter-crochet"
+              element={<BlogPostVoiceCounter />}
             />
             <Route path="/tools/c2c-generator" element={<C2CGeneratorPage />} />
             <Route path="/tools" element={<FreeToolsPage />} />

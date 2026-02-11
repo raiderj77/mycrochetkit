@@ -5,10 +5,37 @@ import { SEOHead } from '../seo/components/SEOHead';
 export const Blog = () => {
   const posts = [
     {
+      slug: 'free-voice-activated-row-counter-crochet',
+      title: 'Free Voice-Activated Row Counter for Crochet (No App Download)',
+      excerpt:
+        'Count crochet rows with your voice — say "next" to count. Free, works offline, no download required. Keep your hands on your hook.',
+      date: '2026-02-11',
+      readTime: '5 min read',
+      category: 'Tools',
+    },
+    {
+      slug: 'why-i-left-ravelry',
+      title: 'Why I Left Ravelry (And What I Use Now)',
+      excerpt:
+        'After 8 years on Ravelry, I finally made the switch. Here\'s what pushed me away, what I miss, and the tools I use instead.',
+      date: '2026-02-11',
+      readTime: '6 min read',
+      category: 'Personal Story',
+    },
+    {
+      slug: 'best-crochet-apps-offline',
+      title: 'Best Crochet Apps That Work Offline in 2026 (Tested)',
+      excerpt:
+        'Looking for crochet apps that work without internet? We tested 7 popular apps at yarn stores and craft circles.',
+      date: '2026-02-11',
+      readTime: '8 min read',
+      category: 'App Reviews',
+    },
+    {
       slug: 'c2c-crochet-patterns-complete-guide',
       title: 'C2C Crochet Patterns: The Complete Corner-to-Corner Guide',
       excerpt:
-        'Learn corner-to-corner crochet from scratch. How C2C works, reading color graphs, managing yarn, and using a free pattern generator to create your own designs.',
+        'Learn corner-to-corner crochet from scratch. How C2C works, reading color graphs, managing yarn, and using a free pattern generator.',
       date: '2026-02-07',
       readTime: '10 min read',
       category: 'Crochet Techniques',
