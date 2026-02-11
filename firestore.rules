@@ -15,5 +15,22 @@ service cloud.firestore {
       allow create: if request.auth != null;
       allow update: if request.auth != null;
     }
+
+    // Waitlist - public write (email collection), no read (privacy)
+    match /waitlist/{entryId} {
+      allow create: if request.resource.data.email is string 
+                    && request.resource.data.email.size() > 5
+                    && request.resource.data.email.size() < 255;
+      allow read: if false; // Admin only via console
+    }
+
+    // Feedback - public write (feature requests, bug reports), no read
+    match /feedback/{entryId} {
+      allow create: if request.resource.data.message is string 
+                    && request.resource.data.message.size() >= 10
+                    && request.resource.data.message.size() < 2000
+                    && request.resource.data.type in ['bug', 'feature', 'feedback', 'other'];
+      allow read: if false; // Admin only via console
+    }
   }
 }

@@ -24,7 +24,9 @@ import {
 import { syncPatterns } from '../services/patternSync';
 import type { Pattern, PatternFormData } from '../types/pattern';
 
-const FREE_PATTERN_LIMIT = 3;
+// Generous free tier = sticky users = word of mouth
+// Pro unlocks: unlimited patterns, cloud sync priority, future AI features
+const FREE_PATTERN_LIMIT = 25;
 
 export function usePatterns(uid: string | null) {
   const [patterns, setPatterns] = useState<Pattern[]>([]);
@@ -226,7 +228,7 @@ export function usePatterns(uid: string | null) {
       if (count >= FREE_PATTERN_LIMIT) {
         return {
           allowed: false,
-          reason: `Free tier allows ${FREE_PATTERN_LIMIT} patterns. Upgrade to Pro for up to 50.`,
+          reason: `Free tier allows ${FREE_PATTERN_LIMIT} patterns. Upgrade to Pro for unlimited patterns + priority sync.`,
         };
       }
 

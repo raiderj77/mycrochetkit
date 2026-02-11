@@ -44,7 +44,22 @@ const C2CGeneratorPage = lazy(() =>
 const QuickCounterPage = lazy(() =>
   import('./pages/QuickCounterPage.tsx').then((m) => ({ default: m.QuickCounterPage }))
 );
+const FreeToolsPage = lazy(() =>
+  import('./pages/FreeTools.tsx').then((m) => ({ default: m.FreeToolsPage }))
+);
+const YarnCalculatorPage = lazy(() =>
+  import('./pages/YarnCalculatorPage.tsx').then((m) => ({ default: m.YarnCalculatorPage }))
+);
+const HookConverterPage = lazy(() =>
+  import('./pages/HookConverterPage.tsx').then((m) => ({ default: m.HookConverterPage }))
+);
+const StitchGlossaryPage = lazy(() =>
+  import('./pages/StitchGlossaryPage.tsx').then((m) => ({ default: m.StitchGlossaryPage }))
+);
 const NotFound = lazy(() => import('./pages/NotFound.tsx').then((m) => ({ default: m.NotFound })));
+const FeedbackButton = lazy(() =>
+  import('./components/FeedbackButton.tsx').then((m) => ({ default: m.FeedbackButton }))
+);
 
 initGA();
 
@@ -83,8 +98,14 @@ createRoot(document.getElementById('root')!).render(
               element={<BlogPostC2CPatterns />}
             />
             <Route path="/tools/c2c-generator" element={<C2CGeneratorPage />} />
+            <Route path="/tools" element={<FreeToolsPage />} />
+            <Route path="/yarn-calculator" element={<YarnCalculatorPage />} />
+            <Route path="/hook-converter" element={<HookConverterPage />} />
+            <Route path="/stitch-glossary" element={<StitchGlossaryPage />} />
+            <Route path="/quick-counter" element={<QuickCounterPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FeedbackButton />
         </Suspense>
       </BrowserRouter>
     </HelmetProvider>

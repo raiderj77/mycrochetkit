@@ -13,45 +13,96 @@ import { trackPageView } from './analytics';
 import { SEOHead } from './seo/components/SEOHead';
 import { organizationSchema } from './seo/schemas/organization';
 import { softwareApplicationSchema } from './seo/schemas/software-application';
-import { Mic, ArrowRight, Sparkles, WifiOff, Mail, Play, FileText } from 'lucide-react';
+import { Mic, ArrowRight, Sparkles, WifiOff, Mail, Play, FileText, Loader2 } from 'lucide-react';
+import { addToWaitlist, getWaitlistCount } from './services/waitlistService';
 
 function FoundersEmailForm() {
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'exists' | 'error'>('idle');
+  const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    getWaitlistCount().then(count => {
+      if (count > 0) setWaitlistCount(count);
+    });
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    // TODO: wire to email collection backend
-    setSubmitted(true);
+    if (!email.trim() || status === 'loading') return;
+    
+    setStatus('loading');
+    const result = await addToWaitlist(email, 'founders');
+    
+    if (result.success) {
+      setStatus(result.isNew ? 'success' : 'exists');
+      if (result.isNew && waitlistCount !== null) {
+        setWaitlistCount(waitlistCount + 1);
+      }
+    } else {
+      setStatus('error');
+    }
   };
 
-  if (submitted) {
+  const spotsRemaining = waitlistCount !== null ? Math.max(0, 500 - waitlistCount) : 500;
+  const spotsUrgency = spotsRemaining < 100 ? 'text-red-500' : spotsRemaining < 250 ? 'text-[#E86A58]' : 'text-[#E86A58]';
+
+  if (status === 'success') {
     return (
       <div className="px-4 py-3 bg-[#7FBFA0]/10 text-[#7FBFA0] rounded-xl text-sm font-medium">
-        You&apos;re on the list! We&apos;ll email you when it&apos;s ready.
+        🎉 You&apos;re on the list! We&apos;ll email you when founders pricing goes live.
+      </div>
+    );
+  }
+
+  if (status === 'exists') {
+    return (
+      <div className="px-4 py-3 bg-[#B8A9C9]/10 text-[#6B5B7A] rounded-xl text-sm font-medium">
+        You&apos;re already on the list! We&apos;ll be in touch soon.
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="your@email.com"
-        required
-        className="flex-1 px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/40 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 text-sm"
-      />
-      <button
-        type="submit"
-        className="w-full sm:w-auto px-5 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-medium rounded-xl transition-colors text-sm flex items-center justify-center gap-1.5 flex-shrink-0"
-      >
-        <Mail className="w-4 h-4" />
-        Join Waitlist
-      </button>
-    </form>
+    <div className="space-y-4">
+      {spotsRemaining > 0 && (
+        <div className={`${spotsUrgency} text-sm font-medium text-center`}>
+          {spotsRemaining} of 500 spots remaining
+          {spotsRemaining < 100 && ' — almost gone!'}
+        </div>
+      )}
+      {spotsRemaining === 0 && (
+        <div className="text-[#2C1810]/60 text-sm font-medium text-center">
+          Founders spots filled! Join waitlist for next batch.
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your@email.com"
+          required
+          disabled={status === 'loading'}
+          className="flex-1 px-4 py-3 bg-[#FFF8F0] rounded-xl text-[#2C1810] placeholder:text-[#2C1810]/40 focus:outline-none focus:ring-2 focus:ring-[#E86A58]/50 text-sm disabled:opacity-50"
+        />
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="w-full sm:w-auto px-5 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-medium rounded-xl transition-colors text-sm flex items-center justify-center gap-1.5 flex-shrink-0 disabled:opacity-50"
+        >
+          {status === 'loading' ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Mail className="w-4 h-4" />
+          )}
+          {status === 'loading' ? 'Joining...' : 'Join Waitlist'}
+        </button>
+        {status === 'error' && (
+          <p className="text-red-500 text-xs mt-1 sm:mt-0 sm:ml-2 self-center">Something went wrong. Try again?</p>
+        )}
+      </form>
+    </div>
   );
 }
 
@@ -215,10 +266,21 @@ function App() {
                 MyCrochetKit
               </span>
             </div>
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E86A58]/10 text-[#E86A58] text-xs font-medium border border-[#E86A58]/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E86A58] animate-pulse"></span>
-              Beta
-            </span>
+            <nav className="hidden md:flex items-center gap-6">
+              <Link to="/tools" className="text-[#2C1810]/70 hover:text-[#E86A58] text-sm font-medium transition-colors">
+                Free Tools
+              </Link>
+              <Link to="/blog" className="text-[#2C1810]/70 hover:text-[#E86A58] text-sm font-medium transition-colors">
+                Blog
+              </Link>
+              <Link to="/quick-counter" className="text-[#2C1810]/70 hover:text-[#E86A58] text-sm font-medium transition-colors">
+                Quick Counter
+              </Link>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E86A58]/10 text-[#E86A58] text-xs font-medium border border-[#E86A58]/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#E86A58] animate-pulse"></span>
+                Beta
+              </span>
+            </nav>
             <Auth user={user} setUser={setUser} variant="compact" />
           </div>
         </header>
@@ -675,10 +737,6 @@ function App() {
                   </li>
                 ))}
               </ul>
-
-              <div className="text-[#E86A58] text-sm font-medium mb-4">
-                500 of 500 spots remaining
-              </div>
 
               <FoundersEmailForm />
 
