@@ -212,6 +212,22 @@ function App() {
             </motion.div>
 
             <QuickLinks />
+
+            {/* Pro Banner */}
+            <div className="mx-4 mb-6 p-4 bg-gradient-to-r from-white to-[#FAF0E4] border border-[#EDE8E3] rounded-2xl hover:border-[#5E8A5E]/30 transition-colors">
+              <a href="/pro-guide" className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5E8A5E] to-[#4A6F4A] flex items-center justify-center shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z"/></svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-[#3D352E]">Unlock 6 Pro Tools</p>
+                    <p className="text-xs text-[#746454]">Timer, yarn sub, hat calc & more</p>
+                  </div>
+                </div>
+                <span className="text-[#5E8A5E] text-sm font-semibold">See all →</span>
+              </a>
+            </div>
             <ProjectsList user={user} />
           </main>
 
