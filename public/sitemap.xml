@@ -12,4 +12,21 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <url><loc>https://mycrochetkit.com/blog/tools</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/yarn-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/blanket-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/gauge-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/needle-converter</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/stitch-counter</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/project-cost-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/yarn-weight-chart</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/increase-decrease-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/abbreviation-glossary</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/stripe-generator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/color-pooling-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/spinning-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/cross-stitch-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/weaving-sett-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mycrochetkit.com/blog/tools/thread-converter</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

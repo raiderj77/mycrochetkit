@@ -1,48 +1,128 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Calculator, BookOpen, Ruler, Mic } from 'lucide-react';
+import { ArrowRight, Calculator, BookOpen, Ruler, Mic, ExternalLink, Palette, Scale, Scissors, Grid3X3, Waves, BarChart3, DollarSign, Minus, Sparkles } from 'lucide-react';
 import { SEOHead } from '../seo/components/SEOHead';
 
-const tools = [
+const fiberTools = [
   {
-    slug: '/quick-counter',
-    title: 'Voice Row Counter',
-    description: 'Hands-free row counting. Say "next" to count. No signup required.',
+    url: 'https://fibertools.app/stitch-counter',
+    title: 'Stitch Counter',
+    description: 'Voice-activated row and stitch counter. Say "next" to count hands-free.',
     icon: Mic,
-    color: 'from-[#E86A58] to-[#D35A4A]',
+    color: 'from-[#5E8A5E] to-[#4A6F4A]',
     highlight: 'Most Popular',
   },
   {
-    slug: '/yarn-calculator',
+    url: 'https://fibertools.app/yarn-calculator',
     title: 'Yarn Calculator',
-    description: 'Calculate how much yarn you need for any project based on dimensions and gauge.',
-    icon: Calculator,
-    color: 'from-[#7FBFA0] to-[#5A9A7A]',
+    description: 'Calculate yardage needed for any project by dimensions, weight, and gauge.',
+    icon: Scale,
+    color: 'from-[#A8C1A8] to-[#4A6F4A]',
     highlight: null,
   },
   {
-    slug: '/hook-converter',
-    title: 'Hook Size Converter',
-    description: 'Convert between US, UK, and metric crochet hook sizes instantly.',
+    url: 'https://fibertools.app/blanket-calculator',
+    title: 'Blanket Size Calculator',
+    description: 'Standard blanket dimensions with yardage estimates by yarn weight.',
+    icon: Grid3X3,
+    color: 'from-[#E8B86A] to-[#D4A04A]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/gauge-calculator',
+    title: 'Gauge Calculator',
+    description: 'Convert gauge swatches to stitch and row counts for any project size.',
     icon: Ruler,
-    color: 'from-[#B8A9C9] to-[#8B7A9C]',
+    color: 'from-[#6AB8E8] to-[#4A98C8]',
     highlight: null,
   },
   {
-    slug: '/stitch-glossary',
-    title: 'Stitch Abbreviation Guide',
+    url: 'https://fibertools.app/hook-converter',
+    title: 'Hook Size Converter',
+    description: 'Convert between US, UK, metric, and steel crochet hook sizes.',
+    icon: Ruler,
+    color: 'from-[#8D7B6A] to-[#5D5044]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/yarn-weight-chart',
+    title: 'Yarn Weight Chart',
+    description: 'Compare yarn weights from lace to jumbo with recommended hooks and gauges.',
+    icon: BarChart3,
+    color: 'from-[#7A9CC8] to-[#5A7CA8]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/abbreviations',
+    title: 'Stitch Abbreviations',
     description: 'Decode any crochet abbreviation. US and UK terms with explanations.',
     icon: BookOpen,
-    color: 'from-[#E8B86A] to-[#D4A04A]',
-    highlight: '40+ Stitches',
+    color: 'from-[#C9A97A] to-[#A8895A]',
+    highlight: null,
   },
   {
-    slug: '/tools/c2c-generator',
-    title: 'C2C Pattern Generator',
-    description: 'Create corner-to-corner patterns from any image or draw your own grid.',
-    icon: Calculator,
+    url: 'https://fibertools.app/cost-calculator',
+    title: 'Project Cost Calculator',
+    description: 'Estimate total project cost including yarn, hooks, and supplies.',
+    icon: DollarSign,
+    color: 'from-[#A8C1A8] to-[#4A6F4A]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/inc-dec-calculator',
+    title: 'Increase/Decrease Calculator',
+    description: 'Calculate evenly spaced increases and decreases for shaping.',
+    icon: Minus,
+    color: 'from-[#5E8A5E] to-[#4A6F4A]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/stripe-generator',
+    title: 'Stripe Pattern Generator',
+    description: 'Generate random or structured stripe sequences with color palettes.',
+    icon: Palette,
+    color: 'from-[#C97A8B] to-[#A85A6B]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/color-pooling',
+    title: 'Color Pooling Planner',
+    description: 'Plan pooling projects with variegated yarn color repeat calculations.',
+    icon: Waves,
     color: 'from-[#6AB8E8] to-[#4A98C8]',
-    highlight: 'New',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/spinning-calculator',
+    title: 'Spinning Calculator',
+    description: 'Estimate finished yardage from fiber weight for handspinning projects.',
+    icon: Sparkles,
+    color: 'from-[#8D7B6A] to-[#5D5044]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/cross-stitch-calculator',
+    title: 'Cross Stitch Calculator',
+    description: 'Calculate Aida fabric size, thread estimates, and count conversions.',
+    icon: Grid3X3,
+    color: 'from-[#E8B86A] to-[#D4A04A]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/weaving-sett',
+    title: 'Weaving Sett Calculator',
+    description: 'Find optimal ends per inch based on yarn weight and weave structure.',
+    icon: Calculator,
+    color: 'from-[#8BC97A] to-[#6BA85A]',
+    highlight: null,
+  },
+  {
+    url: 'https://fibertools.app/thread-converter',
+    title: 'Thread Size Converter',
+    description: 'Convert between crochet thread sizes, tex, denier, and metric systems.',
+    icon: Scissors,
+    color: 'from-[#7A9CC8] to-[#5A7CA8]',
+    highlight: null,
   },
 ];
 
@@ -50,19 +130,19 @@ export function FreeToolsPage() {
   return (
     <>
       <SEOHead
-        title="Free Crochet Tools - Yarn Calculator, Hook Converter, Row Counter | MyCrochetKit"
-        description="Free online crochet tools: voice-activated row counter, yarn calculator, hook size converter, stitch glossary. No signup required. Works offline."
+        title="Free Fiber Arts Tools - 15 Calculators & Converters | FiberTools"
+        description="15 free crochet, knitting, and fiber arts tools: yarn calculator, stitch counter, gauge calculator, hook converter, stripe generator, and more. No signup required."
         canonicalUrl="https://mycrochetkit.com/tools"
       />
-      
-      <div className="min-h-screen bg-[#FFF8F0]">
-        <header className="sticky top-0 z-50 bg-[#FFF8F0]/80 backdrop-blur-xl border-b border-[#2C1810]/5">
+
+      <div className="min-h-screen bg-[#FEFDFB]">
+        <header className="sticky top-0 z-50 bg-[#FEFDFB]/80 backdrop-blur-xl border-b border-[#3D352E]/5">
           <div className="max-w-5xl mx-auto flex justify-between items-center px-6 py-4">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#E86A58] to-[#D35A4A] flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#5E8A5E] to-[#4A6F4A] flex items-center justify-center shadow-md">
                 <span className="text-xl">🧶</span>
               </div>
-              <span className="font-semibold text-[#2C1810] text-lg">MyCrochetKit</span>
+              <span className="font-semibold text-[#3D352E] text-lg">MyCrochetKit</span>
             </Link>
           </div>
         </header>
@@ -73,59 +153,59 @@ export function FreeToolsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <span className="inline-block px-4 py-1.5 bg-[#7FBFA0]/15 text-[#2D7A4F] text-sm font-medium rounded-full mb-4">
-                100% Free • No Signup • Works Offline
+              <span className="inline-block px-4 py-1.5 bg-[#A8C1A8]/15 text-[#4A6F4A] text-sm font-medium rounded-full mb-4">
+                100% Free &middot; No Signup Required
               </span>
-              <h1 className="text-4xl md:text-5xl font-bold text-[#2C1810] mb-6">
-                Free Crochet Tools
+              <h1 className="text-4xl md:text-5xl font-bold text-[#3D352E] mb-6">
+                Free Fiber Arts Tools
               </h1>
-              <p className="text-xl text-[#2C1810]/70 max-w-2xl mx-auto">
-                Everything you need to crochet smarter. No account required.
+              <p className="text-xl text-[#3D352E] max-w-2xl mx-auto">
+                15 calculators, converters, and planners for crochet, knitting, weaving, and more &mdash; all on{' '}
+                <a href="https://fibertools.app" target="_blank" rel="noopener noreferrer" className="text-[#5E8A5E] hover:text-[#4A6F4A] underline">
+                  fibertools.app
+                </a>.
               </p>
             </motion.div>
           </div>
         </section>
 
         <section className="px-6 pb-24">
-          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-            {tools.map((tool, index) => (
+          <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-5">
+            {fiberTools.map((tool, index) => (
               <motion.div
-                key={tool.slug}
+                key={tool.url}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.06 }}
               >
-                <Link
-                  to={tool.slug}
-                  className="group block bg-white rounded-3xl p-8 shadow-sm border border-[#2C1810]/5 hover:shadow-lg hover:border-[#E86A58]/20 transition-all h-full"
+                <a
+                  href={tool.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block bg-white rounded-2xl p-6 shadow-sm border border-[#3D352E]/5 hover:shadow-lg hover:border-[#5E8A5E]/20 transition-all h-full"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg`}>
-                      <tool.icon className="w-7 h-7 text-white" />
+                  <div className="flex items-start gap-4">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-md flex-shrink-0`}>
+                      <tool.icon className="w-6 h-6 text-white" />
                     </div>
-                    {tool.highlight && (
-                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${
-                        tool.highlight === 'Most Popular' 
-                          ? 'bg-[#E86A58]/10 text-[#E86A58]' 
-                          : 'bg-[#7FBFA0]/15 text-[#2D7A4F]'
-                      }`}>
-                        {tool.highlight}
-                      </span>
-                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h2 className="text-lg font-bold text-[#3D352E] group-hover:text-[#5E8A5E] transition-colors">
+                          {tool.title}
+                        </h2>
+                        <ExternalLink className="w-3.5 h-3.5 text-[#3D352E]/25 group-hover:text-[#5E8A5E] transition-colors flex-shrink-0" />
+                        {tool.highlight && (
+                          <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-[#5E8A5E]/10 text-[#5E8A5E] flex-shrink-0">
+                            {tool.highlight}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[#746454] text-sm">
+                        {tool.description}
+                      </p>
+                    </div>
                   </div>
-                  
-                  <h2 className="text-xl font-bold text-[#2C1810] mb-2 group-hover:text-[#E86A58] transition-colors">
-                    {tool.title}
-                  </h2>
-                  
-                  <p className="text-[#2C1810]/70 mb-4">
-                    {tool.description}
-                  </p>
-                  
-                  <span className="text-[#E86A58] font-semibold flex items-center gap-2 group-hover:gap-3 transition-all">
-                    Use Tool <ArrowRight className="w-4 h-4" />
-                  </span>
-                </Link>
+                </a>
               </motion.div>
             ))}
           </div>
@@ -134,31 +214,27 @@ export function FreeToolsPage() {
         {/* CTA */}
         <section className="px-6 py-16 bg-white">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-[#2C1810] mb-4">
+            <h2 className="text-3xl font-bold text-[#3D352E] mb-4">
               Want to save your projects?
             </h2>
-            <p className="text-[#2C1810]/70 mb-8">
-              Create a free account to sync your work across devices and access premium features.
+            <p className="text-[#3D352E] mb-8">
+              Create a free account to track projects, sync across devices, and access premium features.
             </p>
             <Link
               to="/"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-[#E86A58] hover:bg-[#D35A4A] text-white rounded-2xl font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-[#5E8A5E] hover:bg-[#4A6F4A] text-white rounded-2xl font-semibold transition-colors"
             >
               Get Started Free <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
         </section>
 
-        <footer className="border-t border-[#2C1810]/5 bg-[#FFF8F0]">
+        <footer className="border-t border-[#3D352E]/5 bg-[#FEFDFB]">
           <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <span className="text-[#2C1810]/65 text-sm">© 2026 MyCrochetKit</span>
+            <span className="text-[#3D352E]/65 text-sm">&copy; 2026 MyCrochetKit</span>
             <div className="flex gap-6">
-              <Link to="/blog" className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors">
-                Blog
-              </Link>
-              <Link to="/roadmap" className="text-[#2C1810]/65 hover:text-[#E86A58] text-sm transition-colors">
-                Roadmap
-              </Link>
+              <Link to="/blog" className="text-[#3D352E]/65 hover:text-[#5E8A5E] text-sm transition-colors">Blog</Link>
+              <Link to="/roadmap" className="text-[#3D352E]/65 hover:text-[#5E8A5E] text-sm transition-colors">Roadmap</Link>
             </div>
           </div>
         </footer>

@@ -196,17 +196,17 @@ export function QuickCounterPage() {
   const targetReached = state.target !== null && state.count >= state.target;
 
   return (
-    <div className="counter-background min-h-screen p-4 md:p-6">
+    <div className="counter-light min-h-screen p-4 md:p-6">
       {/* Header */}
       <header className="flex justify-between items-center mb-6">
         <Link
           to="/"
-          className="flex items-center gap-2 text-white/70 hover:text-white transition-colors"
+          className="flex items-center gap-2 text-[#3D352E] hover:text-[#3D352E] transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="text-sm font-medium">Back</span>
         </Link>
-        <h1 className="display-font text-lg text-white truncate max-w-[50%]">
+        <h1 className="display-font text-lg text-[#3D352E] truncate max-w-[50%]">
           {editingName ? (
             <input
               type="text"
@@ -223,7 +223,7 @@ export function QuickCounterPage() {
                 }
                 if (e.key === 'Escape') setEditingName(false);
               }}
-              className="bg-transparent border-b border-white/50 text-white text-lg outline-none text-center w-full"
+              className="bg-transparent border-b border-white/50 text-[#3D352E] text-lg outline-none text-center w-full"
               autoFocus
             />
           ) : (
@@ -243,7 +243,7 @@ export function QuickCounterPage() {
       <div className="flex justify-center mb-4">
         <motion.button
           onClick={() => setShowSettings(!showSettings)}
-          className="glass-card px-4 py-2 text-sm text-white/60 hover:text-white flex items-center gap-2"
+          className="light-card px-4 py-2 text-sm text-[#746454] hover:text-[#3D352E] flex items-center gap-2"
           whileTap={{ scale: 0.95 }}
         >
           <Settings className="w-4 h-4" />
@@ -255,20 +255,20 @@ export function QuickCounterPage() {
       <AnimatePresence>
         {showSettings && (
           <motion.div
-            className="glass-card p-5 mb-8"
+            className="light-card p-5 mb-8"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
           >
             <div className="flex items-center justify-between mb-3">
-              <p className="text-white/70 text-sm font-medium">Counter Settings</p>
-              <motion.button onClick={() => setShowSettings(false)} className="text-white/50 hover:text-white/80" whileTap={{ scale: 0.95 }}>
+              <p className="text-[#3D352E] text-sm font-medium">Counter Settings</p>
+              <motion.button onClick={() => setShowSettings(false)} className="text-[#746454] hover:text-[#3D352E]" whileTap={{ scale: 0.95 }}>
                 <X className="w-4 h-4" />
               </motion.button>
             </div>
 
             {/* Target */}
-            <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Target (optional)</p>
+            <p className="text-[#746454] text-xs uppercase tracking-wider mb-2">Target (optional)</p>
             <input
               type="number"
               min={0}
@@ -278,11 +278,11 @@ export function QuickCounterPage() {
                 setState((p) => ({ ...p, target: val && val > 0 ? val : null }));
               }}
               placeholder="e.g. 100"
-              className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#E86A58]/50 mb-4"
+              className="w-full px-4 py-2.5 bg-[#FAF0E4] border border-[#EDE8E3] rounded-xl text-[#3D352E] placeholder-[#3D352E]/40 text-sm focus:outline-none focus:border-[#E86A58]/50 mb-4"
             />
 
             {/* Increment */}
-            <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Increment</p>
+            <p className="text-[#746454] text-xs uppercase tracking-wider mb-2">Increment</p>
             <div className="flex gap-2 mb-3">
               {[1, 2, 5, 10].map((n) => (
                 <motion.button
@@ -290,8 +290,8 @@ export function QuickCounterPage() {
                   onClick={() => setState((p) => ({ ...p, increment: n }))}
                   className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     state.increment === n
-                      ? 'bg-[#E86A58] text-white'
-                      : 'bg-white/5 border border-white/10 text-white/70 hover:bg-white/10'
+                      ? 'bg-[#E86A58] text-[#3D352E]'
+                      : 'bg-[#FAF0E4] border border-[#EDE8E3] text-[#3D352E] hover:bg-[#FAF0E4]'
                   }`}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -307,7 +307,7 @@ export function QuickCounterPage() {
                 value={customIncrementInput}
                 onChange={(e) => setCustomIncrementInput(e.target.value)}
                 placeholder="Custom..."
-                className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 text-sm focus:outline-none focus:border-[#E86A58]/50"
+                className="flex-1 px-4 py-2.5 bg-[#FAF0E4] border border-[#EDE8E3] rounded-xl text-[#3D352E] placeholder-[#3D352E]/40 text-sm focus:outline-none focus:border-[#E86A58]/50"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     const val = parseInt(customIncrementInput, 10);
@@ -320,7 +320,7 @@ export function QuickCounterPage() {
                   const val = parseInt(customIncrementInput, 10);
                   if (val > 0) { setState((p) => ({ ...p, increment: Math.min(100, val) })); setCustomIncrementInput(''); }
                 }}
-                className="px-4 py-2.5 bg-[#E86A58] text-white text-sm font-medium rounded-xl"
+                className="px-4 py-2.5 bg-[#E86A58] text-[#3D352E] text-sm font-medium rounded-xl"
                 whileTap={{ scale: 0.95 }}
               >
                 Set
@@ -351,7 +351,7 @@ export function QuickCounterPage() {
           </motion.p>
         )}
         {state.increment > 1 && (
-          <p className="text-white/40 text-sm mt-2">Increment: +{state.increment}</p>
+          <p className="text-[#3D352E]/40 text-sm mt-2">Increment: +{state.increment}</p>
         )}
         <AnimatePresence>
           {lastAction && (
@@ -373,7 +373,7 @@ export function QuickCounterPage() {
       {/* Voice Status */}
       <div className="text-center mb-8">
         <motion.div
-          className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium ${isListening ? 'bg-[#E86A58]/20 border-2 border-[#E86A58] text-[#E86A58]' : 'glass-card text-white/70'}`}
+          className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium ${isListening ? 'bg-[#E86A58]/20 border-2 border-[#E86A58] text-[#E86A58]' : 'light-card text-[#3D352E]'}`}
           animate={isListening ? { scale: [1, 1.02, 1] } : {}}
           transition={{ repeat: Infinity, duration: 1.5 }}
         >
@@ -386,7 +386,7 @@ export function QuickCounterPage() {
           )}
         </motion.div>
         {lastHeard && (
-          <motion.p className="text-white/60 text-sm mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          <motion.p className="text-[#746454] text-sm mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             Heard: "{lastHeard}"
           </motion.p>
         )}
@@ -421,7 +421,7 @@ export function QuickCounterPage() {
       <div className="text-center mb-8">
         <motion.button
           onClick={() => setState({ ...DEFAULT_STATE })}
-          className="text-white/50 text-sm hover:text-white/80 transition-colors"
+          className="text-[#746454] text-sm hover:text-[#3D352E] transition-colors"
           whileTap={{ scale: 0.95 }}
         >
           Start New Counter
@@ -429,10 +429,10 @@ export function QuickCounterPage() {
       </div>
 
       {/* Help Section */}
-      <motion.div className="glass-card overflow-hidden">
+      <motion.div className="light-card overflow-hidden">
         <motion.button
           onClick={() => setShowHelp(!showHelp)}
-          className="w-full p-4 flex items-center justify-between text-white/60 hover:text-white transition-colors"
+          className="w-full p-4 flex items-center justify-between text-[#746454] hover:text-[#3D352E] transition-colors"
           whileTap={{ scale: 0.99 }}
         >
           <span className="flex items-center gap-2 text-sm font-medium">Voice Commands</span>
@@ -446,7 +446,7 @@ export function QuickCounterPage() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="border-t border-white/10"
+              className="border-t border-[#EDE8E3]"
             >
               <div className="p-6 space-y-6">
                 <div className="grid grid-cols-4 gap-4 text-center">
@@ -454,45 +454,45 @@ export function QuickCounterPage() {
                     <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-[#7FBFA0]/10 flex items-center justify-center">
                       <span className="text-[#7FBFA0] font-bold">+{state.increment}</span>
                     </div>
-                    <p className="text-white/70 text-xs">"next"</p>
+                    <p className="text-[#3D352E] text-xs">"next"</p>
                   </div>
                   <div>
                     <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-[#B8A9C9]/10 flex items-center justify-center">
                       <span className="text-[#B8A9C9] font-bold">-{state.increment}</span>
                     </div>
-                    <p className="text-white/70 text-xs">"back"</p>
+                    <p className="text-[#3D352E] text-xs">"back"</p>
                   </div>
                   <div>
                     <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-[#E86A58]/10 flex items-center justify-center">
                       <span className="text-[#E86A58] font-bold">0</span>
                     </div>
-                    <p className="text-white/70 text-xs">"reset"</p>
+                    <p className="text-[#3D352E] text-xs">"reset"</p>
                   </div>
                   <div>
-                    <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-white/10 flex items-center justify-center">
-                      <span className="text-white/70 font-bold">⏹</span>
+                    <div className="w-12 h-12 mx-auto mb-2 rounded-xl bg-[#FAF0E4] flex items-center justify-center">
+                      <span className="text-[#3D352E] font-bold">⏹</span>
                     </div>
-                    <p className="text-white/70 text-xs">"stop"</p>
+                    <p className="text-[#3D352E] text-xs">"stop"</p>
                   </div>
                 </div>
-                <div className="border-t border-white/10 pt-4">
-                  <p className="text-white/65 text-xs uppercase tracking-wider mb-3">Advanced</p>
+                <div className="border-t border-[#EDE8E3] pt-4">
+                  <p className="text-[#746454] text-xs uppercase tracking-wider mb-3">Advanced</p>
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div className="bg-white/5 rounded-lg p-3">
+                    <div className="bg-[#FAF0E4] rounded-lg p-3">
                       <span className="text-[#7FBFA0]">"add 5"</span>
-                      <span className="text-white/65 ml-2">→ +5</span>
+                      <span className="text-[#746454] ml-2">→ +5</span>
                     </div>
-                    <div className="bg-white/5 rounded-lg p-3">
+                    <div className="bg-[#FAF0E4] rounded-lg p-3">
                       <span className="text-[#B8A9C9]">"minus 3"</span>
-                      <span className="text-white/65 ml-2">→ -3</span>
+                      <span className="text-[#746454] ml-2">→ -3</span>
                     </div>
-                    <div className="bg-white/5 rounded-lg p-3">
+                    <div className="bg-[#FAF0E4] rounded-lg p-3">
                       <span className="text-[#E86A58]">"set 47"</span>
-                      <span className="text-white/65 ml-2">→ jump to 47</span>
+                      <span className="text-[#746454] ml-2">→ jump to 47</span>
                     </div>
-                    <div className="bg-white/5 rounded-lg p-3">
-                      <span className="text-white/70">"undo"</span>
-                      <span className="text-white/65 ml-2">→ go back</span>
+                    <div className="bg-[#FAF0E4] rounded-lg p-3">
+                      <span className="text-[#3D352E]">"undo"</span>
+                      <span className="text-[#746454] ml-2">→ go back</span>
                     </div>
                   </div>
                 </div>

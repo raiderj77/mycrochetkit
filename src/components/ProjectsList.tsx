@@ -7,6 +7,7 @@ import { events } from '../analytics';
 import type { User } from 'firebase/auth';
 import { saveProjectsListLocal, getProjectsListLocal, isOnline } from '../lib/offlineDb';
 import { Plus, Trash2, ArrowRight, WifiOff, Clock, Sparkles } from 'lucide-react';
+import { useSubscription } from '../hooks/useSubscription';
 
 interface Project {
   id: string;
@@ -18,6 +19,7 @@ interface Project {
 }
 
 export function ProjectsList({ user }: { user: User }) {
+  const { isPro } = useSubscription(user);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -76,7 +78,7 @@ export function ProjectsList({ user }: { user: User }) {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newName.trim() || creating || projects.length >= 3) return;
+    if (!newName.trim() || creating || !isPro && projects.length >= 5) return;
     setCreating(true);
     try {
       await addDoc(collection(db, 'users', user.uid, 'projects'), {
@@ -117,7 +119,7 @@ export function ProjectsList({ user }: { user: User }) {
     return (
       <div className="flex justify-center py-16">
         <motion.div className="text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <div className="w-12 h-12 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#E86A58]/20 to-[#B8A9C9]/20 flex items-center justify-center">
+          <div className="w-12 h-12 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#5E8A5E]/20 to-[#8D7B6A]/20 flex items-center justify-center">
             <motion.span
               className="text-2xl"
               animate={{ rotate: 360 }}
@@ -126,7 +128,7 @@ export function ProjectsList({ user }: { user: User }) {
               🧶
             </motion.span>
           </div>
-          <p className="text-[#2C1810]/70">Loading projects...</p>
+          <p className="text-[#3D352E]">Loading projects...</p>
         </motion.div>
       </div>
     );
@@ -141,14 +143,14 @@ export function ProjectsList({ user }: { user: User }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-[#F5E6E0] border border-[#B8A9C9]/30 rounded-2xl p-4 mb-8 flex items-center gap-4"
+            className="bg-[#FAF0E4] border border-[#8D7B6A]/30 rounded-2xl p-4 mb-8 flex items-center gap-4"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#B8A9C9]/20 flex items-center justify-center">
-              <WifiOff className="w-5 h-5 text-[#B8A9C9]" />
+            <div className="w-10 h-10 rounded-xl bg-[#8D7B6A]/20 flex items-center justify-center">
+              <WifiOff className="w-5 h-5 text-[#8D7B6A]" />
             </div>
             <div>
-              <p className="text-[#2C1810] font-medium">Offline mode</p>
-              <p className="text-[#2C1810]/70 text-sm">
+              <p className="text-[#3D352E] font-medium">Offline mode</p>
+              <p className="text-[#3D352E] text-sm">
                 Showing cached projects. Changes sync when reconnected.
               </p>
             </div>
@@ -159,10 +161,10 @@ export function ProjectsList({ user }: { user: User }) {
       {/* Header */}
       <div className="flex justify-between items-start mb-8">
         <div>
-          <h2 className="text-2xl font-semibold text-[#2C1810] mb-1">Your Projects</h2>
-          <p className="text-[#2C1810]/70">{projects.length} of 3 free projects</p>
+          <h2 className="text-2xl font-semibold text-[#3D352E] mb-1">Your Projects</h2>
+          <p className="text-[#3D352E]">{projects.length} of 5 free projects</p>
         </div>
-        {projects.length < 3 && online && (
+        {projects.length < 5 && online && (
           <motion.button
             onClick={() => setShowForm(true)}
             className="btn-primary flex items-center gap-2 !py-2.5 !px-5 text-sm"
@@ -180,17 +182,17 @@ export function ProjectsList({ user }: { user: User }) {
         {showForm && (
           <motion.form
             onSubmit={handleCreate}
-            className="bg-white rounded-2xl p-6 mb-8 shadow-lg border border-[#2C1810]/5"
+            className="bg-white rounded-2xl p-6 mb-8 shadow-lg border border-[#3D352E]/5"
             initial={{ opacity: 0, y: -20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
           >
-            <label className="block text-[#2C1810]/70 text-sm mb-2 font-medium">Project name</label>
+            <label className="block text-[#3D352E] text-sm mb-2 font-medium">Project name</label>
             <input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="e.g., Baby Blanket, Cozy Sweater..."
-              className="w-full p-4 bg-[#FFF8F0] border border-[#2C1810]/10 rounded-xl text-[#2C1810] placeholder-[#2C1810]/50 focus:outline-none focus:border-[#E86A58]/50 focus:ring-2 focus:ring-[#E86A58]/10 transition-all mb-4"
+              className="w-full p-4 bg-[#FEFDFB] border border-[#3D352E]/10 rounded-xl text-[#3D352E] placeholder-[#3D352E]/50 focus:outline-none focus:border-[#5E8A5E]/50 focus:ring-2 focus:ring-[#5E8A5E]/10 transition-all mb-4"
               autoFocus
             />
             <div className="flex gap-3">
@@ -228,21 +230,21 @@ export function ProjectsList({ user }: { user: User }) {
       {/* Empty State */}
       {projects.length === 0 ? (
         <motion.div
-          className="text-center py-20 bg-white rounded-3xl shadow-sm border border-[#2C1810]/5"
+          className="text-center py-20 bg-white rounded-3xl shadow-sm border border-[#3D352E]/5"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
         >
           <motion.div
-            className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-[#F5E6E0] to-[#FFECD2] flex items-center justify-center"
+            className="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-[#FAF0E4] to-[#FDF9F3] flex items-center justify-center"
             animate={{ rotate: [0, 5, -5, 0] }}
             transition={{ duration: 4, repeat: Infinity }}
           >
             <span className="text-5xl">🧶</span>
           </motion.div>
-          <h3 className="text-[#2C1810] text-xl font-semibold mb-2">
+          <h3 className="text-[#3D352E] text-xl font-semibold mb-2">
             {online ? 'No projects yet' : 'No cached projects'}
           </h3>
-          <p className="text-[#2C1810]/70 mb-8 max-w-sm mx-auto">
+          <p className="text-[#3D352E] mb-8 max-w-sm mx-auto">
             {online
               ? 'Create your first project and start counting those rows!'
               : 'Connect to the internet to load your projects.'}
@@ -287,7 +289,7 @@ export function ProjectsList({ user }: { user: User }) {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
-                      <p className="text-[#2C1810] text-center mb-4 px-4">
+                      <p className="text-[#3D352E] text-center mb-4 px-4">
                         Delete "{project.name}"?
                       </p>
                       <div className="flex gap-3">
@@ -300,7 +302,7 @@ export function ProjectsList({ user }: { user: User }) {
                         </motion.button>
                         <motion.button
                           onClick={() => setDeleteConfirm(null)}
-                          className="px-4 py-2 bg-[#F5E6E0] rounded-xl text-[#2C1810]/70 text-sm"
+                          className="px-4 py-2 bg-[#FAF0E4] rounded-xl text-[#3D352E] text-sm"
                           whileTap={{ scale: 0.95 }}
                         >
                           Cancel
@@ -313,12 +315,12 @@ export function ProjectsList({ user }: { user: User }) {
                 {/* Card Content */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#F5E6E0] to-[#FFECD2] flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF0E4] to-[#FDF9F3] flex items-center justify-center">
                       <span className="text-xl">🧶</span>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-[#2C1810] text-lg">{project.name}</h3>
-                      <p className="text-[#2C1810]/65 text-sm flex items-center gap-1">
+                      <h3 className="font-semibold text-[#3D352E] text-lg">{project.name}</h3>
+                      <p className="text-[#3D352E]/65 text-sm flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {formatDate(project.updatedAt)}
                       </p>
@@ -327,7 +329,7 @@ export function ProjectsList({ user }: { user: User }) {
                   {online && (
                     <motion.button
                       onClick={() => setDeleteConfirm(project.id)}
-                      className="p-2 text-[#2C1810]/40 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                      className="p-2 text-[#3D352E]/40 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
                       whileTap={{ scale: 0.9 }}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -337,19 +339,19 @@ export function ProjectsList({ user }: { user: User }) {
 
                 {project.patternId && (
                   <div className="flex items-center gap-1.5 mb-3">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#B8A9C9]/15 text-[#B8A9C9] text-xs font-medium rounded-full">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#8D7B6A]/15 text-[#8D7B6A] text-xs font-medium rounded-full">
                       Pattern linked
                     </span>
                   </div>
                 )}
 
                 {project.notes && (
-                  <p className="text-[#2C1810]/70 text-sm mb-4 line-clamp-2">{project.notes}</p>
+                  <p className="text-[#3D352E] text-sm mb-4 line-clamp-2">{project.notes}</p>
                 )}
 
                 <Link
                   to={`/counter/${project.id}`}
-                  className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[#E86A58]/10 to-[#B8A9C9]/10 hover:from-[#E86A58]/20 hover:to-[#B8A9C9]/20 border border-[#E86A58]/20 text-[#E86A58] rounded-xl font-medium transition-all"
+                  className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-[#5E8A5E]/10 to-[#8D7B6A]/10 hover:from-[#5E8A5E]/20 hover:to-[#8D7B6A]/20 border border-[#5E8A5E]/20 text-[#5E8A5E] rounded-xl font-medium transition-all"
                 >
                   Open Project
                   <ArrowRight className="w-4 h-4" />

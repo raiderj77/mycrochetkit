@@ -2,6 +2,7 @@ import { StrictMode, lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ScrollToTop } from './components/ScrollToTop';
 import App from './App.tsx';
 import { initGA } from './analytics';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -67,6 +68,21 @@ const StitchGlossaryPage = lazy(() =>
   import('./pages/StitchGlossaryPage.tsx').then((m) => ({ default: m.StitchGlossaryPage }))
 );
 const NotFound = lazy(() => import('./pages/NotFound.tsx').then((m) => ({ default: m.NotFound })));
+const BlogPostYarnCalculator = lazy(() => import('./pages/BlogPostYarnCalculator').then(m => ({ default: m.BlogPostYarnCalculator })));
+const BlogPostBlanketCalculator = lazy(() => import('./pages/BlogPostBlanketCalculator').then(m => ({ default: m.BlogPostBlanketCalculator })));
+const BlogPostGaugeCalculator = lazy(() => import('./pages/BlogPostGaugeCalculator').then(m => ({ default: m.BlogPostGaugeCalculator })));
+const BlogPostHookConverter = lazy(() => import('./pages/BlogPostHookConverter').then(m => ({ default: m.BlogPostHookConverter })));
+const BlogPostYarnWeightChart = lazy(() => import('./pages/BlogPostYarnWeightChart').then(m => ({ default: m.BlogPostYarnWeightChart })));
+const BlogPostAbbreviations = lazy(() => import('./pages/BlogPostAbbreviations').then(m => ({ default: m.BlogPostAbbreviations })));
+const BlogPostStitchCounter = lazy(() => import('./pages/BlogPostStitchCounter').then(m => ({ default: m.BlogPostStitchCounter })));
+const BlogPostCostCalculator = lazy(() => import('./pages/BlogPostCostCalculator').then(m => ({ default: m.BlogPostCostCalculator })));
+const BlogPostIncDecCalculator = lazy(() => import('./pages/BlogPostIncDecCalculator').then(m => ({ default: m.BlogPostIncDecCalculator })));
+const BlogPostStripeGenerator = lazy(() => import('./pages/BlogPostStripeGenerator').then(m => ({ default: m.BlogPostStripeGenerator })));
+const BlogPostColorPooling = lazy(() => import('./pages/BlogPostColorPooling').then(m => ({ default: m.BlogPostColorPooling })));
+const BlogPostSpinningCalculator = lazy(() => import('./pages/BlogPostSpinningCalculator').then(m => ({ default: m.BlogPostSpinningCalculator })));
+const BlogPostCrossStitchCalculator = lazy(() => import('./pages/BlogPostCrossStitchCalculator').then(m => ({ default: m.BlogPostCrossStitchCalculator })));
+const BlogPostWeavingSett = lazy(() => import('./pages/BlogPostWeavingSett').then(m => ({ default: m.BlogPostWeavingSett })));
+const BlogPostThreadConverter = lazy(() => import('./pages/BlogPostThreadConverter').then(m => ({ default: m.BlogPostThreadConverter })));
 const FeedbackButton = lazy(() =>
   import('./components/FeedbackButton.tsx').then((m) => ({ default: m.FeedbackButton }))
 );
@@ -77,6 +93,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <ErrorBoundary>
           <Suspense
             fallback={
@@ -126,6 +143,21 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/hook-converter" element={<HookConverterPage />} />
               <Route path="/stitch-glossary" element={<StitchGlossaryPage />} />
               <Route path="/quick-counter" element={<QuickCounterPage />} />
+              <Route path="/blog/how-much-yarn-do-i-need" element={<BlogPostYarnCalculator />} />
+              <Route path="/blog/crochet-blanket-size-chart" element={<BlogPostBlanketCalculator />} />
+              <Route path="/blog/crochet-gauge-calculator-guide" element={<BlogPostGaugeCalculator />} />
+              <Route path="/blog/crochet-hook-size-conversion-chart" element={<BlogPostHookConverter />} />
+              <Route path="/blog/yarn-weight-chart-guide" element={<BlogPostYarnWeightChart />} />
+              <Route path="/blog/crochet-abbreviations-glossary" element={<BlogPostAbbreviations />} />
+              <Route path="/blog/free-crochet-stitch-counter" element={<BlogPostStitchCounter />} />
+              <Route path="/blog/crochet-project-cost-calculator" element={<BlogPostCostCalculator />} />
+              <Route path="/blog/crochet-increase-decrease-calculator" element={<BlogPostIncDecCalculator />} />
+              <Route path="/blog/crochet-stripe-pattern-generator" element={<BlogPostStripeGenerator />} />
+              <Route path="/blog/planned-pooling-crochet-guide" element={<BlogPostColorPooling />} />
+              <Route path="/blog/spinning-wheel-ratio-calculator" element={<BlogPostSpinningCalculator />} />
+              <Route path="/blog/cross-stitch-fabric-calculator" element={<BlogPostCrossStitchCalculator />} />
+              <Route path="/blog/weaving-sett-calculator-guide" element={<BlogPostWeavingSett />} />
+              <Route path="/blog/embroidery-thread-conversion-chart" element={<BlogPostThreadConverter />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <FeedbackButton />

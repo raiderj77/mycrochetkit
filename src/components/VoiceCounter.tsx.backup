@@ -637,8 +637,155 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
         />
       )}
 
+      {/* Notes Button */}
+      <motion.button
+        onClick={() => {
+          setShowNotes(!showNotes);
+          setTempNotes(notes);
+        }}
+        className="w-full mb-4 py-3 light-card text-sm text-[#746454] hover:text-[#3D352E] transition-colors flex items-center justify-center gap-2"
+        whileTap={{ scale: 0.99 }}
+      >
+        <FileText className="w-4 h-4" />
+        {notes ? 'View Notes' : 'Add Notes'}
+        {notes && <span className="w-2 h-2 bg-[#5E8A5E] rounded-full" />}
+      </motion.button>
+
+      {/* Notes Panel */}
+      <AnimatePresence>
+        {showNotes && (
+          <motion.div
+            className="light-card p-5 mb-4"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            {editingNotes ? (
+              <>
+                <textarea
+                  value={tempNotes}
+                  onChange={(e) => setTempNotes(e.target.value)}
+                  placeholder="Add notes..."
+                  className="w-full h-28 bg-[#FAF0E4] border border-[#EDE8E3] rounded-2xl p-4 text-[#3D352E] placeholder-[#3D352E]/40 resize-none focus:outline-none focus:border-[#5E8A5E]/50"
+                  maxLength={500}
+                  autoFocus
+                />
+                <div className="flex gap-3 mt-4">
+                  <motion.button
+                    onClick={saveNotes}
+                    className="btn-primary flex-1 !py-3"
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Save Notes
+                  </motion.button>
+                  <motion.button
+                    onClick={() => setEditingNotes(false)}
+                    className="px-5 py-3 bg-[#FAF0E4] border border-[#EDE8E3] rounded-full text-[#3D352E]"
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Cancel
+                  </motion.button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-[#3D352E] text-sm whitespace-pre-wrap min-h-[2rem]">
+                  {notes || 'No notes yet.'}
+                </p>
+                <motion.button
+                  onClick={() => {
+                    setEditingNotes(true);
+                    setTempNotes(notes);
+                  }}
+                  className="mt-4 text-[#5E8A5E] text-sm font-medium"
+                  whileTap={{ scale: 0.98 }}
+                >
+                  ✏️ Edit Notes
+                </motion.button>
+              </>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Linked Pattern Card */}
+      {linkedPattern ? (
+        <motion.div
+          className="light-card p-4 mb-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-xl bg-[#FAF0E4] flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-[#3D352E]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[#3D352E] font-medium text-sm truncate">{linkedPattern.name}</p>
+              <p className="text-[#746454] text-xs">
+                {linkedPattern.sections.length} section{linkedPattern.sections.length !== 1 ? 's' : ''}
+                {' · '}
+                {linkedPattern.sections.reduce((sum, s) => sum + s.steps.length, 0)} steps
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Link
+              to={`/patterns/${linkedPatternId}/track`}
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#5E8A5E]/20 border border-[#5E8A5E]/30 text-[#5E8A5E] text-sm font-medium rounded-xl hover:bg-[#5E8A5E]/30 transition-colors"
+            >
+              Continue Pattern
+            </Link>
+            <motion.button
+              onClick={async () => {
+                if (!user) return;
+                try {
+                  await unlinkPatternFromProject(user.uid, projectId);
+                  setLinkedPatternId(null);
+                  setLinkedPattern(null);
+                } catch (err) {
+                  console.error('Failed to unlink pattern:', err);
+                }
+              }}
+              className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#FAF0E4] border border-[#EDE8E3] text-[#746454] text-sm rounded-xl hover:text-[#3D352E] hover:border-[#5E8A5E]/30 transition-colors"
+              whileTap={{ scale: 0.95 }}
+            >
+              <Unlink className="w-3.5 h-3.5" />
+              Unlink
+            </motion.button>
+          </div>
+        </motion.div>
+      ) : !loading && user && (
+        <motion.button
+          onClick={() => setShowPatternPicker(true)}
+          className="w-full mb-4 py-3 light-card text-sm text-[#746454] hover:text-[#3D352E] transition-colors flex items-center justify-center gap-2"
+          whileTap={{ scale: 0.99 }}
+        >
+          <BookOpen className="w-4 h-4" />
+          Link a Pattern
+        </motion.button>
+      )}
+
+      {/* Pattern Picker Modal */}
+      <AnimatePresence>
+        {showPatternPicker && user && (
+          <PatternPicker
+            uid={user.uid}
+            onSelect={async (selectedPatternId) => {
+              try {
+                await linkPatternToProject(user.uid, projectId, selectedPatternId);
+                setLinkedPatternId(selectedPatternId);
+                setShowPatternPicker(false);
+              } catch (err) {
+                console.error('Failed to link pattern:', err);
+              }
+            }}
+            onClose={() => setShowPatternPicker(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Counter Tabs */}
-      <div className="flex gap-2 mb-4 flex-wrap">
+      <div className="flex gap-2 mb-8 flex-wrap">
         {counters.map((counter) => (
           <motion.button
             key={counter.id}
@@ -699,7 +846,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       <AnimatePresence>
         {showSettings && (
           <motion.div
-            className="light-card p-4 mb-3"
+            className="light-card p-5 mb-8"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -761,7 +908,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
                 <motion.button
                   key={n}
                   onClick={() => setCounterIncrement(activeId, n)}
-                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors ${
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     activeCounter.increment === n
                       ? 'bg-[#5E8A5E] text-white'
                       : 'bg-[#FAF0E4] border border-[#EDE8E3] text-[#3D352E] hover:bg-[#FAF0E4]'
@@ -813,7 +960,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       <AnimatePresence>
         {showAddForm && (
           <motion.div
-            className="light-card p-4 mb-3"
+            className="light-card p-5 mb-8"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -823,7 +970,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
                 <motion.button
                   key={t}
                   onClick={() => setNewCounterType(t)}
-                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors ${
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     newCounterType === t
                       ? 'bg-[#5E8A5E] text-white'
                       : 'bg-[#FAF0E4] border border-[#EDE8E3] text-[#3D352E] hover:bg-[#FAF0E4]'
@@ -864,7 +1011,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       </AnimatePresence>
 
       {/* Main Counter Display */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-8">
         <p className="text-[#3D352E] mb-4 text-lg">
           {activeCounter.name}
           {activeCounter.type === 'stitch' && (
@@ -913,7 +1060,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       </div>
 
       {/* Voice Status */}
-      <div className="text-center mb-4">
+      <div className="text-center mb-8">
         <motion.div
           className={`inline-flex items-center gap-3 px-6 py-3 rounded-full text-sm font-medium ${isListening ? 'bg-[#5E8A5E]/20 border-2 border-[#5E8A5E] text-[#5E8A5E]' : 'light-card text-[#3D352E]'}`}
           animate={isListening ? { scale: [1, 1.02, 1] } : {}}
@@ -948,7 +1095,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
       </div>
 
       {/* Voice Button */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-10">
         <motion.button
           onClick={isListening ? stopListening : startListening}
           className={`voice-button ${isListening ? 'listening' : ''}`}
@@ -956,15 +1103,15 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
           whileTap={{ scale: 0.95 }}
         >
           {isListening ? (
-            <MicOff className="w-10 h-10 text-white" />
+            <MicOff className="w-12 h-12 text-white" />
           ) : (
-            <Mic className="w-10 h-10 text-white" />
+            <Mic className="w-12 h-12 text-white" />
           )}
         </motion.button>
       </div>
 
       {/* Manual Controls */}
-      <div className="flex justify-center gap-4 mb-4">
+      <div className="flex justify-center gap-4 mb-8">
         <motion.button
           onClick={() => updateCount(activeId, -activeCounter.increment)}
           className="control-button"
@@ -990,7 +1137,7 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
 
       {/* Delete Counter */}
       {counters.length > 1 && (
-        <div className="text-center mb-4">
+        <div className="text-center mb-8">
           <motion.button
             onClick={() => removeCounter(activeId)}
             className="text-[#746454] text-sm hover:text-red-400 transition-colors flex items-center gap-2 mx-auto"
@@ -1068,153 +1215,6 @@ export function VoiceCounter({ projectId = 'default' }: VoiceCounterProps) {
                     </div>
                     <div className="bg-[#FAF0E4] rounded-lg p-3">
                       <span className="text-[#3D352E]">"undo"</span>
-      {/* Notes Button */}
-      <motion.button
-        onClick={() => {
-          setShowNotes(!showNotes);
-          setTempNotes(notes);
-        }}
-        className="w-full mb-4 py-3 light-card text-sm text-[#746454] hover:text-[#3D352E] transition-colors flex items-center justify-center gap-2"
-        whileTap={{ scale: 0.99 }}
-      >
-        <FileText className="w-4 h-4" />
-        {notes ? 'View Notes' : 'Add Notes'}
-        {notes && <span className="w-2 h-2 bg-[#5E8A5E] rounded-full" />}
-      </motion.button>
-
-      {/* Notes Panel */}
-      <AnimatePresence>
-        {showNotes && (
-          <motion.div
-            className="light-card p-3 mb-3"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-          >
-            {editingNotes ? (
-              <>
-                <textarea
-                  value={tempNotes}
-                  onChange={(e) => setTempNotes(e.target.value)}
-                  placeholder="Add notes..."
-                  className="w-full h-28 bg-[#FAF0E4] border border-[#EDE8E3] rounded-xl p-3 text-[#3D352E] placeholder-[#3D352E]/40 resize-none focus:outline-none focus:border-[#5E8A5E]/50"
-                  maxLength={500}
-                  autoFocus
-                />
-                <div className="flex gap-3 mt-4">
-                  <motion.button
-                    onClick={saveNotes}
-                    className="btn-primary flex-1 !py-3"
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Save Notes
-                  </motion.button>
-                  <motion.button
-                    onClick={() => setEditingNotes(false)}
-                    className="px-5 py-3 bg-[#FAF0E4] border border-[#EDE8E3] rounded-full text-[#3D352E]"
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Cancel
-                  </motion.button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-[#3D352E] text-sm whitespace-pre-wrap min-h-[2rem]">
-                  {notes || 'No notes yet.'}
-                </p>
-                <motion.button
-                  onClick={() => {
-                    setEditingNotes(true);
-                    setTempNotes(notes);
-                  }}
-                  className="mt-4 text-[#5E8A5E] text-sm font-medium"
-                  whileTap={{ scale: 0.98 }}
-                >
-                  ✏️ Edit Notes
-                </motion.button>
-              </>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Linked Pattern Card */}
-      {linkedPattern ? (
-        <motion.div
-          className="light-card p-3 mb-3"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-[#FAF0E4] flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-[#3D352E]" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[#3D352E] font-medium text-sm truncate">{linkedPattern.name}</p>
-              <p className="text-[#746454] text-xs">
-                {linkedPattern.sections.length} section{linkedPattern.sections.length !== 1 ? 's' : ''}
-                {' · '}
-                {linkedPattern.sections.reduce((sum, s) => sum + s.steps.length, 0)} steps
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <Link
-              to={`/patterns/${linkedPatternId}/track`}
-              className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#5E8A5E]/20 border border-[#5E8A5E]/30 text-[#5E8A5E] text-sm font-medium rounded-xl hover:bg-[#5E8A5E]/30 transition-colors"
-            >
-              Continue Pattern
-            </Link>
-            <motion.button
-              onClick={async () => {
-                if (!user) return;
-                try {
-                  await unlinkPatternFromProject(user.uid, projectId);
-                  setLinkedPatternId(null);
-                  setLinkedPattern(null);
-                } catch (err) {
-                  console.error('Failed to unlink pattern:', err);
-                }
-              }}
-              className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#FAF0E4] border border-[#EDE8E3] text-[#746454] text-sm rounded-xl hover:text-[#3D352E] hover:border-[#5E8A5E]/30 transition-colors"
-              whileTap={{ scale: 0.95 }}
-            >
-              <Unlink className="w-3.5 h-3.5" />
-              Unlink
-            </motion.button>
-          </div>
-        </motion.div>
-      ) : !loading && user && (
-        <motion.button
-          onClick={() => setShowPatternPicker(true)}
-          className="w-full mb-4 py-3 light-card text-sm text-[#746454] hover:text-[#3D352E] transition-colors flex items-center justify-center gap-2"
-          whileTap={{ scale: 0.99 }}
-        >
-          <BookOpen className="w-4 h-4" />
-          Link a Pattern
-        </motion.button>
-      )}
-
-      {/* Pattern Picker Modal */}
-      <AnimatePresence>
-        {showPatternPicker && user && (
-          <PatternPicker
-            uid={user.uid}
-            onSelect={async (selectedPatternId) => {
-              try {
-                await linkPatternToProject(user.uid, projectId, selectedPatternId);
-                setLinkedPatternId(selectedPatternId);
-                setShowPatternPicker(false);
-              } catch (err) {
-                console.error('Failed to link pattern:', err);
-              }
-            }}
-            onClose={() => setShowPatternPicker(false)}
-          />
-        )}
-      </AnimatePresence>
-
                       <span className="text-[#746454] ml-2">→ go back 1</span>
                     </div>
                   </div>
