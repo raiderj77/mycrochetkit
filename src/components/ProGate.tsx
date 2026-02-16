@@ -21,7 +21,7 @@ export function ProGate({ isPro, children, featureName }: ProGateProps) {
         </div>
         <div className="absolute inset-0 flex items-center justify-center cursor-pointer">
           <motion.div
-            className="flex flex-col items-center gap-3 px-6 py-5 rounded-2xl bg-gradient-to-br from-[#E86A58]/90 to-[#D35A4A]/90 backdrop-blur-md shadow-xl"
+            className="flex flex-col items-center gap-3 px-6 py-5 rounded-2xl bg-gradient-to-br from-[#5E8A5E]/90 to-[#4A6F4A]/90 backdrop-blur-md shadow-xl"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -65,15 +65,15 @@ function ProUpgradeModal({ onClose, featureName }: { onClose: () => void; featur
         exit={{ y: '100%', opacity: 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full sm:max-w-md bg-[#1a1215] rounded-t-3xl sm:rounded-2xl overflow-hidden"
+        className="w-full sm:max-w-md bg-[white] rounded-t-3xl sm:rounded-2xl overflow-hidden"
       >
         {/* Header */}
-        <div className="relative px-6 pt-8 pb-6 bg-gradient-to-b from-[#E86A58]/20 to-transparent">
+        <div className="relative px-6 pt-8 pb-6 bg-gradient-to-b from-[#5E8A5E]/10 to-transparent">
           <button onClick={onClose} className="absolute top-4 right-4 text-white/40 hover:text-white">
             <X className="w-5 h-5" />
           </button>
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#E86A58] to-[#D35A4A] flex items-center justify-center shadow-lg">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#5E8A5E] to-[#4A6F4A] flex items-center justify-center shadow-lg">
               <Crown className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -88,8 +88,8 @@ function ProUpgradeModal({ onClose, featureName }: { onClose: () => void; featur
           <div className="space-y-3">
             {features.map((f) => (
               <div key={f} className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-[#7FBFA0]/15 flex items-center justify-center flex-shrink-0">
-                  <Check className="w-3 h-3 text-[#7FBFA0]" />
+                <div className="w-5 h-5 rounded-full bg-[#5E8A5E]/15 flex items-center justify-center flex-shrink-0">
+                  <Check className="w-3 h-3 text-[#5E8A5E]" />
                 </div>
                 <span className="text-white/80 text-sm">{f}</span>
               </div>
@@ -99,16 +99,16 @@ function ProUpgradeModal({ onClose, featureName }: { onClose: () => void; featur
 
         {/* Free tools callout */}
         <div className="px-6 pb-4">
-          <div className="p-3 rounded-xl bg-[#7FBFA0]/5 border border-[#7FBFA0]/10">
-            <p className="text-[#7FBFA0]/70 text-xs">
-              <strong className="text-[#7FBFA0]">Already free:</strong> Voice counter, stitch glossary, yarn calculator, hook converter, C2C generator, pattern notes, yarn substitution, hat calculator, stitch multiples
+          <div className="p-3 rounded-xl bg-[#5E8A5E]/5 border border-[#5E8A5E]/10">
+            <p className="text-[#5E8A5E]/70 text-xs">
+              <strong className="text-[#5E8A5E]">Already free:</strong> Voice counter, stitch glossary, yarn calculator, hook converter, C2C generator, pattern notes, yarn substitution, hat calculator, stitch multiples
             </p>
           </div>
         </div>
 
         {/* Pricing */}
         <div className="px-6 pb-8 space-y-3">
-          <button className="w-full py-4 bg-gradient-to-r from-[#E86A58] to-[#D35A4A] text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-shadow">
+          <button className="w-full py-4 bg-gradient-to-r from-[#5E8A5E] to-[#4A6F4A] text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-shadow">
             <Zap className="w-5 h-5" />
             Lifetime Pro — $59.99
           </button>
@@ -132,7 +132,7 @@ function ProUpgradeModal({ onClose, featureName }: { onClose: () => void; featur
 /** Small inline badge for Pro features in lists/menus */
 export function ProBadge() {
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#E86A58]/20 to-[#D35A4A]/20 text-[#E86A58] text-[10px] font-bold uppercase tracking-wider">
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#5E8A5E]/20 to-[#4A6F4A]/20 text-[#5E8A5E] text-[10px] font-bold uppercase tracking-wider">
       <Crown className="w-2.5 h-2.5" /> Pro
     </span>
   );

@@ -11,9 +11,11 @@ import {
   CircleDot,
   Hash,
   ChevronDown,
-  Wrench,
+  ExternalLink,
+  Crown,
+  Sparkles,
 } from 'lucide-react';
-import { ProGate, ProBadge } from './ProGate';
+import { ProGate } from './ProGate';
 import { ProjectTimer } from './ProjectTimer';
 import { TemperaturePlanner } from './TemperaturePlanner';
 import { GrannySquareLayout } from './GrannySquareLayout';
@@ -28,9 +30,19 @@ interface ProjectFeatureTabsProps {
   isPro: boolean;
   currentRow: number;
   proData?: Record<string, unknown>;
+  ravelryUrl?: string;
+  onRavelryUrlChange?: (url: string) => void;
 }
 
-type ToolKey = 'notes' | 'timer' | 'temperature' | 'granny' | 'yarnsub' | 'hat' | 'multiples';
+type ToolKey =
+  | 'notes'
+  | 'timer'
+  | 'temperature'
+  | 'granny'
+  | 'yarnsub'
+  | 'hat'
+  | 'multiples'
+  | 'ravelry';
 
 interface ToolDef {
   key: ToolKey;
@@ -40,12 +52,11 @@ interface ToolDef {
 }
 
 const TOOLS: ToolDef[] = [
-  // Free tools
   { key: 'notes', label: 'Notes', icon: FileText, free: true },
-  { key: 'yarnsub', label: 'Yarn Sub', icon: Repeat, free: true },
-  { key: 'hat', label: 'Hat Calc', icon: CircleDot, free: true },
-  { key: 'multiples', label: 'Multiples', icon: Hash, free: true },
-  // Pro tools
+  { key: 'ravelry', label: 'Ravelry', icon: ExternalLink, free: true },
+  { key: 'yarnsub', label: 'Yarn Sub', icon: Repeat, free: false },
+  { key: 'hat', label: 'Hat Calc', icon: CircleDot, free: false },
+  { key: 'multiples', label: 'Multiples', icon: Hash, free: false },
   { key: 'timer', label: 'Timer', icon: Clock, free: false },
   { key: 'temperature', label: 'Temp', icon: Thermometer, free: false },
   { key: 'granny', label: 'Layout', icon: Grid3X3, free: false },
@@ -57,9 +68,13 @@ export function ProjectFeatureTabs({
   isPro,
   currentRow,
   proData = {},
+  ravelryUrl = '',
+  onRavelryUrlChange,
 }: ProjectFeatureTabsProps) {
   const [expanded, setExpanded] = useState(false);
   const [activeTool, setActiveTool] = useState<ToolKey | null>(null);
+  const [localRavelryUrl, setLocalRavelryUrl] = useState(ravelryUrl);
+  const [ravelrySaved, setRavelrySaved] = useState(false);
 
   const saveProData = useCallback(
     async (key: string, data: unknown) => {
@@ -80,10 +95,71 @@ export function ProjectFeatureTabs({
     setActiveTool(activeTool === key ? null : key);
   };
 
+  const saveRavelryUrl = async () => {
+    try {
+      await setDoc(
+        doc(db, 'users', userId, 'projects', projectId),
+        { ravelryUrl: localRavelryUrl },
+        { merge: true }
+      );
+      onRavelryUrlChange?.(localRavelryUrl);
+      setRavelrySaved(true);
+      setTimeout(() => setRavelrySaved(false), 2000);
+    } catch (e) {
+      console.error('Failed to save Ravelry URL:', e);
+    }
+  };
+
   const renderToolContent = () => {
     if (!activeTool) return null;
-
     const tool = TOOLS.find((t) => t.key === activeTool)!;
+
+    if (activeTool === 'ravelry') {
+      return (
+        <motion.div
+          key="ravelry"
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="mt-3"
+        >
+          <div className="bg-white border border-[#EDE8E3] rounded-xl p-4">
+            <p className="text-xs text-[#746454] mb-2 font-medium">
+              Link your Ravelry pattern or project
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={localRavelryUrl}
+                onChange={(e) => {
+                  setLocalRavelryUrl(e.target.value);
+                  setRavelrySaved(false);
+                }}
+                placeholder="https://www.ravelry.com/patterns/..."
+                className="flex-1 px-3 py-2 bg-[#FAF0E4] border border-[#EDE8E3] rounded-lg text-sm text-[#3D352E] placeholder-[#8D7B6A] focus:outline-none focus:border-[#5E8A5E]/50"
+                onKeyDown={(e) => e.key === 'Enter' && saveRavelryUrl()}
+              />
+              <button
+                onClick={saveRavelryUrl}
+                className="px-4 py-2 bg-[#5E8A5E] text-white text-sm font-medium rounded-lg hover:bg-[#4A6F4A] transition-colors"
+              >
+                {ravelrySaved ? '✓' : 'Save'}
+              </button>
+            </div>
+            {localRavelryUrl && (
+              <a              
+                href={localRavelryUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 mt-2 text-xs text-[#5E8A5E] hover:underline"
+              >
+                Open in Ravelry <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+          </div>
+        </motion.div>
+      );
+    }
 
     const content = (() => {
       switch (activeTool) {
@@ -152,16 +228,15 @@ export function ProjectFeatureTabs({
       }
     })();
 
-    // Wrap Pro tools in ProGate
     if (!tool.free) {
       return (
         <ProGate isPro={isPro} featureName={tool.label}>
           <motion.div
             key={activeTool}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="mt-4"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-3"
           >
             {content}
           </motion.div>
@@ -172,40 +247,49 @@ export function ProjectFeatureTabs({
     return (
       <motion.div
         key={activeTool}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        className="mt-4"
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ opacity: 1, height: 'auto' }}
+        exit={{ opacity: 0, height: 0 }}
+        className="mt-3"
       >
         {content}
       </motion.div>
     );
   };
 
+  const proToolCount = TOOLS.filter((t) => !t.free).length;
+
   return (
-    <div className="mt-6">
-      {/* Collapsible header */}
-      <motion.button
+    <div className="mb-4">
+      <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors"
-        whileTap={{ scale: 0.99 }}
+        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
+          expanded
+            ? 'bg-white border-[#5E8A5E]/30 shadow-sm'
+            : 'bg-gradient-to-r from-white to-[#FAF0E4] border-[#EDE8E3] hover:border-[#5E8A5E]/30'
+        }`}
       >
-        <div className="flex items-center gap-2">
-          <Wrench className="w-4 h-4 text-[#B8A9C9]" />
-          <span className="text-white/70 text-sm font-medium">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-lg bg-[#5E8A5E]/10 flex items-center justify-center">
+            <Sparkles className="w-4 h-4 text-[#5E8A5E]" />
+          </div>
+          <span className="text-[#3D352E] text-sm font-semibold">
             Project Tools
           </span>
-          <span className="text-white/25 text-xs">
-            {TOOLS.length} tools
-          </span>
+          {!isPro && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#5E8A5E]/10 text-[#5E8A5E] text-[10px] font-bold uppercase tracking-wider">
+              <Crown className="w-2.5 h-2.5" />
+              {proToolCount} Pro tools
+            </span>
+          )}
         </div>
         <motion.span
           animate={{ rotate: expanded ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown className="w-4 h-4 text-white/40" />
+          <ChevronDown className="w-4 h-4 text-[#8D7B6A]" />
         </motion.span>
-      </motion.button>
+      </button>
 
       <AnimatePresence>
         {expanded && (
@@ -216,36 +300,47 @@ export function ProjectFeatureTabs({
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            {/* Icon grid — 4 columns */}
-            <div className="grid grid-cols-4 gap-2 mt-3 px-1">
+            <div className="flex flex-wrap gap-1.5 mt-3">
               {TOOLS.map((tool) => {
                 const isActive = activeTool === tool.key;
+                const isLocked = !tool.free && !isPro;
                 return (
-                  <motion.button
+                  <button
                     key={tool.key}
                     onClick={() => handleToolClick(tool.key)}
-                    className={`relative flex flex-col items-center gap-1.5 py-3 px-1 rounded-xl text-center transition-all ${
+                    className={`relative inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                       isActive
-                        ? 'bg-white/10 text-white border border-white/15'
-                        : 'bg-white/[0.02] text-white/40 border border-transparent hover:bg-white/[0.05] hover:text-white/60'
+                        ? 'bg-[#5E8A5E] text-white shadow-sm'
+                        : isLocked
+                          ? 'bg-[#FAF0E4] border border-[#EDE8E3] text-[#8D7B6A] hover:border-[#5E8A5E]/30'
+                          : 'bg-white border border-[#EDE8E3] text-[#3D352E] hover:border-[#5E8A5E]/30'
                     }`}
-                    whileTap={{ scale: 0.92 }}
                   >
-                    <tool.icon className="w-5 h-5" />
-                    <span className="text-[10px] font-medium leading-tight">
-                      {tool.label}
-                    </span>
-                    {!tool.free && !isPro && (
-                      <div className="absolute -top-1 -right-1">
-                        <ProBadge />
-                      </div>
+                    <tool.icon className="w-3.5 h-3.5" />
+                    {tool.label}
+                    {isLocked && (
+                      <Crown className="w-3 h-3 text-[#5E8A5E] ml-0.5" />
                     )}
-                  </motion.button>
+                  </button>
                 );
               })}
             </div>
 
-            {/* Active tool content */}
+            {!isPro && !activeTool && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-3 p-3 rounded-xl bg-gradient-to-r from-[#5E8A5E]/5 to-[#FAF0E4] border border-[#5E8A5E]/15"
+              >
+                <p className="text-xs text-[#3D352E]">
+                  <span className="font-semibold">Unlock {proToolCount} Pro tools</span>{' '}
+                  <span className="text-[#746454]">
+                    — timer, yarn sub, hat calc, multiples, temp planner & layout designer.
+                  </span>
+                </p>
+              </motion.div>
+            )}
+
             <AnimatePresence mode="wait">
               {renderToolContent()}
             </AnimatePresence>

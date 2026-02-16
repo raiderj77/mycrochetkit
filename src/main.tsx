@@ -68,6 +68,9 @@ const StitchGlossaryPage = lazy(() =>
   import('./pages/StitchGlossaryPage.tsx').then((m) => ({ default: m.StitchGlossaryPage }))
 );
 const NotFound = lazy(() => import('./pages/NotFound.tsx').then((m) => ({ default: m.NotFound })));
+const ProGuidePage = lazy(() =>
+  import('./pages/ProGuidePage.tsx').then((m) => ({ default: m.ProGuidePage }))
+);
 const BlogPostYarnCalculator = lazy(() => import('./pages/BlogPostYarnCalculator').then(m => ({ default: m.BlogPostYarnCalculator })));
 const BlogPostBlanketCalculator = lazy(() => import('./pages/BlogPostBlanketCalculator').then(m => ({ default: m.BlogPostBlanketCalculator })));
 const BlogPostGaugeCalculator = lazy(() => import('./pages/BlogPostGaugeCalculator').then(m => ({ default: m.BlogPostGaugeCalculator })));
@@ -158,6 +161,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/blog/cross-stitch-fabric-calculator" element={<BlogPostCrossStitchCalculator />} />
               <Route path="/blog/weaving-sett-calculator-guide" element={<BlogPostWeavingSett />} />
               <Route path="/blog/embroidery-thread-conversion-chart" element={<BlogPostThreadConverter />} />
+              <Route path="/pro-guide" element={<ProGuidePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <FeedbackButton />
