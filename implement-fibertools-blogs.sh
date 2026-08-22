@@ -33,7 +33,7 @@ keywords: "how much yarn do i need for a blanket, yarn yardage calculator free, 
 
 Every crocheter and knitter has been there — you're three-quarters through a blanket and the yarn runs out. Or you buy six skeins "just in case" and end up with a stash that could outfit a small village.
 
-**[→ Use Our Free Yarn Calculator](https://fibertools.app/yarn-calculator)** — instant results, no login, works offline.
+**→ Use Our Free Yarn Calculator** — instant results, no login, works offline.
 
 ## How the Yarn Calculator Works
 
@@ -70,7 +70,7 @@ The calculator outputs total yardage needed and the number of skeins based on yo
 | Chunky cowl | Super Bulky (#6) | 120–200 yds |
 | Lace shawl | Lace (#0) | 800–1,200 yds |
 
-These are estimates. Your actual yardage depends on your tension, stitch pattern, and how tightly you crochet or knit. That's why a gauge swatch matters — and why the [Gauge Calculator](https://fibertools.app/gauge-calculator) exists.
+These are estimates. Your actual yardage depends on your tension, stitch pattern, and how tightly you crochet or knit. That's why a gauge swatch matters — and why the Gauge Calculator exists.
 
 ## Why Stitch Type Affects Yardage
 
@@ -101,14 +101,14 @@ Not all stitches use the same amount of yarn. Taller stitches consume more yarn 
 
 **Ignoring dye lots.** If you need 6 skeins, buy 7 from the same dye lot. Running out and finding that dye lot discontinued is a special kind of heartbreak.
 
-**Skipping the gauge swatch.** Yes, it's boring. Yes, it takes 20 minutes. But it can save you $30 in yarn you didn't need. The [Gauge Calculator](https://fibertools.app/gauge-calculator) makes this painless.
+**Skipping the gauge swatch.** Yes, it's boring. Yes, it takes 20 minutes. But it can save you $30 in yarn you didn't need. The Gauge Calculator makes this painless.
 
 **Forgetting about borders and finishing.** Budget an extra 10-15% for borders, edging, seaming, and weaving in ends.
 
 ## FAQ
 
 **How many skeins do I need for a baby blanket?**
-For a standard 30×36" baby blanket in worsted weight, plan for 4-6 skeins. Use the [Blanket Calculator](https://fibertools.app/blanket-calculator) for exact numbers.
+For a standard 30×36" baby blanket in worsted weight, plan for 4-6 skeins. Use the Blanket Calculator for exact numbers.
 
 **Does crochet use more yarn than knitting?**
 Generally yes — crochet uses roughly 25-30% more yarn than knitting for the same project dimensions.
@@ -117,18 +117,18 @@ Generally yes — crochet uses roughly 25-30% more yarn than knitting for the sa
 Buy 10-15% more than calculated. For colorwork or stripes, add 15-20% per color.
 
 **Can I substitute a different yarn weight?**
-Yes, but it changes everything. Use the [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) to find compatible substitutions, then recalculate.
+Yes, but it changes everything. Use the Yarn Weight Chart to find compatible substitutions, then recalculate.
 
 ## Related Free Tools
 
-- [Blanket Calculator](https://fibertools.app/blanket-calculator) — Exact stitch counts and yarn for every blanket size
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Measure your swatch and resize any pattern
-- [Project Cost Calculator](https://fibertools.app/project-cost-calculator) — Know the true cost before you start
-- [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) — Interactive weight reference with substitution checker
+- Blanket Calculator — Exact stitch counts and yarn for every blanket size
+- Gauge Calculator — Measure your swatch and resize any pattern
+- Project Cost Calculator — Know the true cost before you start
+- Yarn Weight Chart — Interactive weight reference with substitution checker
 
 ---
 
-**[→ Calculate Your Yarn Now — Free at FiberTools.app](https://fibertools.app/yarn-calculator)**
+**→ Calculate Your Yarn Now — Planning Reference**
 
 *No login. No ads. No email required. Just math that works.*
 BLOGEOF
@@ -144,7 +144,7 @@ keywords: "crochet blanket size chart, how many chains for a baby blanket, blank
 
 You found the perfect stitch pattern. You picked your yarn. But how many chains do you cast on for a throw? How many rows until it's 60 inches?
 
-**[→ Use Our Free Blanket Calculator](https://fibertools.app/blanket-calculator)** — instant results, no login, works on your phone.
+**→ Use Our Free Blanket Calculator** — instant results, no login, works on your phone.
 
 ## Standard Blanket Sizes
 
@@ -177,7 +177,7 @@ If your pattern uses a stitch multiple (like shells every 6 stitches), round to 
 
 **Total rows = desired length ÷ row height**
 
-Your row height comes from your gauge swatch. Use the [Gauge Calculator](https://fibertools.app/gauge-calculator) for precision.
+Your row height comes from your gauge swatch. Use the Gauge Calculator for precision.
 
 ## Yarn Estimates by Blanket Size
 
@@ -190,7 +190,7 @@ Your row height comes from your gauge swatch. Use the [Gauge Calculator](https:/
 | Queen (90×100") | 6,500–8,000 | 33–40 |
 | King (108×100") | 8,000–10,000 | 40–50 |
 
-For exact yarn calculations, use the [Yarn Calculator](https://fibertools.app/yarn-calculator).
+For exact yarn calculations, use the Yarn Calculator.
 
 ## Tips for Giant Blankets
 
@@ -198,12 +198,12 @@ For exact yarn calculations, use the [Yarn Calculator](https://fibertools.app/ya
 
 **Use stitch markers every 25-50 stitches.** Miscounting row 1 of a king blanket means frogging 108 inches of chains.
 
-**Consider modular construction.** Granny squares or strips let you work portably and join later. Our [Stitch Counter](https://fibertools.app/stitch-counter) can track individual sections.
+**Consider modular construction.** Granny squares or strips let you work portably and join later. Our Stitch Counter can track individual sections.
 
 ## FAQ
 
 **How many chains for a baby blanket?**
-It depends on your gauge. With worsted weight at 14 stitches per 4 inches, you'd chain approximately 106 for a 30" wide baby blanket in dc. Use the [blanket calculator](https://fibertools.app/blanket-calculator) for your exact gauge.
+It depends on your gauge. With worsted weight at 14 stitches per 4 inches, you'd chain approximately 106 for a 30" wide baby blanket in dc. Use the blanket calculator for your exact gauge.
 
 **How long does it take to crochet a blanket?**
 A baby blanket: 15-25 hours. A throw: 30-50 hours. A queen afghan: 80-120+ hours. Track your time with [MyCrochetKit](https://mycrochetkit.com).
@@ -213,14 +213,14 @@ Half double crochet (hdc) — it's fast, creates good drape, has minimal curling
 
 ## Related Free Tools
 
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — How much yarn for any project
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Measure your swatch accurately
-- [Stripe Generator](https://fibertools.app/stripe-generator) — Random stripe patterns with yardage
-- [Stitch Counter](https://fibertools.app/stitch-counter) — Track rows in your browser
+- Yarn Calculator — How much yarn for any project
+- Gauge Calculator — Measure your swatch accurately
+- Stripe Generator — Random stripe patterns with yardage
+- Stitch Counter — Track rows in your browser
 
 ---
 
-**[→ Calculate Your Blanket Now — Free at FiberTools.app](https://fibertools.app/blanket-calculator)**
+**→ Calculate Your Blanket Now — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/gauge-calculator.md << 'BLOGEOF'
@@ -234,7 +234,7 @@ keywords: "gauge calculator knitting, crochet gauge swatch calculator, how to ca
 
 Gauge is the single most important number in any crochet or knitting project — and the one most crafters skip. A gauge swatch takes 15 minutes. Ripping out a too-small sweater takes an evening and your will to live.
 
-**[→ Use Our Free Gauge Calculator](https://fibertools.app/gauge-calculator)**
+**→ Use Our Free Gauge Calculator**
 
 ## What Is Gauge?
 
@@ -267,7 +267,7 @@ Gauge (also called "tension" in UK patterns) is the number of stitches and rows 
 **Example:** Pattern gauge: 16 st/4" — Your gauge: 18 st/4"
 If pattern says "chain 80": adjusted = 80 × (18 ÷ 16) = **90 chains**
 
-The [Gauge Calculator](https://fibertools.app/gauge-calculator) does this math for you.
+The Gauge Calculator does this math for you.
 
 ## FAQ
 
@@ -282,14 +282,14 @@ Match stitch gauge first. Row gauge can be adjusted by adding or subtracting row
 
 ## Related Free Tools
 
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — Convert gauge into accurate yardage
-- [Needle Converter](https://fibertools.app/needle-converter) — Find the right hook when sizing up/down
-- [Blanket Calculator](https://fibertools.app/blanket-calculator) — Gauge-based stitch counts
-- [Inc/Dec Calculator](https://fibertools.app/increase-decrease-calculator) — Space shaping evenly after resizing
+- Yarn Calculator — Convert gauge into accurate yardage
+- Needle Converter — Find the right hook when sizing up/down
+- Blanket Calculator — Gauge-based stitch counts
+- Inc/Dec Calculator — Space shaping evenly after resizing
 
 ---
 
-**[→ Calculate Your Gauge Now — Free at FiberTools.app](https://fibertools.app/gauge-calculator)**
+**→ Calculate Your Gauge Now — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/needle-converter.md << 'BLOGEOF'
@@ -303,7 +303,7 @@ keywords: "crochet hook size chart, knitting needle conversion chart, us to metr
 
 You bought a pattern from a UK designer. It calls for a 4.00mm hook. Your hooks are labeled in US sizes. What's the US equivalent?
 
-**[→ Use Our Free Needle & Hook Converter](https://fibertools.app/needle-converter)** — instant conversion between US, UK, metric, and Japanese sizes.
+**→ Use Our Free Needle & Hook Converter** — instant conversion between US, UK, metric, and Japanese sizes.
 
 ## Crochet Hook Size Chart
 
@@ -326,7 +326,7 @@ You bought a pattern from a UK designer. It calls for a 4.00mm hook. Your hooks 
 
 ## Why Metric Is Most Reliable
 
-US letter/number sizing isn't standardized — a "G hook" from one brand may be 4.00mm while another is 4.25mm. **Always go by the millimeter measurement.** If your hook doesn't have mm printed on it, use a hook gauge tool or check with our [converter](https://fibertools.app/needle-converter).
+US letter/number sizing isn't standardized — a "G hook" from one brand may be 4.00mm while another is 4.25mm. **Always go by the millimeter measurement.** If your hook doesn't have mm printed on it, use a hook gauge tool or check with our converter.
 
 ## Recommended Hook Size by Yarn Weight
 
@@ -351,17 +351,17 @@ Tunisian crochet hooks are typically 2-3mm larger than standard crochet hooks fo
 Use a hook gauge (a flat card with holes). Insert the hook — the hole it fits snugly into is your size. Or measure the shaft diameter with calipers.
 
 **Are Japanese and US sizes the same?**
-No. Japanese sizes use a different numbering system. Use the [converter](https://fibertools.app/needle-converter) to translate.
+No. Japanese sizes use a different numbering system. Use the converter to translate.
 
 ## Related Free Tools
 
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Check if you need to size up or down
-- [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) — Match hooks to yarn weights
-- [Abbreviation Glossary](https://fibertools.app/abbreviation-glossary) — Decode any pattern term
+- Gauge Calculator — Check if you need to size up or down
+- Yarn Weight Chart — Match hooks to yarn weights
+- Abbreviation Glossary — Decode any pattern term
 
 ---
 
-**[→ Convert Hook & Needle Sizes — Free at FiberTools.app](https://fibertools.app/needle-converter)**
+**→ Convert Hook & Needle Sizes — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/stitch-counter.md << 'BLOGEOF'
@@ -375,7 +375,7 @@ keywords: "free stitch counter online, row counter crochet free, digital stitch 
 
 You don't need another app on your phone. You need a counter that works.
 
-**[→ Use Our Free Stitch Counter](https://fibertools.app/stitch-counter)** — tap to count, works offline, no account needed.
+**→ Use Our Free Stitch Counter** — tap to count, works offline, no account needed.
 
 ## What You Get
 
@@ -419,14 +419,14 @@ Yes — your count is saved locally. For cloud backup across devices, use [MyCro
 
 ## Related Free Tools
 
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Know your stitch count before starting
-- [Blanket Calculator](https://fibertools.app/blanket-calculator) — How many rows for your blanket
-- [Abbreviation Glossary](https://fibertools.app/abbreviation-glossary) — Decode pattern instructions
-- [Inc/Dec Calculator](https://fibertools.app/increase-decrease-calculator) — Space shaping evenly
+- Gauge Calculator — Know your stitch count before starting
+- Blanket Calculator — How many rows for your blanket
+- Abbreviation Glossary — Decode pattern instructions
+- Inc/Dec Calculator — Space shaping evenly
 
 ---
 
-**[→ Start Counting — Free at FiberTools.app](https://fibertools.app/stitch-counter)**
+**→ Start Counting — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/project-cost-calculator.md << 'BLOGEOF'
@@ -442,7 +442,7 @@ keywords: "cost to crochet a blanket, crochet project cost calculator, how to pr
 
 Every crocheter has heard it. Here's why the answer is complicated.
 
-**[→ Use Our Free Cost Calculator](https://fibertools.app/project-cost-calculator)**
+**→ Use Our Free Cost Calculator**
 
 ## The Real Cost of a Handmade Throw Blanket
 
@@ -470,14 +470,14 @@ That $40 blanket at Target isn't your competition. You're making something machi
 
 **Materials × 2 + (Time × hourly rate) + overhead = minimum price**
 
-Most sellers undercharge because they don't count their time. The [Cost Calculator](https://fibertools.app/project-cost-calculator) makes this math transparent.
+Most sellers undercharge because they don't count their time. The Cost Calculator makes this math transparent.
 
 ## Tips for Reducing Costs
 
 - **Buy during sales.** Joann's and Michael's run 40-50% off yarn sales regularly
 - **Use coupons strategically.** Stack manufacturer coupons with store sales
 - **Buy in bulk for large projects.** Price per yard drops significantly
-- **Consider yarn substitution.** The [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) helps find budget alternatives
+- **Consider yarn substitution.** The Yarn Weight Chart helps find budget alternatives
 
 ## FAQ
 
@@ -489,14 +489,14 @@ Never price below materials × 2 + minimum wage × hours. Use our calculator to 
 
 ## Related Free Tools
 
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — Know exactly how much yarn you need
-- [Blanket Calculator](https://fibertools.app/blanket-calculator) — Size and yarn for any blanket
-- [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) — Find budget yarn substitutions
-- [Stitch Counter](https://fibertools.app/stitch-counter) — Track progress for time estimates
+- Yarn Calculator — Know exactly how much yarn you need
+- Blanket Calculator — Size and yarn for any blanket
+- Yarn Weight Chart — Find budget yarn substitutions
+- Stitch Counter — Track progress for time estimates
 
 ---
 
-**[→ Calculate Your Project Cost — Free at FiberTools.app](https://fibertools.app/project-cost-calculator)**
+**→ Calculate Your Project Cost — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/yarn-weight-chart.md << 'BLOGEOF'
@@ -510,7 +510,7 @@ keywords: "yarn weight chart, yarn weight comparison, what weight is my yarn, ya
 
 You found unlabeled yarn at a thrift store. Or the label faded. Or it's from your grandmother's stash. What weight is it?
 
-**[→ Use Our Interactive Yarn Weight Chart](https://fibertools.app/yarn-weight-chart)** — identify any yarn and find substitutions.
+**→ Use Our Interactive Yarn Weight Chart** — identify any yarn and find substitutions.
 
 ## The CYC Yarn Weight System
 
@@ -537,7 +537,7 @@ No label? Wrap yarn around a ruler:
 
 **Same weight category = usually safe.** A DK for a DK works in most cases.
 
-**Going up or down one weight = possible with hook adjustment.** Use the [Gauge Calculator](https://fibertools.app/gauge-calculator) to verify.
+**Going up or down one weight = possible with hook adjustment.** Use the Gauge Calculator to verify.
 
 **Fiber content matters.** Cotton has no stretch; substituting cotton for wool changes drape significantly.
 
@@ -558,13 +558,13 @@ Yes. "Medium" is the CYC category label for #4 weight yarn.
 
 ## Related Free Tools
 
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — Yardage estimates by weight
-- [Needle Converter](https://fibertools.app/needle-converter) — Match hooks to yarn weight
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Verify substitutions with a swatch
+- Yarn Calculator — Yardage estimates by weight
+- Needle Converter — Match hooks to yarn weight
+- Gauge Calculator — Verify substitutions with a swatch
 
 ---
 
-**[→ Check Yarn Weights — Free at FiberTools.app](https://fibertools.app/yarn-weight-chart)**
+**→ Check Yarn Weights — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/increase-decrease-calculator.md << 'BLOGEOF'
@@ -578,7 +578,7 @@ keywords: "evenly distribute increases crochet, decrease calculator knitting, sp
 
 Your pattern says "decrease 8 stitches evenly across." You have 96 stitches. Where exactly do you put those decreases?
 
-**[→ Use Our Free Inc/Dec Calculator](https://fibertools.app/increase-decrease-calculator)** — get stitch-by-stitch instructions instantly.
+**→ Use Our Free Inc/Dec Calculator** — get stitch-by-stitch instructions instantly.
 
 ## The Formula
 
@@ -610,13 +610,13 @@ Depends on the pattern. For invisible shaping (like adjusting stitch count betwe
 
 ## Related Free Tools
 
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Calculate exact stitch counts
-- [Blanket Calculator](https://fibertools.app/blanket-calculator) — Stitch counts for any size
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — Yardage after resizing
+- Gauge Calculator — Calculate exact stitch counts
+- Blanket Calculator — Stitch counts for any size
+- Yarn Calculator — Yardage after resizing
 
 ---
 
-**[→ Calculate Your Shaping — Free at FiberTools.app](https://fibertools.app/increase-decrease-calculator)**
+**→ Calculate Your Shaping — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/abbreviation-glossary.md << 'BLOGEOF'
@@ -630,7 +630,7 @@ keywords: "crochet abbreviations list, knitting abbreviations chart, what does d
 
 You're reading a pattern and it says "sc2tog, ch 1, sk 1, dc in next." If you're a beginner, that looks like someone fell asleep on their keyboard.
 
-**[→ Use Our Searchable Abbreviation Glossary](https://fibertools.app/abbreviation-glossary)** — type any abbreviation, get the full term and description.
+**→ Use Our Searchable Abbreviation Glossary** — type any abbreviation, get the full term and description.
 
 ## The US vs UK Problem
 
@@ -679,13 +679,13 @@ Single crochet two together — it's a decrease. Insert hook in next stitch, pul
 
 ## Related Free Tools
 
-- [Needle Converter](https://fibertools.app/needle-converter) — Convert hook sizes between systems
-- [Stitch Counter](https://fibertools.app/stitch-counter) — Track your rows
-- [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) — Identify yarn types
+- Needle Converter — Convert hook sizes between systems
+- Stitch Counter — Track your rows
+- Yarn Weight Chart — Identify yarn types
 
 ---
 
-**[→ Search All Abbreviations — Free at FiberTools.app](https://fibertools.app/abbreviation-glossary)**
+**→ Search All Abbreviations — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/stripe-generator.md << 'BLOGEOF'
@@ -699,7 +699,7 @@ keywords: "random stripe generator crochet, crochet stripe pattern maker, stash 
 
 You have 14 partial skeins in a bin. You want to make something with them. But what stripe pattern won't look like a disaster?
 
-**[→ Use Our Free Stripe Generator](https://fibertools.app/stripe-generator)** — random, weighted, or structured patterns with yardage breakdown.
+**→ Use Our Free Stripe Generator** — random, weighted, or structured patterns with yardage breakdown.
 
 ## Modes
 
@@ -727,14 +727,14 @@ The generator calculates how much of each color you'll need based on your gauge 
 
 ## Related Free Tools
 
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — Yardage for each color
-- [Blanket Calculator](https://fibertools.app/blanket-calculator) — Size your stripe blanket
-- [Color Pooling Calculator](https://fibertools.app/color-pooling-calculator) — Turn variegated yarn into argyle
-- [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) — Match weights across your stash
+- Yarn Calculator — Yardage for each color
+- Blanket Calculator — Size your stripe blanket
+- Color Pooling Calculator — Turn variegated yarn into argyle
+- Yarn Weight Chart — Match weights across your stash
 
 ---
 
-**[→ Generate Your Stripe Pattern — Free at FiberTools.app](https://fibertools.app/stripe-generator)**
+**→ Generate Your Stripe Pattern — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/color-pooling-calculator.md << 'BLOGEOF'
@@ -748,7 +748,7 @@ keywords: "color pooling stitch count, planned pooling calculator, variegated ya
 
 Color pooling looks like magic, but it's just math. The key: your stitch count must match the yarn's color repeat length.
 
-**[→ Use Our Free Color Pooling Calculator](https://fibertools.app/color-pooling-calculator)**
+**→ Use Our Free Color Pooling Calculator**
 
 ## How Pooling Works
 
@@ -778,13 +778,13 @@ Yes, but the stitch count will be different than crochet. Recalculate for your k
 
 ## Related Free Tools
 
-- [Stripe Generator](https://fibertools.app/stripe-generator) — Alternative stripe patterns
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Dial in your exact stitch count
-- [Stitch Counter](https://fibertools.app/stitch-counter) — Track rows while pooling
+- Stripe Generator — Alternative stripe patterns
+- Gauge Calculator — Dial in your exact stitch count
+- Stitch Counter — Track rows while pooling
 
 ---
 
-**[→ Calculate Your Pooling — Free at FiberTools.app](https://fibertools.app/color-pooling-calculator)**
+**→ Calculate Your Pooling — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/spinning-calculator.md << 'BLOGEOF'
@@ -798,7 +798,7 @@ keywords: "spinning calculator drive ratio, twists per inch calculator, plying r
 
 Handspinning math shouldn't require a spreadsheet. But until now, it kind of did.
 
-**[→ Use Our Free Spinning Calculator](https://fibertools.app/spinning-ratio-calculator)** — the only free online tool for handspinners.
+**→ Use Our Free Spinning Calculator** — the only free online tool for handspinners.
 
 ## Drive Ratio by Yarn Type
 
@@ -828,13 +828,13 @@ Too many treadles per draft, or your draft length is too short. Slow down the tr
 
 ## Related Free Tools
 
-- [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) — Classify your handspun
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — Estimate yardage for projects
-- [Gauge Calculator](https://fibertools.app/gauge-calculator) — Swatch your handspun before committing
+- Yarn Weight Chart — Classify your handspun
+- Yarn Calculator — Estimate yardage for projects
+- Gauge Calculator — Swatch your handspun before committing
 
 ---
 
-**[→ Calculate Your Spinning — Free at FiberTools.app](https://fibertools.app/spinning-ratio-calculator)**
+**→ Calculate Your Spinning — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/cross-stitch-calculator.md << 'BLOGEOF'
@@ -848,7 +848,7 @@ keywords: "cross stitch size calculator, aida cloth calculator, cross stitch dim
 
 Your pattern is 150 × 200 stitches. On 14-count Aida, how big will it be? Will it fit that frame you already bought?
 
-**[→ Use Our Free Cross Stitch Calculator](https://fibertools.app/cross-stitch-calculator)**
+**→ Use Our Free Cross Stitch Calculator**
 
 ## Fabric Count Affects Size
 
@@ -879,12 +879,12 @@ Yes, but it doubles the count — stitching over 1 on 28-count makes it behave l
 
 ## Related Free Tools
 
-- [Thread Converter](https://fibertools.app/thread-converter) — DMC to Anchor to Cosmo
-- [Stitch Counter](https://fibertools.app/stitch-counter) — Track your progress
+- Thread Converter — DMC to Anchor to Cosmo
+- Stitch Counter — Track your progress
 
 ---
 
-**[→ Calculate Your Cross Stitch — Free at FiberTools.app](https://fibertools.app/cross-stitch-calculator)**
+**→ Calculate Your Cross Stitch — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/weaving-sett-calculator.md << 'BLOGEOF'
@@ -898,7 +898,7 @@ keywords: "weaving sett calculator, epi calculator weaving, warp calculator free
 
 You measured your yarn at 12 WPI. What sett do you use for plain weave? For twill? How much warp do you need?
 
-**[→ Use Our Free Weaving Sett Calculator](https://fibertools.app/weaving-sett-calculator)**
+**→ Use Our Free Weaving Sett Calculator**
 
 ## WPI to EPI by Weave Structure
 
@@ -929,13 +929,13 @@ Too stiff = sett is too high, reduce EPI. Too loose = sett is too low, increase 
 
 ## Related Free Tools
 
-- [Yarn Weight Chart](https://fibertools.app/yarn-weight-chart) — Identify your yarn weight
-- [Spinning Calculator](https://fibertools.app/spinning-ratio-calculator) — For handspun warp/weft
-- [Yarn Calculator](https://fibertools.app/yarn-calculator) — Total yardage needs
+- Yarn Weight Chart — Identify your yarn weight
+- Spinning Calculator — For handspun warp/weft
+- Yarn Calculator — Total yardage needs
 
 ---
 
-**[→ Calculate Your Sett — Free at FiberTools.app](https://fibertools.app/weaving-sett-calculator)**
+**→ Calculate Your Sett — Planning Reference**
 BLOGEOF
 
 cat > public/blog-posts/thread-converter.md << 'BLOGEOF'
@@ -949,7 +949,7 @@ keywords: "dmc to anchor conversion, thread conversion chart, embroidery floss c
 
 Your pattern calls for DMC 3801. You only have Anchor. What's the equivalent?
 
-**[→ Use Our Free Thread Converter](https://fibertools.app/thread-converter)** — instant conversion between DMC, Anchor, Cosmo, and Sulky.
+**→ Use Our Free Thread Converter** — instant conversion between DMC, Anchor, Cosmo, and Sulky.
 
 ## Why Conversions Are Approximate
 
@@ -978,12 +978,12 @@ Neither. Both are high quality. DMC has slightly more color options; Anchor is s
 
 ## Related Free Tools
 
-- [Cross Stitch Calculator](https://fibertools.app/cross-stitch-calculator) — Finished size and thread amounts
-- [Abbreviation Glossary](https://fibertools.app/abbreviation-glossary) — Pattern term reference
+- Cross Stitch Calculator — Finished size and thread amounts
+- Abbreviation Glossary — Pattern term reference
 
 ---
 
-**[→ Convert Thread Colors — Free at FiberTools.app](https://fibertools.app/thread-converter)**
+**→ Convert Thread Colors — Planning Reference**
 BLOGEOF
 
 echo "  ✅ All 15 blog post markdown files created in public/blog-posts/"

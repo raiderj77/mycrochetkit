@@ -10,7 +10,6 @@ export const BlogPostCrossStitchCalculator = () => (
     category="Fiber Arts Tools"
     keywords={['cross stitch calculator', 'aida cloth calculator', 'cross stitch fabric size', 'embroidery thread calculator', 'cross stitch stitch count']}
     breadcrumbTitle="Cross Stitch Calculator"
-    toolUrl="https://fibertools.app/cross-stitch-calculator"
     toolName="Cross Stitch Calculator"
     faqs={[
       { question: 'How do I calculate cross stitch fabric size?', answer: 'Divide your pattern\'s stitch count by the fabric count (e.g., 14-count Aida = 14 stitches per inch). A 140x100 stitch pattern on 14-count Aida = 10x7.14 inches of stitching area. Add 3-4 inches on each side for framing margins.' },
@@ -23,7 +22,7 @@ export const BlogPostCrossStitchCalculator = () => (
       Every cross stitch project starts with the same question: "How big do I cut the fabric?" Get it wrong and you're either wasting expensive Aida cloth or &mdash; worse &mdash; running out of fabric three-quarters through a project you've spent months on.
     </p>
     <p>
-      The <a href="https://fibertools.app/cross-stitch-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools cross stitch calculator</a> handles fabric sizing, thread estimates, and count conversions so you can focus on the actual stitching.
+      The <span className="font-medium">FiberTools cross stitch calculator</span> handles fabric sizing, thread estimates, and count conversions so you can focus on the actual stitching.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Calculating Fabric Size</h2>
@@ -34,7 +33,7 @@ export const BlogPostCrossStitchCalculator = () => (
       But you can't cut your fabric to the exact stitched size. You need margins for framing, finishing, and keeping the fabric taut in your hoop or scroll frame. The standard recommendation is 3-4 inches of margin on every side. So that 14.3" &times; 10" stitched area needs fabric cut to at least 20" &times; 16".
     </p>
     <p>
-      Use the <a href="https://fibertools.app/cross-stitch-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">calculator</a> to instantly see your cut size with margins included &mdash; no mental math required.
+      Use the <span className="font-medium">calculator</span> to instantly see your cut size with margins included &mdash; no mental math required.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Estimating Thread and Floss</h2>
@@ -55,7 +54,7 @@ export const BlogPostCrossStitchCalculator = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Converting Between Fabric Counts</h2>
     <p>
-      Want to stitch a 14-count pattern on 18-count fabric? The stitch count doesn't change &mdash; only the physical dimensions. Plug both counts into the <a href="https://fibertools.app/cross-stitch-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">cross stitch calculator</a> to see exactly how the finished size and thread requirements shift.
+      Want to stitch a 14-count pattern on 18-count fabric? The stitch count doesn't change &mdash; only the physical dimensions. Plug both counts into the <span className="font-medium">cross stitch calculator</span> to see exactly how the finished size and thread requirements shift.
     </p>
     <p>
       A common conversion trap: going from 14-count to 18-count makes your piece about 22% smaller in each dimension, which means 40% less total area. That can turn a bold wall piece into something that looks undersized in its frame. Plan your frame size and display location before committing to a count change.
@@ -63,7 +62,7 @@ export const BlogPostCrossStitchCalculator = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Planning Your Next Cross Stitch Project</h2>
     <p>
-      Good project planning is the difference between a relaxing craft session and a frustrating fabric shortage. The <a href="https://fibertools.app/cross-stitch-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools cross stitch calculator</a> gives you fabric dimensions with margins, thread estimates by color, and count conversions &mdash; all in one place. Cut once, stitch with confidence.
+      Good project planning is the difference between a relaxing craft session and a frustrating fabric shortage. The <span className="font-medium">FiberTools cross stitch calculator</span> gives you fabric dimensions with margins, thread estimates by color, and count conversions &mdash; all in one place. Cut once, stitch with confidence.
     </p>
   </BlogPostLayout>
 );

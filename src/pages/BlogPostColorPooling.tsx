@@ -10,7 +10,6 @@ export const BlogPostColorPooling = () => (
     category="Crochet Techniques"
     keywords={['color pooling calculator', 'variegated yarn pooling', 'planned pooling crochet', 'argyle crochet', 'color pooling planner']}
     breadcrumbTitle="Color Pooling Calculator"
-    toolUrl="https://fibertools.app/color-pooling"
     toolName="Color Pooling Calculator"
     faqs={[
       { question: 'What is color pooling in crochet?', answer: 'Color pooling is a technique where you use variegated (multi-color) yarn and specific stitch counts to create intentional patterns like argyle, plaid, or diagonal stripes. Instead of random color changes, the colors pool into organized designs.' },
@@ -23,7 +22,7 @@ export const BlogPostColorPooling = () => (
       You've seen those stunning argyle blankets on Instagram &mdash; the ones that look impossibly complex but are actually made with a single strand of variegated yarn. That's <strong>planned color pooling</strong>, and it's one of the most satisfying techniques in crochet once you understand the math behind it.
     </p>
     <p>
-      The catch? Getting the stitch count right requires some calculation. Our <a href="https://fibertools.app/color-pooling" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">free color pooling calculator</a> does the math for you &mdash; just measure your yarn's color sections and enter your gauge.
+      The catch? Getting the stitch count right requires some calculation. Our <span className="font-medium">free color pooling calculator</span> does the math for you &mdash; just measure your yarn's color sections and enter your gauge.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">How Color Pooling Works</h2>
@@ -44,7 +43,7 @@ export const BlogPostColorPooling = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Using the Color Pooling Calculator</h2>
     <p>
-      Head to the <a href="https://fibertools.app/color-pooling" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools color pooling calculator</a> and enter your color segments and lengths. Then input your gauge &mdash; how many stitches per inch in your chosen stitch pattern. The calculator will show you the ideal chain count and a preview of how colors will arrange in your fabric.
+      Head to the <span className="font-medium">FiberTools color pooling calculator</span> and enter your color segments and lengths. Then input your gauge &mdash; how many stitches per inch in your chosen stitch pattern. The calculator will show you the ideal chain count and a preview of how colors will arrange in your fabric.
     </p>
     <p>
       If the preview doesn't show clean pooling, try adjusting up or down by one stitch. Sometimes a single stitch makes the difference between random color soup and a gorgeous argyle pattern.
@@ -69,7 +68,7 @@ export const BlogPostColorPooling = () => (
       <strong>Pooling works for a few rows then falls apart:</strong> Tension inconsistency is the usual culprit. Crocheters tend to tighten up after the foundation chain. Make a gauge swatch of at least 20 rows before committing to a project, and measure your gauge from the middle rows, not the first few.
     </p>
     <p>
-      <strong>Colors pooling but the pattern isn't what you wanted:</strong> The number of colors and their relative lengths determine the pattern type. Two alternating colors of equal length create stripes. Four colors in an ABAB pattern create argyle. Experiment with the <a href="https://fibertools.app/color-pooling" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">calculator's preview</a> before you start stitching.
+      <strong>Colors pooling but the pattern isn't what you wanted:</strong> The number of colors and their relative lengths determine the pattern type. Two alternating colors of equal length create stripes. Four colors in an ABAB pattern create argyle. Experiment with the <span className="font-medium">calculator's preview</span> before you start stitching.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Recommended Yarns for Color Pooling</h2>
@@ -82,7 +81,7 @@ export const BlogPostColorPooling = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Plan Your Pooling Project</h2>
     <p>
-      Ready to try planned pooling? Start with a dishcloth or scarf &mdash; something flat and rectangular where you don't need shaping. Use the <a href="https://fibertools.app/color-pooling" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">color pooling calculator at FiberTools</a> to find your ideal stitch count, make a generous gauge swatch, and let the yarn do the work. Once you see those colors lock into an argyle pattern for the first time, you'll be hooked &mdash; pun fully intended.
+      Ready to try planned pooling? Start with a dishcloth or scarf &mdash; something flat and rectangular where you don't need shaping. Use the <span className="font-medium">color pooling calculator at FiberTools</span> to find your ideal stitch count, make a generous gauge swatch, and let the yarn do the work. Once you see those colors lock into an argyle pattern for the first time, you'll be hooked &mdash; pun fully intended.
     </p>
   </BlogPostLayout>
 );

@@ -10,7 +10,6 @@ export const BlogPostYarnWeightChart = () => (
     category="Crochet Reference"
     keywords={['yarn weight chart', 'yarn weight categories', 'yarn substitution guide', 'wraps per inch yarn', 'CYC yarn weight system']}
     breadcrumbTitle="Yarn Weight Chart Guide"
-    toolUrl="https://fibertools.app/yarn-weight-chart"
     toolName="Yarn Weight Reference Chart"
     faqs={[
       { question: 'What are the 7 yarn weight categories?', answer: 'The Craft Yarn Council defines 8 categories: 0 (Lace), 1 (Super Fine/Fingering), 2 (Fine/Sport), 3 (Light/DK), 4 (Medium/Worsted), 5 (Bulky), 6 (Super Bulky), and 7 (Jumbo). Each category has a recommended hook/needle size range and gauge range. Size 4 worsted is the most commonly used.' },
@@ -66,7 +65,7 @@ export const BlogPostYarnWeightChart = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Reference all yarn weights at a glance</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/yarn-weight-chart" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Yarn Weight Chart</a> shows every weight category with WPI ranges, hook sizes, gauge ranges, and common names in US, UK, and Australian terminology.
+        The free <span className="font-medium">Yarn Weight Chart</span> shows every weight category with WPI ranges, hook sizes, gauge ranges, and common names in US, UK, and Australian terminology.
       </p>
     </div>
   </BlogPostLayout>

@@ -10,7 +10,6 @@ export const BlogPostCostCalculator = () => (
     category="Crochet Business"
     keywords={['how much to charge for crochet', 'crochet pricing calculator', 'cost of handmade crochet blanket', 'pricing crochet items to sell', 'crochet cost formula']}
     breadcrumbTitle="Crochet Cost Calculator"
-    toolUrl="https://fibertools.app/project-cost-calculator"
     toolName="Project Cost Calculator"
     faqs={[
       { question: 'How do I price my crochet items?', answer: 'The standard formula is: (Material Cost + Labor Cost + Overhead) × 2 = Wholesale Price. Double wholesale for retail. For labor, track your actual hours and set an hourly rate ($15-25/hr minimum). Most crocheters dramatically underprice because they do not count their time.' },
@@ -54,7 +53,7 @@ export const BlogPostCostCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Know your numbers before you start</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/project-cost-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Project Cost Calculator</a> factors in materials, time, overhead, and platform fees to give you honest pricing for any crochet project.
+        The free <span className="font-medium">Project Cost Calculator</span> factors in materials, time, overhead, and platform fees to give you honest pricing for any crochet project.
       </p>
     </div>
   </BlogPostLayout>

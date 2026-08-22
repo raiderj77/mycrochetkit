@@ -10,7 +10,6 @@ export const BlogPostWeavingSett = () => (
     category="Fiber Arts Tools"
     keywords={['weaving sett calculator', 'ends per inch calculator', 'EPI calculator weaving', 'warp sett calculator', 'weaving density calculator']}
     breadcrumbTitle="Weaving Sett Calculator"
-    toolUrl="https://fibertools.app/weaving-sett"
     toolName="Weaving Sett Calculator"
     faqs={[
       { question: 'What is sett in weaving?', answer: 'Sett is the number of warp ends per inch (EPI) in woven fabric. It determines how dense or open your weaving will be. The correct sett depends on your yarn thickness and weave structure — too close and the weft can\'t beat in properly, too open and the fabric is sleazy.' },
@@ -23,7 +22,7 @@ export const BlogPostWeavingSett = () => (
       Sett is arguably the most important decision you make before warping your loom &mdash; and getting it wrong means hours of weaving produce fabric you can't use. Too tight and your weft can't beat in, creating stiff, warp-faced cloth. Too loose and you get sleazy fabric that stretches and shifts.
     </p>
     <p>
-      The <a href="https://fibertools.app/weaving-sett" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools weaving sett calculator</a> takes the guesswork out of this critical step. Enter your yarn's wraps per inch and weave structure, and get a recommended sett with room for adjustment.
+      The <span className="font-medium">FiberTools weaving sett calculator</span> takes the guesswork out of this critical step. Enter your yarn's wraps per inch and weave structure, and get a recommended sett with room for adjustment.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Understanding Sett (Ends Per Inch)</h2>
@@ -39,7 +38,7 @@ export const BlogPostWeavingSett = () => (
       The classic way to find sett starts with your yarn and a ruler. Wrap your warp yarn around a ruler for exactly one inch, with wraps touching side by side but not overlapping or leaving gaps. Count the wraps &mdash; that's your WPI (wraps per inch). For plain weave, divide by 2. For twill weaves, use 60-70% of WPI. For satin structures, you can go up to 80%.
     </p>
     <p>
-      So if your yarn wraps at 16 WPI: plain weave sett = 8 EPI, twill sett = 10-11 EPI, and satin sett = 12-13 EPI. The <a href="https://fibertools.app/weaving-sett" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">sett calculator</a> handles these conversions across all standard weave structures.
+      So if your yarn wraps at 16 WPI: plain weave sett = 8 EPI, twill sett = 10-11 EPI, and satin sett = 12-13 EPI. The <span className="font-medium">sett calculator</span> handles these conversions across all standard weave structures.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Sett by Weave Structure</h2>
@@ -59,7 +58,7 @@ export const BlogPostWeavingSett = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Calculate Your Sett</h2>
     <p>
-      Whether you're dressing a rigid heddle or threading a multi-shaft floor loom, getting sett right saves you from weaving yards of unusable fabric. Use the <a href="https://fibertools.app/weaving-sett" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools weaving sett calculator</a> to find your starting point, weave a sample, and adjust from there. Your future self &mdash; the one happily cutting fabric off the loom &mdash; will thank you.
+      Whether you're dressing a rigid heddle or threading a multi-shaft floor loom, getting sett right saves you from weaving yards of unusable fabric. Use the <span className="font-medium">FiberTools weaving sett calculator</span> to find your starting point, weave a sample, and adjust from there. Your future self &mdash; the one happily cutting fabric off the loom &mdash; will thank you.
     </p>
   </BlogPostLayout>
 );

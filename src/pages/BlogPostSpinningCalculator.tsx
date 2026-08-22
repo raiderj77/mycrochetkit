@@ -10,7 +10,6 @@ export const BlogPostSpinningCalculator = () => (
     category="Fiber Arts Tools"
     keywords={['spinning calculator', 'handspinning yardage', 'fiber to yarn calculator', 'twist per inch calculator', 'spinning yardage estimator']}
     breadcrumbTitle="Spinning Calculator"
-    toolUrl="https://fibertools.app/spinning-calculator"
     toolName="Spinning Calculator"
     faqs={[
       { question: 'How much yarn will I get from a pound of fiber?', answer: 'It depends on how thick you spin. A pound of fiber typically yields 800-1,600 yards of worsted-weight yarn, 1,200-2,400 yards of sport weight, or 2,000-4,000+ yards of laceweight. Processing loss (washing, carding) removes about 5-15% of the starting weight.' },
@@ -23,7 +22,7 @@ export const BlogPostSpinningCalculator = () => (
       Handspinners face a question that never gets easier to answer: "How much yarn will this pile of fiber actually make?" Whether you're staring at a gorgeous braid of hand-dyed merino at a fiber festival or planning a sweater from your own sheep's fleece, estimating finished yardage from raw fiber is part math, part experience.
     </p>
     <p>
-      The <a href="https://fibertools.app/spinning-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools spinning calculator</a> helps take the guesswork out of that equation. Enter your fiber weight, target yarn weight, and it estimates your finished yardage &mdash; accounting for processing loss and twist.
+      The <span className="font-medium">FiberTools spinning calculator</span> helps take the guesswork out of that equation. Enter your fiber weight, target yarn weight, and it estimates your finished yardage &mdash; accounting for processing loss and twist.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">The Fiber-to-Yarn Math</h2>
@@ -39,7 +38,7 @@ export const BlogPostSpinningCalculator = () => (
       As a starting reference, here's what spinners typically get from one pound (16 oz) of prepared fiber: Laceweight (14+ WPI) yields roughly 2,000-4,000 yards. Fingering weight (11-13 WPI) gives about 1,400-2,000 yards. Sport weight (9-10 WPI) produces 1,000-1,400 yards. Worsted weight (7-8 WPI) comes in around 800-1,200 yards. Bulky weight (5-6 WPI) gives approximately 400-700 yards.
     </p>
     <p>
-      These ranges are wide because they depend on your personal spinning style &mdash; how much twist you add, how consistent your drafting is, and whether you're spinning woolen or worsted style. The <a href="https://fibertools.app/spinning-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">spinning calculator</a> lets you dial in your specific parameters for a tighter estimate.
+      These ranges are wide because they depend on your personal spinning style &mdash; how much twist you add, how consistent your drafting is, and whether you're spinning woolen or worsted style. The <span className="font-medium">spinning calculator</span> lets you dial in your specific parameters for a tighter estimate.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Twist Per Inch: Finding the Sweet Spot</h2>
@@ -68,7 +67,7 @@ export const BlogPostSpinningCalculator = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">From Fiber to Finished Object</h2>
     <p>
-      The <a href="https://fibertools.app/spinning-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">spinning calculator on FiberTools</a> bridges the gap between your fiber stash and your project plans. Estimate yardage before you buy, plan your spinning sessions, and stop guessing whether three braids of roving will be enough for that cardigan. The fiber-to-yarn pipeline has enough variables already &mdash; let the math handle itself.
+      The <span className="font-medium">spinning calculator on FiberTools</span> bridges the gap between your fiber stash and your project plans. Estimate yardage before you buy, plan your spinning sessions, and stop guessing whether three braids of roving will be enough for that cardigan. The fiber-to-yarn pipeline has enough variables already &mdash; let the math handle itself.
     </p>
   </BlogPostLayout>
 );

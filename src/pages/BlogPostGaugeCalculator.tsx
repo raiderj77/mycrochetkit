@@ -10,7 +10,6 @@ export const BlogPostGaugeCalculator = () => (
     category="Crochet Techniques"
     keywords={['crochet gauge calculator', 'how to measure crochet gauge', 'gauge swatch crochet', 'crochet tension swatch', 'why gauge matters crochet']}
     breadcrumbTitle="Gauge Calculator Guide"
-    toolUrl="https://fibertools.app/gauge-calculator"
     toolName="Gauge Calculator"
     faqs={[
       { question: 'What is gauge in crochet?', answer: 'Gauge is a measurement of how many stitches and rows fit into a specific area, usually 4 inches (10cm). It tells you the size of your stitches. Since everyone crochets at different tensions, gauge ensures your finished project matches the intended dimensions.' },
@@ -74,7 +73,7 @@ export const BlogPostGaugeCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Check your gauge instantly</p>
       <p className="text-[#2C1810]/70">
-        Plug your swatch measurements into the free <a href="https://fibertools.app/gauge-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Gauge Calculator</a> and it will tell you your exact stitches and rows per inch &mdash; no mental math required.
+        Plug your swatch measurements into the free <span className="font-medium">Gauge Calculator</span> and it will tell you your exact stitches and rows per inch &mdash; no mental math required.
       </p>
     </div>
   </BlogPostLayout>

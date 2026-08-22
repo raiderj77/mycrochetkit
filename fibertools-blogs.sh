@@ -18,7 +18,7 @@ mkdir -p src/components
 
 cat > src/components/BlogPostLayout.tsx << 'ENDOFFILE'
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import { SEOHead } from '../seo/components/SEOHead';
 import { ShareButtons } from './ShareButtons';
 
@@ -37,7 +37,6 @@ interface BlogPostLayoutProps {
   keywords: string[];
   breadcrumbTitle: string;
   faqs: FAQItem[];
-  toolUrl: string;
   toolName: string;
   children: React.ReactNode;
 }
@@ -52,7 +51,6 @@ export const BlogPostLayout = ({
   keywords,
   breadcrumbTitle,
   faqs,
-  toolUrl,
   toolName,
   children,
 }: BlogPostLayoutProps) => {
@@ -156,18 +154,10 @@ export const BlogPostLayout = ({
             {children}
           </div>
 
-          {/* CTA Box */}
+          {/* Non-linked reference summary */}
           <div className="my-12 p-8 bg-gradient-to-br from-[#E86A58]/10 to-[#B8A9C9]/10 rounded-2xl border border-[#E86A58]/20 text-center">
-            <p className="text-2xl font-bold text-[#2C1810] mb-2">Try the {toolName}</p>
-            <p className="text-[#2C1810]/70 mb-6">Free, instant, no signup required.</p>
-            <a
-              href={toolUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-semibold rounded-xl transition-colors"
-            >
-              Open {toolName} <ExternalLink className="w-4 h-4" />
-            </a>
+            <p className="text-2xl font-bold text-[#2C1810] mb-2">{toolName} reference</p>
+            <p className="text-[#2C1810]/70">Keep the guidance above handy while planning and checking your project.</p>
           </div>
 
           {/* FAQ Section */}
@@ -223,7 +213,6 @@ export const BlogPostYarnCalculator = () => (
     category="Crochet Guides"
     keywords={['how much yarn do I need', 'yarn yardage calculator', 'yarn needed for blanket', 'crochet yarn estimate', 'yarn calculator crochet']}
     breadcrumbTitle="How Much Yarn Do I Need"
-    toolUrl="https://fibertools.app/yarn-calculator"
     toolName="Yarn Calculator"
     faqs={[
       { question: 'How much yarn do I need for a crochet blanket?', answer: 'A standard throw blanket (50" x 60") typically needs around 2,000 yards of medium-weight yarn, roughly 10-12 skeins. A baby blanket needs 800-1,200 yards. Queen-size blankets can require 2,500-3,000 yards. Your actual yardage depends on stitch pattern, tension, and yarn weight.' },
@@ -306,7 +295,7 @@ export const BlogPostYarnCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Skip the math entirely</p>
       <p className="text-[#2C1810]/70">
-        Our free <a href="https://fibertools.app/yarn-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Yarn Calculator</a> does all of this for you. Plug in your project type, yarn weight, and dimensions &mdash; get instant yardage and skein estimates. No swatch required (though we always recommend one for garments).
+        Our free <span className="font-medium">Yarn Calculator</span> does all of this for you. Plug in your project type, yarn weight, and dimensions &mdash; get instant yardage and skein estimates. No swatch required (though we always recommend one for garments).
       </p>
     </div>
 
@@ -334,7 +323,6 @@ export const BlogPostBlanketCalculator = () => (
     category="Crochet Guides"
     keywords={['crochet blanket sizes', 'blanket size chart crochet', 'how many chains to start a blanket', 'crochet blanket dimensions', 'yarn needed for blanket']}
     breadcrumbTitle="Crochet Blanket Size Chart"
-    toolUrl="https://fibertools.app/blanket-calculator"
     toolName="Blanket Calculator"
     faqs={[
       { question: 'How many chains should I start with for a crochet blanket?', answer: 'It depends on your gauge and desired width. For worsted weight yarn with a 5mm hook, you will get roughly 4 stitches per inch. A 50-inch wide throw needs about 200 starting chains. Always make a gauge swatch first and calculate: desired width in inches × stitches per inch = starting chain count. Add extra chains for your turning chain.' },
@@ -402,7 +390,7 @@ export const BlogPostBlanketCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Plan your blanket in seconds</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/blanket-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Blanket Calculator</a> gives you starting chain counts, row counts, and yarn estimates for any blanket size. Just pick your bed size and yarn weight.
+        The free <span className="font-medium">Blanket Calculator</span> gives you starting chain counts, row counts, and yarn estimates for any blanket size. Just pick your bed size and yarn weight.
       </p>
     </div>
 
@@ -429,7 +417,6 @@ export const BlogPostGaugeCalculator = () => (
     category="Crochet Techniques"
     keywords={['crochet gauge calculator', 'how to measure crochet gauge', 'gauge swatch crochet', 'crochet tension swatch', 'why gauge matters crochet']}
     breadcrumbTitle="Gauge Calculator Guide"
-    toolUrl="https://fibertools.app/gauge-calculator"
     toolName="Gauge Calculator"
     faqs={[
       { question: 'What is gauge in crochet?', answer: 'Gauge is a measurement of how many stitches and rows fit into a specific area, usually 4 inches (10cm). It tells you the size of your stitches. Since everyone crochets at different tensions, gauge ensures your finished project matches the intended dimensions.' },
@@ -493,7 +480,7 @@ export const BlogPostGaugeCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Check your gauge instantly</p>
       <p className="text-[#2C1810]/70">
-        Plug your swatch measurements into the free <a href="https://fibertools.app/gauge-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Gauge Calculator</a> and it will tell you your exact stitches and rows per inch &mdash; no mental math required.
+        Plug your swatch measurements into the free <span className="font-medium">Gauge Calculator</span> and it will tell you your exact stitches and rows per inch &mdash; no mental math required.
       </p>
     </div>
   </BlogPostLayout>
@@ -515,7 +502,6 @@ export const BlogPostHookConverter = () => (
     category="Crochet Reference"
     keywords={['crochet hook size chart', 'crochet hook conversion', 'US to metric crochet hook', 'UK crochet hook sizes', 'crochet hook mm chart']}
     breadcrumbTitle="Hook Size Conversion Chart"
-    toolUrl="https://fibertools.app/needle-converter"
     toolName="Hook & Needle Converter"
     faqs={[
       { question: 'What does a G/6 crochet hook mean?', answer: 'G/6 means the hook is a US letter size G and US number size 6, which equals 4.0mm in metric. The letter and number are interchangeable ways to reference the same hook size. When in doubt, always go by the millimeter measurement since it is the universal standard.' },
@@ -573,7 +559,7 @@ export const BlogPostHookConverter = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Convert any hook size instantly</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/needle-converter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Hook &amp; Needle Converter</a> translates between US, UK, metric, and Japanese sizing in one click. Includes both standard and steel hook sizes.
+        The free <span className="font-medium">Hook &amp; Needle Converter</span> translates between US, UK, metric, and Japanese sizing in one click. Includes both standard and steel hook sizes.
       </p>
     </div>
   </BlogPostLayout>
@@ -595,7 +581,6 @@ export const BlogPostYarnWeightChart = () => (
     category="Crochet Reference"
     keywords={['yarn weight chart', 'yarn weight categories', 'yarn substitution guide', 'wraps per inch yarn', 'CYC yarn weight system']}
     breadcrumbTitle="Yarn Weight Chart Guide"
-    toolUrl="https://fibertools.app/yarn-weight-chart"
     toolName="Yarn Weight Reference Chart"
     faqs={[
       { question: 'What are the 7 yarn weight categories?', answer: 'The Craft Yarn Council defines 8 categories: 0 (Lace), 1 (Super Fine/Fingering), 2 (Fine/Sport), 3 (Light/DK), 4 (Medium/Worsted), 5 (Bulky), 6 (Super Bulky), and 7 (Jumbo). Each category has a recommended hook/needle size range and gauge range. Size 4 worsted is the most commonly used.' },
@@ -651,7 +636,7 @@ export const BlogPostYarnWeightChart = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Reference all yarn weights at a glance</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/yarn-weight-chart" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Yarn Weight Chart</a> shows every weight category with WPI ranges, hook sizes, gauge ranges, and common names in US, UK, and Australian terminology.
+        The free <span className="font-medium">Yarn Weight Chart</span> shows every weight category with WPI ranges, hook sizes, gauge ranges, and common names in US, UK, and Australian terminology.
       </p>
     </div>
   </BlogPostLayout>
@@ -673,7 +658,6 @@ export const BlogPostAbbreviations = () => (
     category="Crochet Reference"
     keywords={['crochet abbreviations', 'crochet terms US vs UK', 'crochet stitch abbreviations', 'dc in crochet means', 'crochet pattern abbreviations list']}
     breadcrumbTitle="Crochet Abbreviations"
-    toolUrl="https://fibertools.app/abbreviation-glossary"
     toolName="Abbreviation Glossary"
     faqs={[
       { question: 'What does dc mean in crochet?', answer: 'It depends on which terminology the pattern uses. In US crochet terms, dc means double crochet (yarn over, insert hook, pull up a loop, yarn over and pull through 2 loops twice). In UK terms, dc means double crochet, which is equivalent to a US single crochet. Always check whether your pattern specifies US or UK terms.' },
@@ -729,7 +713,7 @@ export const BlogPostAbbreviations = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Look up any abbreviation instantly</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/abbreviation-glossary" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Crochet Abbreviation Glossary</a> lets you search any abbreviation and instantly see what it means in both US and UK terms. Bookmark it for mid-pattern panic moments.
+        The free <span className="font-medium">Crochet Abbreviation Glossary</span> lets you search any abbreviation and instantly see what it means in both US and UK terms. Bookmark it for mid-pattern panic moments.
       </p>
     </div>
   </BlogPostLayout>
@@ -753,10 +737,9 @@ export const BlogPostStitchCounter = () => (
     category="Crochet Tools"
     keywords={['crochet stitch counter', 'free row counter crochet', 'crochet counter online', 'voice activated row counter', 'digital stitch counter']}
     breadcrumbTitle="Crochet Stitch Counter"
-    toolUrl="https://fibertools.app/stitch-counter"
     toolName="Stitch Counter"
     faqs={[
-      { question: 'What is the best free crochet row counter?', answer: 'The best counter depends on your workflow. Browser-based counters like the one at fibertools.app work on any device without downloading an app. For hands-free counting, voice-activated counters (like MyCrochetKit) let you say "next" instead of tapping. Physical clicker counters work but require stopping to click.' },
+      { question: 'What is the best free crochet row counter?', answer: 'The best counter depends on your workflow. Browser-based counters work on any device without downloading an app. For hands-free counting, voice-activated counters (like MyCrochetKit) let you say "next" instead of tapping. Physical clicker counters work but require stopping to click.' },
       { question: 'Can I use a row counter on my phone without an app?', answer: 'Yes. Web-based counters work directly in your phone browser with no download required. They save your count locally so you do not lose progress if you close the tab. Some even work offline after the first load.' },
       { question: 'How do I keep track of crochet rows without losing count?', answer: 'Use a digital counter (voice-activated is best for hands-free), place a stitch marker every 10 rows as a visual checkpoint, and keep a tally on paper as a backup. For complex patterns, take a photo of your counter at the end of each session.' },
     ]}
@@ -788,7 +771,7 @@ export const BlogPostStitchCounter = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Try it right now</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/stitch-counter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Stitch Counter</a> runs in your browser, saves automatically, and works offline. For voice-activated counting with project tracking, try <a href="https://mycrochetkit.com/quick-counter" className="text-[#E86A58] font-medium hover:underline">MyCrochetKit&apos;s voice counter</a>.
+        The free <span className="font-medium">Stitch Counter</span> runs in your browser, saves automatically, and works offline. For voice-activated counting with project tracking, try <a href="https://mycrochetkit.com/quick-counter" className="text-[#E86A58] font-medium hover:underline">MyCrochetKit&apos;s voice counter</a>.
       </p>
     </div>
   </BlogPostLayout>
@@ -810,7 +793,6 @@ export const BlogPostCostCalculator = () => (
     category="Crochet Business"
     keywords={['how much to charge for crochet', 'crochet pricing calculator', 'cost of handmade crochet blanket', 'pricing crochet items to sell', 'crochet cost formula']}
     breadcrumbTitle="Crochet Cost Calculator"
-    toolUrl="https://fibertools.app/project-cost-calculator"
     toolName="Project Cost Calculator"
     faqs={[
       { question: 'How do I price my crochet items?', answer: 'The standard formula is: (Material Cost + Labor Cost + Overhead) × 2 = Wholesale Price. Double wholesale for retail. For labor, track your actual hours and set an hourly rate ($15-25/hr minimum). Most crocheters dramatically underprice because they do not count their time.' },
@@ -854,7 +836,7 @@ export const BlogPostCostCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Know your numbers before you start</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/project-cost-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Project Cost Calculator</a> factors in materials, time, overhead, and platform fees to give you honest pricing for any crochet project.
+        The free <span className="font-medium">Project Cost Calculator</span> factors in materials, time, overhead, and platform fees to give you honest pricing for any crochet project.
       </p>
     </div>
   </BlogPostLayout>
@@ -876,7 +858,6 @@ export const BlogPostIncDecCalculator = () => (
     category="Crochet Techniques"
     keywords={['evenly spaced increases crochet', 'crochet decrease calculator', 'how to increase evenly in crochet', 'crochet shaping calculator', 'amigurumi increase formula']}
     breadcrumbTitle="Increase/Decrease Calculator"
-    toolUrl="https://fibertools.app/increase-decrease-calculator"
     toolName="Increase/Decrease Calculator"
     faqs={[
       { question: 'How do I evenly increase across a crochet row?', answer: 'Divide total stitches by number of increases to find the spacing. For example, if you have 24 stitches and need 6 increases: 24 ÷ 6 = 4. Work an increase every 4th stitch. If the division is not even, distribute the remainders across the row so the spacing looks uniform.' },
@@ -915,7 +896,7 @@ export const BlogPostIncDecCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Let the calculator do the math</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/increase-decrease-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Increase/Decrease Calculator</a> handles the division and remainder distribution for you. Enter your current stitch count and desired count, and it tells you exactly where to place each increase or decrease.
+        The free <span className="font-medium">Increase/Decrease Calculator</span> handles the division and remainder distribution for you. Enter your current stitch count and desired count, and it tells you exactly where to place each increase or decrease.
       </p>
     </div>
   </BlogPostLayout>
@@ -937,7 +918,6 @@ export const BlogPostStripeGenerator = () => (
     category="Crochet Design"
     keywords={['crochet stripe pattern generator', 'random stripe blanket crochet', 'temperature blanket colors', 'stripe sequence crochet', 'color stripe generator']}
     breadcrumbTitle="Stripe Pattern Generator"
-    toolUrl="https://fibertools.app/stripe-generator"
     toolName="Stripe Generator"
     faqs={[
       { question: 'How do I make random stripes look good in crochet?', answer: 'True randomness can look chaotic. Weighted randomization works better: assign a probability to each color so favorites appear more often. Also vary stripe widths (1-4 rows) for visual interest. Avoid placing similar colors next to each other by adding a rule that prevents the same color from repeating consecutively.' },
@@ -967,7 +947,7 @@ export const BlogPostStripeGenerator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Generate your stripe pattern</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/stripe-generator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Stripe Generator</a> creates random, weighted, and temperature-based stripe sequences. Preview your color combinations before you commit to yarn purchases.
+        The free <span className="font-medium">Stripe Generator</span> creates random, weighted, and temperature-based stripe sequences. Preview your color combinations before you commit to yarn purchases.
       </p>
     </div>
   </BlogPostLayout>
@@ -977,13 +957,13 @@ echo "  ✅ 10/15 BlogPostStripeGenerator.tsx"
 
 # Posts 11-15 (shorter format for remaining niche tools)
 for post_data in \
-  "BlogPostColorPooling|How Planned Pooling Works in Crochet: The Color Pooling Calculator Guide|Learn the math and technique behind planned color pooling in crochet. Calculate stitch counts for argyle and plaid effects with variegated yarn.|planned-pooling-crochet-guide|Crochet Techniques|planned pooling crochet,color pooling calculator,argyle crochet variegated yarn,crochet planned pooling tutorial|Color Pooling Guide|https://fibertools.app/color-pooling-calculator|Color Pooling Calculator" \
-  "BlogPostSpinningCalculator|Spinning Wheel Ratio Calculator: Drive Ratios, TPI, and Plying Math|Calculate spinning wheel drive ratios, twists per inch, and plying ratios. Essential math for handspinners working with different fiber preparations.|spinning-wheel-ratio-calculator|Fiber Arts|spinning wheel ratio calculator,twists per inch calculator,drive ratio spinning wheel,plying ratio handspinning|Spinning Calculator|https://fibertools.app/spinning-calculator|Spinning Calculator" \
-  "BlogPostCrossStitchCalculator|Cross Stitch Fabric Calculator: Size Your Design for Any Count|Calculate cross stitch design dimensions across different fabric counts. Convert between Aida, evenweave, and linen counts with thread estimation.|cross-stitch-fabric-calculator|Cross Stitch|cross stitch fabric calculator,cross stitch size calculator,aida count calculator,cross stitch thread estimation|Cross Stitch Calculator|https://fibertools.app/cross-stitch-calculator|Cross Stitch Calculator" \
-  "BlogPostWeavingSett|Weaving Sett Calculator: WPI to EPI Conversion and Warp Planning|Calculate optimal sett for weaving projects. Convert wraps per inch to ends per inch for balanced, warp-faced, and weft-faced weaves.|weaving-sett-calculator-guide|Weaving|weaving sett calculator,wpi to epi conversion,warp planning calculator,balanced weave sett|Weaving Sett Calculator|https://fibertools.app/weaving-sett-calculator|Weaving Sett Calculator" \
-  "BlogPostThreadConverter|Embroidery Thread Conversion Chart: DMC to Anchor to Cosmo Cross-Reference|Convert embroidery thread colors between DMC, Anchor, Cosmo, and Sulky brands. Find equivalent thread colors when your preferred brand is unavailable.|embroidery-thread-conversion-chart|Embroidery|DMC to Anchor conversion,embroidery thread conversion chart,Cosmo thread equivalent,cross stitch thread substitute|Thread Conversion Chart|https://fibertools.app/thread-converter|Thread Converter"
+  "BlogPostColorPooling|How Planned Pooling Works in Crochet: The Color Pooling Calculator Guide|Learn the math and technique behind planned color pooling in crochet. Calculate stitch counts for argyle and plaid effects with variegated yarn.|planned-pooling-crochet-guide|Crochet Techniques|planned pooling crochet,color pooling calculator,argyle crochet variegated yarn,crochet planned pooling tutorial|Color Pooling Guide|Color Pooling Calculator" \
+  "BlogPostSpinningCalculator|Spinning Wheel Ratio Calculator: Drive Ratios, TPI, and Plying Math|Calculate spinning wheel drive ratios, twists per inch, and plying ratios. Essential math for handspinners working with different fiber preparations.|spinning-wheel-ratio-calculator|Fiber Arts|spinning wheel ratio calculator,twists per inch calculator,drive ratio spinning wheel,plying ratio handspinning|Spinning Calculator|Spinning Calculator" \
+  "BlogPostCrossStitchCalculator|Cross Stitch Fabric Calculator: Size Your Design for Any Count|Calculate cross stitch design dimensions across different fabric counts. Convert between Aida, evenweave, and linen counts with thread estimation.|cross-stitch-fabric-calculator|Cross Stitch|cross stitch fabric calculator,cross stitch size calculator,aida count calculator,cross stitch thread estimation|Cross Stitch Calculator|Cross Stitch Calculator" \
+  "BlogPostWeavingSett|Weaving Sett Calculator: WPI to EPI Conversion and Warp Planning|Calculate optimal sett for weaving projects. Convert wraps per inch to ends per inch for balanced, warp-faced, and weft-faced weaves.|weaving-sett-calculator-guide|Weaving|weaving sett calculator,wpi to epi conversion,warp planning calculator,balanced weave sett|Weaving Sett Calculator|Weaving Sett Calculator" \
+  "BlogPostThreadConverter|Embroidery Thread Conversion Chart: DMC to Anchor to Cosmo Cross-Reference|Convert embroidery thread colors between DMC, Anchor, Cosmo, and Sulky brands. Find equivalent thread colors when your preferred brand is unavailable.|embroidery-thread-conversion-chart|Embroidery|DMC to Anchor conversion,embroidery thread conversion chart,Cosmo thread equivalent,cross stitch thread substitute|Thread Conversion Chart|Thread Converter"
 do
-  IFS='|' read -r comp_name title desc slug category kw_str breadcrumb tool_url tool_name <<< "$post_data"
+  IFS='|' read -r comp_name title desc slug category kw_str breadcrumb tool_name <<< "$post_data"
   
   # Convert comma-separated keywords to array format
   kw_array=$(echo "$kw_str" | sed "s/,/', '/g" | sed "s/^/'/" | sed "s/$/'/")
@@ -1001,7 +981,6 @@ export const ${comp_name} = () => (
     category="${category}"
     keywords={[${kw_array}]}
     breadcrumbTitle="${breadcrumb}"
-    toolUrl="${tool_url}"
     toolName="${tool_name}"
     faqs={[]}
   >

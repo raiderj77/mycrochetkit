@@ -10,7 +10,6 @@ export const BlogPostStripeGenerator = () => (
     category="Crochet Design"
     keywords={['crochet stripe pattern generator', 'random stripe blanket crochet', 'temperature blanket colors', 'stripe sequence crochet', 'color stripe generator']}
     breadcrumbTitle="Stripe Pattern Generator"
-    toolUrl="https://fibertools.app/stripe-generator"
     toolName="Stripe Generator"
     faqs={[
       { question: 'How do I make random stripes look good in crochet?', answer: 'True randomness can look chaotic. Weighted randomization works better: assign a probability to each color so favorites appear more often. Also vary stripe widths (1-4 rows) for visual interest. Avoid placing similar colors next to each other by adding a rule that prevents the same color from repeating consecutively.' },
@@ -40,7 +39,7 @@ export const BlogPostStripeGenerator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Generate your stripe pattern</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/stripe-generator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Stripe Generator</a> creates random, weighted, and temperature-based stripe sequences. Preview your color combinations before you commit to yarn purchases.
+        The free <span className="font-medium">Stripe Generator</span> creates random, weighted, and temperature-based stripe sequences. Preview your color combinations before you commit to yarn purchases.
       </p>
     </div>
   </BlogPostLayout>
