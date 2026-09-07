@@ -11,7 +11,6 @@ export const BlogPostYarnCalculator = () => (
     category="Crochet Guides"
     keywords={['how much yarn do I need', 'yarn yardage calculator', 'yarn needed for blanket', 'crochet yarn estimate', 'yarn calculator crochet']}
     breadcrumbTitle="How Much Yarn Do I Need"
-    toolUrl="https://fibertools.app/yarn-calculator"
     toolName="Yarn Calculator"
     faqs={[
       { question: 'How much yarn do I need for a crochet blanket?', answer: 'A standard throw blanket (50" x 60") typically needs around 2,000 yards of medium-weight yarn, roughly 10-12 skeins. A baby blanket needs 800-1,200 yards. Queen-size blankets can require 2,500-3,000 yards. Your actual yardage depends on stitch pattern, tension, and yarn weight.' },
@@ -94,7 +93,7 @@ export const BlogPostYarnCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Skip the math entirely</p>
       <p className="text-[#2C1810]/70">
-        Our free <a href="https://fibertools.app/yarn-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Yarn Calculator</a> does all of this for you. Plug in your project type, yarn weight, and dimensions &mdash; get instant yardage and skein estimates. No swatch required (though we always recommend one for garments).
+        Our free <span className="font-medium">Yarn Calculator</span> does all of this for you. Plug in your project type, yarn weight, and dimensions &mdash; get instant yardage and skein estimates. No swatch required (though we always recommend one for garments).
       </p>
     </div>
 

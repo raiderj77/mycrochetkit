@@ -10,7 +10,6 @@ export const BlogPostThreadConverter = () => (
     category="Fiber Arts Tools"
     keywords={['crochet thread size converter', 'thread size chart', 'crochet thread weight', 'thread numbering system', 'lace thread sizes']}
     breadcrumbTitle="Thread Size Converter"
-    toolUrl="https://fibertools.app/thread-converter"
     toolName="Thread Size Converter"
     faqs={[
       { question: 'How does crochet thread sizing work?', answer: 'Crochet thread uses an inverse numbering system — higher numbers mean thinner thread. Size 3 is the thickest common crochet thread. Size 10 is the most popular all-purpose thread. Size 20-30 is fine thread for doilies. Size 80-100 is ultra-fine for heirloom tatting.' },
@@ -23,7 +22,7 @@ export const BlogPostThreadConverter = () => (
       Thread crochet has its own sizing system, and it's backwards from everything else in yarn craft &mdash; higher numbers mean <em>thinner</em> thread. Size 3 is thick, size 10 is medium, size 30 is fine, and size 100 is practically invisible. If you're coming from regular yarn crochet or trying to follow a vintage pattern, the numbering can be genuinely confusing.
     </p>
     <p>
-      The <a href="https://fibertools.app/thread-converter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools thread size converter</a> translates between crochet thread sizes, tex, denier, and common yarn weight equivalents &mdash; so you always know what you're working with.
+      The <span className="font-medium">FiberTools thread size converter</span> translates between crochet thread sizes, tex, denier, and common yarn weight equivalents &mdash; so you always know what you're working with.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Crochet Thread Sizes Explained</h2>
@@ -39,7 +38,7 @@ export const BlogPostThreadConverter = () => (
       Thread crochet uses steel hooks, numbered differently from regular aluminum or ergonomic hooks. And confusingly, steel hook numbers are <em>also</em> inverse &mdash; a size 14 steel hook is smaller than a size 7.
     </p>
     <p>
-      General pairings: Size 3 thread works with a 2.25mm (US B/1) or steel 0 hook. Size 5 pairs with a 1.9mm or steel 1-2 hook. Size 10 uses a 1.65mm (steel 7) hook. Size 20 takes a 1.25mm (steel 9) or smaller. Size 30 uses a 1.0mm (steel 10-11) hook. The <a href="https://fibertools.app/thread-converter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">thread converter</a> includes recommended hook sizes for each thread weight.
+      General pairings: Size 3 thread works with a 2.25mm (US B/1) or steel 0 hook. Size 5 pairs with a 1.9mm or steel 1-2 hook. Size 10 uses a 1.65mm (steel 7) hook. Size 20 takes a 1.25mm (steel 9) or smaller. Size 30 uses a 1.0mm (steel 10-11) hook. The <span className="font-medium">thread converter</span> includes recommended hook sizes for each thread weight.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Understanding Tex, Denier, and Metric Numbering</h2>
@@ -62,7 +61,7 @@ export const BlogPostThreadConverter = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Convert Any Thread Size</h2>
     <p>
-      Whether you're deciphering a vintage doily pattern, converting between international sizing systems, or figuring out which thread to substitute, the <a href="https://fibertools.app/thread-converter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools thread size converter</a> gives you instant answers. Enter any thread measurement and see equivalents across all common systems.
+      Whether you're deciphering a vintage doily pattern, converting between international sizing systems, or figuring out which thread to substitute, the <span className="font-medium">FiberTools thread size converter</span> gives you instant answers. Enter any thread measurement and see equivalents across all common systems.
     </p>
   </BlogPostLayout>
 );

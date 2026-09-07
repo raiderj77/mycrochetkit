@@ -10,7 +10,6 @@ export const BlogPostHookConverter = () => (
     category="Crochet Guides"
     keywords={['crochet hook size converter', 'hook size chart', 'crochet hook mm to us', 'uk to us hook sizes', 'crochet hook conversion chart']}
     breadcrumbTitle="Hook Size Converter"
-    toolUrl="https://fibertools.app/hook-converter"
     toolName="Hook Size Converter"
     faqs={[
       { question: 'How do I convert crochet hook sizes between US and metric?', answer: 'US hook sizes use letters (B through S) or numbers (1-16), while metric uses millimeters. For example, US G/6 = 4.0mm, US H/8 = 5.0mm, and US J/10 = 6.0mm. Use a hook size converter chart for accurate conversions, as the relationship is not linear.' },
@@ -23,7 +22,7 @@ export const BlogPostHookConverter = () => (
       You found a gorgeous pattern from a UK designer. It calls for a "4.00mm hook." You dig through your hook case and find hooks labeled B, G, H, 6, 8 &mdash; but no millimeters in sight. Sound familiar?
     </p>
     <p>
-      Crochet hook sizing is one of those things that should be simple but isn't. Three different regional systems, inconsistent labeling between brands, and steel hooks with their own entirely separate numbering. The <a href="https://fibertools.app/hook-converter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools hook size converter</a> translates between all of them instantly.
+      Crochet hook sizing is one of those things that should be simple but isn't. Three different regional systems, inconsistent labeling between brands, and steel hooks with their own entirely separate numbering. The <span className="font-medium">FiberTools hook size converter</span> translates between all of them instantly.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Understanding the Three Hook Size Systems</h2>
@@ -42,7 +41,7 @@ export const BlogPostHookConverter = () => (
       These are the hook sizes that come up constantly in patterns. US G/6 = 4.0mm (great for DK weight). US H/8 = 5.0mm (worsted weight go-to). US I/9 = 5.5mm (slightly larger worsted). US J/10 = 6.0mm (bulky-friendly). US K/10.5 = 6.5mm. These five hooks cover probably 80% of crochet patterns.
     </p>
     <p>
-      For a full list with UK equivalents, use the <a href="https://fibertools.app/hook-converter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">hook converter tool</a>. It covers every standard size from 2.0mm steel hooks up to 25mm jumbo hooks.
+      For a full list with UK equivalents, use the <span className="font-medium">hook converter tool</span>. It covers every standard size from 2.0mm steel hooks up to 25mm jumbo hooks.
     </p>
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Steel Hook Sizes: A Separate System</h2>
@@ -71,7 +70,7 @@ export const BlogPostHookConverter = () => (
 
     <h2 className="text-2xl font-bold text-[#2C1810] mt-10 mb-4">Convert Any Hook Size</h2>
     <p>
-      Stop squinting at tiny hook engravings and guessing at conversions. The <a href="https://fibertools.app/hook-converter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] underline hover:text-[#D35A4A]">FiberTools hook size converter</a> gives you instant, accurate conversions between US, UK, metric, and steel hook sizes. Bookmark it &mdash; you'll use it more than you expect.
+      Stop squinting at tiny hook engravings and guessing at conversions. The <span className="font-medium">FiberTools hook size converter</span> gives you instant, accurate conversions between US, UK, metric, and steel hook sizes. Bookmark it &mdash; you'll use it more than you expect.
     </p>
   </BlogPostLayout>
 );

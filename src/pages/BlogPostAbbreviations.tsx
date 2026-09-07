@@ -10,7 +10,6 @@ export const BlogPostAbbreviations = () => (
     category="Crochet Reference"
     keywords={['crochet abbreviations', 'crochet terms US vs UK', 'crochet stitch abbreviations', 'dc in crochet means', 'crochet pattern abbreviations list']}
     breadcrumbTitle="Crochet Abbreviations"
-    toolUrl="https://fibertools.app/abbreviation-glossary"
     toolName="Abbreviation Glossary"
     faqs={[
       { question: 'What does dc mean in crochet?', answer: 'It depends on which terminology the pattern uses. In US crochet terms, dc means double crochet (yarn over, insert hook, pull up a loop, yarn over and pull through 2 loops twice). In UK terms, dc means double crochet, which is equivalent to a US single crochet. Always check whether your pattern specifies US or UK terms.' },
@@ -66,7 +65,7 @@ export const BlogPostAbbreviations = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Look up any abbreviation instantly</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/abbreviation-glossary" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Crochet Abbreviation Glossary</a> lets you search any abbreviation and instantly see what it means in both US and UK terms. Bookmark it for mid-pattern panic moments.
+        The free <span className="font-medium">Crochet Abbreviation Glossary</span> lets you search any abbreviation and instantly see what it means in both US and UK terms. Bookmark it for mid-pattern panic moments.
       </p>
     </div>
   </BlogPostLayout>

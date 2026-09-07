@@ -10,10 +10,9 @@ export const BlogPostStitchCounter = () => (
     category="Crochet Tools"
     keywords={['crochet stitch counter', 'free row counter crochet', 'crochet counter online', 'voice activated row counter', 'digital stitch counter']}
     breadcrumbTitle="Crochet Stitch Counter"
-    toolUrl="https://fibertools.app/stitch-counter"
     toolName="Stitch Counter"
     faqs={[
-      { question: 'What is the best free crochet row counter?', answer: 'The best counter depends on your workflow. Browser-based counters like the one at fibertools.app work on any device without downloading an app. For hands-free counting, voice-activated counters (like MyCrochetKit) let you say "next" instead of tapping. Physical clicker counters work but require stopping to click.' },
+      { question: 'What is the best free crochet row counter?', answer: 'The best counter depends on your workflow. Browser-based counters work on any device without downloading an app. For hands-free counting, voice-activated counters (like MyCrochetKit) let you say "next" instead of tapping. Physical clicker counters work but require stopping to click.' },
       { question: 'Can I use a row counter on my phone without an app?', answer: 'Yes. Web-based counters work directly in your phone browser with no download required. They save your count locally so you do not lose progress if you close the tab. Some even work offline after the first load.' },
       { question: 'How do I keep track of crochet rows without losing count?', answer: 'Use a digital counter (voice-activated is best for hands-free), place a stitch marker every 10 rows as a visual checkpoint, and keep a tally on paper as a backup. For complex patterns, take a photo of your counter at the end of each session.' },
     ]}
@@ -45,7 +44,7 @@ export const BlogPostStitchCounter = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Try it right now</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/stitch-counter" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Stitch Counter</a> runs in your browser, saves automatically, and works offline. For voice-activated counting with project tracking, try <a href="https://mycrochetkit.com/quick-counter" className="text-[#E86A58] font-medium hover:underline">MyCrochetKit&apos;s voice counter</a>.
+        The free <span className="font-medium">Stitch Counter</span> runs in your browser, saves automatically, and works offline. For voice-activated counting with project tracking, try <a href="https://mycrochetkit.com/quick-counter" className="text-[#E86A58] font-medium hover:underline">MyCrochetKit&apos;s voice counter</a>.
       </p>
     </div>
   </BlogPostLayout>

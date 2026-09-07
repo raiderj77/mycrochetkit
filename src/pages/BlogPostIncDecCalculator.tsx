@@ -10,7 +10,6 @@ export const BlogPostIncDecCalculator = () => (
     category="Crochet Techniques"
     keywords={['evenly spaced increases crochet', 'crochet decrease calculator', 'how to increase evenly in crochet', 'crochet shaping calculator', 'amigurumi increase formula']}
     breadcrumbTitle="Increase/Decrease Calculator"
-    toolUrl="https://fibertools.app/increase-decrease-calculator"
     toolName="Increase/Decrease Calculator"
     faqs={[
       { question: 'How do I evenly increase across a crochet row?', answer: 'Divide total stitches by number of increases to find the spacing. For example, if you have 24 stitches and need 6 increases: 24 ÷ 6 = 4. Work an increase every 4th stitch. If the division is not even, distribute the remainders across the row so the spacing looks uniform.' },
@@ -49,7 +48,7 @@ export const BlogPostIncDecCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Let the calculator do the math</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/increase-decrease-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Increase/Decrease Calculator</a> handles the division and remainder distribution for you. Enter your current stitch count and desired count, and it tells you exactly where to place each increase or decrease.
+        The free <span className="font-medium">Increase/Decrease Calculator</span> handles the division and remainder distribution for you. Enter your current stitch count and desired count, and it tells you exactly where to place each increase or decrease.
       </p>
     </div>
   </BlogPostLayout>

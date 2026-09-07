@@ -11,7 +11,6 @@ export const BlogPostBlanketCalculator = () => (
     category="Crochet Guides"
     keywords={['crochet blanket sizes', 'blanket size chart crochet', 'how many chains to start a blanket', 'crochet blanket dimensions', 'yarn needed for blanket']}
     breadcrumbTitle="Crochet Blanket Size Chart"
-    toolUrl="https://fibertools.app/blanket-calculator"
     toolName="Blanket Calculator"
     faqs={[
       { question: 'How many chains should I start with for a crochet blanket?', answer: 'It depends on your gauge and desired width. For worsted weight yarn with a 5mm hook, you will get roughly 4 stitches per inch. A 50-inch wide throw needs about 200 starting chains. Always make a gauge swatch first and calculate: desired width in inches × stitches per inch = starting chain count. Add extra chains for your turning chain.' },
@@ -79,7 +78,7 @@ export const BlogPostBlanketCalculator = () => (
     <div className="my-8 p-6 bg-white rounded-xl border border-[#2C1810]/10">
       <p className="font-semibold text-[#2C1810] mb-2">Plan your blanket in seconds</p>
       <p className="text-[#2C1810]/70">
-        The free <a href="https://fibertools.app/blanket-calculator" target="_blank" rel="noopener noreferrer" className="text-[#E86A58] font-medium hover:underline">Blanket Calculator</a> gives you starting chain counts, row counts, and yarn estimates for any blanket size. Just pick your bed size and yarn weight.
+        The free <span className="font-medium">Blanket Calculator</span> gives you starting chain counts, row counts, and yarn estimates for any blanket size. Just pick your bed size and yarn weight.
       </p>
     </div>
 

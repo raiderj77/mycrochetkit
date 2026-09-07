@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Clock, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import { SEOHead } from '../seo/components/SEOHead';
 import { ShareButtons } from './ShareButtons';
 
@@ -18,7 +18,6 @@ interface BlogPostLayoutProps {
   keywords: string[];
   breadcrumbTitle: string;
   faqs: FAQItem[];
-  toolUrl: string;
   toolName: string;
   children: React.ReactNode;
 }
@@ -33,7 +32,6 @@ export const BlogPostLayout = ({
   keywords,
   breadcrumbTitle,
   faqs,
-  toolUrl,
   toolName,
   children,
 }: BlogPostLayoutProps) => {
@@ -137,18 +135,10 @@ export const BlogPostLayout = ({
             {children}
           </div>
 
-          {/* CTA Box */}
+          {/* Non-linked reference summary */}
           <div className="my-12 p-8 bg-gradient-to-br from-[#E86A58]/10 to-[#B8A9C9]/10 rounded-2xl border border-[#E86A58]/20 text-center">
-            <p className="text-2xl font-bold text-[#2C1810] mb-2">Try the {toolName}</p>
-            <p className="text-[#2C1810]/70 mb-6">Free, instant, no signup required.</p>
-            <a
-              href={toolUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-8 py-3 bg-[#E86A58] hover:bg-[#D35A4A] text-white font-semibold rounded-xl transition-colors"
-            >
-              Open {toolName} <ExternalLink className="w-4 h-4" />
-            </a>
+            <p className="text-2xl font-bold text-[#2C1810] mb-2">{toolName} reference</p>
+            <p className="text-[#2C1810]/70">Keep the guidance above handy while planning and checking your project.</p>
           </div>
 
           {/* FAQ Section */}
