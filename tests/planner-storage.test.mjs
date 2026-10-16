@@ -18,7 +18,7 @@ function launch(projects = [core.createProject('existing')], options = {}) {
   let exported
   const windowListeners = {}
   let confirmed = true
-  const context = vm.createContext({ ...core, console, Date, Intl, Math, JSON, Set, Number, String, Blob,
+  const context = vm.createContext({ ...core, console, Date, Intl, Math, JSON, Set, Number, String, Blob, TextEncoder, Error,
     URL: { createObjectURL: (blob) => { exported = blob; return 'blob:fixture' }, revokeObjectURL() {} },
     crypto: { randomUUID: () => 'replacement' },
     confirm: () => confirmed,
@@ -31,7 +31,7 @@ function launch(projects = [core.createProject('existing')], options = {}) {
     exported: async () => JSON.parse(await exported.text()),
     externalWrite: (raw) => { saved = raw; windowListeners.storage({ key }) },
     event: (selector, type, arg) => element(selector).listeners[type](arg),
-    import: (text) => element('#import-projects').listeners.change({ target: { files: [{ size: text.length, text: async () => text }], value: 'backup.json' } }),
+    import: (text) => element('#import-projects').listeners.change({ target: { files: [{ size: new Blob([text]).size, text: async () => text }], value: 'backup.json' } }),
   }
 }
 
@@ -144,9 +144,12 @@ test('failed repair writes leave original bytes intact while repaired projects r
   assert.equal(app.element('#app-status').dataset.error, 'true')
   app.event('#export-projects', 'click')
   const backup = await app.exported()
-  assert.equal(new Set(backup.projects.map(project => project.id)).size, 2)
-  assert.deepEqual(backup.projects.map(project => project.notes), projects.map(project => project.notes))
+  assert.equal(new Set(backup.state.projects.map(project => project.id)).size, 2)
+  assert.deepEqual(backup.state.projects.map(project => project.notes), projects.map(project => project.notes))
   assert.equal(app.raw(), raw)
+  const destination = launch()
+  await destination.import(JSON.stringify(backup))
+  assert.deepEqual(destination.read(), backup.state)
 })
 
 test('recovery avoids ID collisions and keeps later original IDs and custom fields', () => {
@@ -179,5 +182,100 @@ test('an absent storage key still creates and saves a usable first project', () 
   const app = launch(undefined, { raw: null })
   assert.equal(app.read().projects.length, 1)
   assert.equal(app.element('#app-status').dataset.error, 'false')
+})
+
+test('failed-save recovery export restores 101 legacy projects, long notes, custom fields and selection losslessly', async () => {
+  const projects = Array.from({ length: 101 }, (_, index) => ({ ...core.createProject(`legacy-${index}`), notes: 'n'.repeat(8100), name: `  Name ${index}  `, customField: { keep: [true, index] } }))
+  const original = { version: 1, projects, currentId: 'legacy-100', customState: { keep: 'all metadata' } }
+  const source = launch(projects, { raw: JSON.stringify(original), writeFails: true })
+  source.event('#export-projects', 'click')
+  const backup = JSON.stringify(await source.exported())
+  const destination = launch()
+  await destination.import(backup)
+  assert.equal(JSON.stringify(destination.read()), JSON.stringify(original))
+  assert.equal(source.raw(), JSON.stringify(original))
+})
+
+test('untrusted recovery imports enforce byte, record and field-type limits without replacing data', async () => {
+  const app = launch()
+  const before = app.raw()
+  for (const state of [
+    { version: 1, projects: [{ ...core.createProject('large'), notes: 'x'.repeat(core.MAX_RECOVERY_BYTES) }] },
+    { version: 1, projects: Array.from({ length: 10_001 }, () => ({})) },
+    { version: 1, projects: [{ ...core.createProject('invalid'), notes: { unsafe: true } }] },
+  ]) {
+    await app.import(core.createRecoveryBackup(state))
+    assert.equal(app.raw(), before)
+    assert.equal(app.element('#app-status').dataset.error, 'true')
+  }
+})
+
+test('oversized recovery export retains all data and explicitly warns that direct restore is unavailable', async () => {
+  const projects = [{ ...core.createProject('large'), notes: 'x'.repeat(core.MAX_RECOVERY_BYTES) }]
+  const app = launch(projects, { writeFails: true })
+  app.event('#export-projects', 'click')
+  assert.equal((await app.exported()).state.projects[0].notes.length, core.MAX_RECOVERY_BYTES)
+  assert.match(app.element('#app-status').textContent, /cannot be restored/)
+})
+
+test('recovery larger than 1 MB round trips completely while legacy imports keep their 1 MB limit', async () => {
+  const projects = [{ ...core.createProject('large'), notes: 'y'.repeat(1_200_000), custom: { preserve: true } }]
+  const original = { version: 1, projects, currentId: 'large', metadata: ['keep'] }
+  const source = launch(projects, { raw: JSON.stringify(original), writeFails: true })
+  source.event('#export-projects', 'click')
+  const backup = JSON.stringify(await source.exported())
+  assert.ok(new TextEncoder().encode(backup).byteLength > core.MAX_BACKUP_BYTES)
+  const destination = launch()
+  await destination.import(backup)
+  assert.equal(JSON.stringify(destination.read()), JSON.stringify(original))
+  const before = destination.raw()
+  await destination.import(core.createBackup(projects))
+  assert.equal(destination.raw(), before)
+  assert.match(destination.element('#app-status').textContent, /1 MB/)
+})
+
+test('non-finite numbers in known, unknown nested and top-level fields block every write', async () => {
+  for (const fragment of ['"currentRow":1e400', '"custom":{"nested":[1e400]}']) {
+    const raw = `{"version":1,"projects":[{"id":"keep",${fragment}}],"currentId":"keep"}`
+    const app = launch(undefined, { raw })
+    app.event('#project-form', 'input')
+    assert.equal(app.raw(), raw)
+    assert.equal(app.writes(), 0)
+    const destination = launch()
+    const before = destination.raw()
+    await destination.import(`{"application":"MyCrochetKit","version":1,"format":"recovery-state","state":${raw}}`)
+    assert.equal(destination.raw(), before)
+  }
+  const raw = '{"version":1,"projects":[{"id":"keep"}],"metadata":{"number":1e400}}'
+  const app = launch(undefined, { raw })
+  assert.equal(app.raw(), raw)
+  assert.equal(app.writes(), 0)
+})
+
+test('finite legacy numbers and nested metadata survive load and recovery restore', async () => {
+  const projects = [{ ...core.createProject('finite'), currentRow: 12.5, custom: { nested: [1e300, -123, 0.125] } }]
+  const original = { version: 1, projects, currentId: 'finite', metadata: { number: 1e300 } }
+  const app = launch(projects, { raw: JSON.stringify(original) })
+  app.event('#export-projects', 'click')
+  const destination = launch()
+  await destination.import(JSON.stringify(await app.exported()))
+  assert.equal(JSON.stringify(destination.read()), JSON.stringify(original))
+})
+
+test('recovery limit is UTF-8 bytes and rejects overflow before replacing existing state', async () => {
+  const base = { version: 1, projects: [core.createProject('boundary')], currentId: 'boundary', padding: '' }
+  const overhead = new TextEncoder().encode(core.createRecoveryBackup(base, 'fixed')).byteLength
+  base.padding = 'x'.repeat(core.MAX_RECOVERY_BYTES - overhead)
+  const exact = core.createRecoveryBackup(base, 'fixed')
+  assert.equal(new TextEncoder().encode(exact).byteLength, core.MAX_RECOVERY_BYTES)
+  assert.equal(core.parseBackupState(exact, () => 'new').padding.length, base.padding.length)
+  base.padding = base.padding.slice(0, -1) + 'é'
+  const overflow = core.createRecoveryBackup(base, 'fixed')
+  assert.equal(new TextEncoder().encode(overflow).byteLength, core.MAX_RECOVERY_BYTES + 1)
+  assert.throws(() => core.parseBackupState(overflow, () => 'new'), /10 MB/)
+  const app = launch()
+  const before = app.raw()
+  await app.import(overflow)
+  assert.equal(app.raw(), before)
 })
 

@@ -1,4 +1,14 @@
 export const STORAGE_VERSION = 1
+export const MAX_BACKUP_BYTES = 1_000_000
+export const MAX_RECOVERY_BYTES = 10_000_000
+export const MAX_RECOVERY_PROJECTS = 10_000
+
+const parseFiniteJson = (json) => JSON.parse(json, (_key, value) => {
+  if (typeof value === 'number' && !Number.isFinite(value)) {
+    throw new Error('The saved data contains a number that cannot be preserved safely.')
+  }
+  return value
+})
 
 export const textFields = [
   'name',
@@ -108,7 +118,7 @@ export function sanitizeProject(candidate, fallbackId, now = new Date().toISOStr
 // Stored projects are user data, not a new import: do not trim fields or drop
 // records during recovery. Reserve existing IDs before generating replacements.
 export function restoreStoredState(json, idFactory) {
-  const parsed = JSON.parse(json)
+  const parsed = parseFiniteJson(json)
   const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value)
   if (!isRecord(parsed) || parsed.version !== STORAGE_VERSION || !Array.isArray(parsed.projects) || !parsed.projects.length) {
     throw new Error('The saved planner data is not supported.')
@@ -159,6 +169,38 @@ export function createBackup(projects, now = new Date().toISOString()) {
     exportedAt: now,
     projects,
   }, null, 2)
+}
+
+// Recovery exports retain the whole state. This marker is a format selector,
+// not a trust signal: recovery files still have byte, record and type limits.
+export function createRecoveryBackup(state, now = new Date().toISOString()) {
+  return JSON.stringify({
+    application: 'MyCrochetKit',
+    version: STORAGE_VERSION,
+    format: 'recovery-state',
+    exportedAt: now,
+    state,
+  })
+}
+
+export function parseBackupState(json, idFactory) {
+  const bytes = new TextEncoder().encode(json).byteLength
+  if (bytes > MAX_RECOVERY_BYTES) {
+    throw new Error('That backup is larger than the 10 MB recovery safety limit. The existing projects were not replaced.')
+  }
+  const parsed = parseFiniteJson(json)
+  if (parsed?.format === 'recovery-state') {
+    if (parsed.application !== 'MyCrochetKit' || parsed.version !== STORAGE_VERSION
+      || !Array.isArray(parsed.state?.projects) || parsed.state.projects.length > MAX_RECOVERY_PROJECTS) {
+      throw new Error('This is not a supported recovery backup (maximum 10,000 projects).')
+    }
+    return restoreStoredState(JSON.stringify(parsed.state), idFactory)
+  }
+  if (bytes > MAX_BACKUP_BYTES) {
+    throw new Error('That legacy backup is larger than the 1 MB safety limit. The existing projects were not replaced.')
+  }
+  const projects = parseBackup(json, idFactory)
+  return { version: STORAGE_VERSION, projects, currentId: projects[0].id }
 }
 
 export function parseBackup(json, idFactory = (index) => `imported-${index + 1}`, now = new Date().toISOString()) {

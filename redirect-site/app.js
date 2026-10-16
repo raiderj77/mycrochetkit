@@ -1,11 +1,13 @@
 import {
   calculateProgress,
   calculateYardage,
-  createBackup,
+  createRecoveryBackup,
   createProject,
   createProjectSummary,
   numberFields,
-  parseBackup,
+  parseBackupState,
+  MAX_RECOVERY_BYTES,
+  MAX_RECOVERY_PROJECTS,
   restoreStoredState,
   sanitizeNumberField,
   STORAGE_VERSION,
@@ -164,7 +166,7 @@ function deleteProject() {
 }
 
 function exportProjects() {
-  const blob = new Blob([createBackup(state.projects)], { type: 'application/json' })
+  const blob = new Blob([createRecoveryBackup(state)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')
   const date = new Date().toISOString().slice(0, 10)
@@ -172,22 +174,26 @@ function exportProjects() {
   anchor.download = `mycrochetkit-backup-${date}.json`
   anchor.click()
   URL.revokeObjectURL(url)
-  setStatus(`Exported a backup of ${state.projects.length} project${state.projects.length === 1 ? '' : 's'}.`)
+  if (blob.size > MAX_RECOVERY_BYTES || state.projects.length > MAX_RECOVERY_PROJECTS) {
+    setStatus('Exported all data for safekeeping. This archive exceeds the 10 MB or 10,000-project recovery limits and needs separate recovery; it cannot be restored through Import backup.', true)
+  } else {
+    setStatus(`Exported a backup of ${state.projects.length} project${state.projects.length === 1 ? '' : 's'}.`)
+  }
 }
 
 async function importProjects(event) {
   const file = event.target.files?.[0]
   event.target.value = ''
   if (!file) return
-  if (file.size > 1_000_000) {
-    setStatus('That backup is larger than the 1 MB safety limit.', true)
+  if (file.size > MAX_RECOVERY_BYTES) {
+    setStatus('That backup is larger than the 10 MB recovery safety limit. The existing projects were not replaced.', true)
     return
   }
 
   try {
-    const projects = parseBackup(await file.text(), () => newId())
-    if (!confirm(`Replace the projects saved in this browser with ${projects.length} project${projects.length === 1 ? '' : 's'} from this backup?`)) return
-    state = { version: STORAGE_VERSION, projects, currentId: projects[0].id }
+    const restored = parseBackupState(await file.text(), () => newId())
+    if (!confirm(`Replace the projects saved in this browser with ${restored.projects.length} project${restored.projects.length === 1 ? '' : 's'} from this backup?`)) return
+    state = restored
     saveState('Backup imported and saved on this device.')
     render()
   } catch (error) {
