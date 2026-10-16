@@ -10,9 +10,20 @@
     <title>MyCrochetKit | A private crochet project planner</title>
     <meta name="description" content="Plan and track crochet projects privately in your browser. Record yarn, hook, gauge, rows, measurements, and notes without creating an account." />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MyCrochetKit" />
     <meta property="og:title" content="MyCrochetKit — Private crochet project planner" />
     <meta property="og:description" content="Keep project details, yarn, gauge, progress, and notes together—stored only in your browser." />
     <meta property="og:url" content="https://mycrochetkit.com/" />
+    <meta property="og:image" content="https://mycrochetkit.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="MyCrochetKit private crochet project planner" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MyCrochetKit — Private crochet project planner" />
+    <meta name="twitter:description" content="Keep project details, yarn, gauge, progress, and notes together—stored only in your browser." />
+    <meta name="twitter:image" content="https://mycrochetkit.com/og-image.png" />
+    <meta name="twitter:image:alt" content="MyCrochetKit private crochet project planner" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"MyCrochetKit","url":"https://mycrochetkit.com/","applicationCategory":"LifestyleApplication","operatingSystem":"Any modern browser","description":"A free, accountless crochet project planner that stores project details in local browser storage.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   </head>
   <body>
     <a class="skip-link" href="#planner">Skip to project planner</a>
@@ -20,7 +31,7 @@
       <a class="brand" href="/" aria-label="MyCrochetKit home"><span class="brand-mark" aria-hidden="true">M</span><span>MyCrochetKit</span></a>
       <nav aria-label="Primary navigation">
         <a href="#planner">Planner</a>
-        <a href="https://fibertools.app/crochet-tools">Calculators</a>
+        <a href="https://fibertools.app/crochet-tools?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=primary_nav">Calculators</a>
         <a href="/about">About</a>
         <a href="/privacy">Privacy</a>
       </nav>
@@ -34,7 +45,8 @@
           <p class="hero-copy">Track the yarn, hook, gauge, rows, measurements, and notes for each project. Everything stays in this browser unless you choose to export it.</p>
           <div class="hero-actions">
             <a class="button primary" href="#planner">Open the planner</a>
-            <a class="button secondary" href="https://fibertools.app/crochet-tools">Use FiberTools calculators</a>
+            <a class="button secondary" href="https://fibertools.app/crochet-tools?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=hero">Use FiberTools calculators</a>
+            <button class="button secondary" id="share-site" type="button">Share MyCrochetKit</button>
           </div>
         </div>
         <aside class="privacy-card" aria-label="Privacy summary">
@@ -82,7 +94,7 @@
               <label class="field"><span>Gauge measured over</span><input name="gaugeSize" maxlength="40" autocomplete="off" placeholder="4 in / 10 cm" /></label>
             </div>
             <div class="tool-links" aria-label="Related FiberTools calculators">
-              <a href="https://fibertools.app/yarn-calculator">Estimate yarn</a><a href="https://fibertools.app/gauge-calculator">Adjust gauge</a><a href="https://fibertools.app/needle-converter">Convert hook size</a>
+              <a href="https://fibertools.app/yarn-calculator?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=materials_yarn">Estimate yarn</a><a href="https://fibertools.app/gauge-calculator?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=materials_gauge">Adjust gauge</a><a href="https://fibertools.app/needle-converter?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=materials_hook">Convert hook size</a>
             </div>
           </section>
 
@@ -99,7 +111,7 @@
             </div>
             <div class="progress-track" role="progressbar" aria-label="Project row progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-bar"></span></div>
             <p class="progress-copy" id="progress-copy">Add a target row count to see progress.</p>
-            <div class="tool-links"><a href="https://fibertools.app/stitch-counter">Open the full stitch counter</a><a href="https://fibertools.app/blanket-calculator">Check blanket sizing</a></div>
+            <div class="tool-links"><a href="https://fibertools.app/stitch-counter?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=progress_counter">Open the full stitch counter</a><a href="https://fibertools.app/blanket-calculator?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=progress_blanket">Check blanket sizing</a></div>
           </section>
 
           <section class="form-section" aria-labelledby="notes-title">
@@ -130,14 +142,14 @@
         <p class="eyebrow">TWO SITES, TWO JOBS</p><h2 id="two-sites-title">Plan here. Calculate there.</h2>
         <div class="role-grid">
           <article><h3>MyCrochetKit</h3><p>Your private workspace for individual projects, materials, progress, and notes.</p></article>
-          <article><h3>FiberTools</h3><p>Free calculators, formulas, conversion tools, and fiber-craft references.</p><a href="https://fibertools.app/crochet-tools">Browse FiberTools</a></article>
+          <article><h3>FiberTools</h3><p>Free calculators, formulas, conversion tools, and fiber-craft references.</p><a href="https://fibertools.app/crochet-tools?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=companion_card">Browse FiberTools</a></article>
         </div>
       </section>
     </main>
 
     <footer>
       <p>MyCrochetKit stores planner data in your browser. Clearing browser storage can remove it, so export backups for projects you care about.</p>
-      <nav aria-label="Footer navigation"><a href="/about">About</a><a href="/privacy">Privacy</a><a href="https://fibertools.app/">FiberTools</a></nav>
+      <nav aria-label="Footer navigation"><a href="/about">About</a><a href="/privacy">Privacy</a><a href="mailto:jason@fibertools.app?subject=MyCrochetKit%20feedback">Send feedback</a><a href="https://fibertools.app/?utm_source=mycrochetkit&amp;utm_medium=referral&amp;utm_campaign=planner_to_calculator&amp;utm_content=footer">FiberTools</a></nav>
     </footer>
     <script type="module" src="/app.js"></script>
   </body>

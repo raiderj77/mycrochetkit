@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">MyCrochetKit private crochet project planner</title>
+  <desc id="description">A branded card showing the planner's browser-local project fields and privacy promises.</desc>
+  <rect width="1200" height="630" fill="#f6f0e3"/>
+  <circle cx="1105" cy="74" r="210" fill="#dbe8df"/>
+  <circle cx="92" cy="588" r="200" fill="#eadcc5"/>
+  <rect x="60" y="52" width="1080" height="526" rx="34" fill="#fffdf8" stroke="#b9c5be" stroke-width="3"/>
+  <circle cx="123" cy="116" r="34" fill="#173f35"/>
+  <text x="123" y="127" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#fffdf8">M</text>
+  <text x="174" y="128" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#173f35">MyCrochetKit</text>
+  <text x="104" y="217" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2" fill="#4d6b61">PRIVATE CROCHET PROJECT PLANNER</text>
+  <text x="104" y="276" font-family="Georgia, serif" font-size="46" font-weight="700" fill="#252c29">Keep the project details</text>
+  <text x="104" y="330" font-family="Georgia, serif" font-size="46" font-weight="700" fill="#252c29">your future self will need.</text>
+  <text x="104" y="388" font-family="Arial, sans-serif" font-size="24" fill="#52605b">Yarn, hook, gauge, rows, measurements, and notes—</text>
+  <text x="104" y="423" font-family="Arial, sans-serif" font-size="24" fill="#52605b">organized in your browser without creating an account.</text>
+  <rect x="104" y="473" width="456" height="58" rx="29" fill="#173f35"/>
+  <text x="332" y="510" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#fffdf8">Browser-local • Exportable backups</text>
+  <rect x="720" y="170" width="352" height="320" rx="22" fill="#f6f0e3" stroke="#c9d2cc" stroke-width="2"/>
+  <text x="754" y="217" font-family="Arial, sans-serif" font-size="19" font-weight="700" fill="#173f35">CROCHET PROJECT</text>
+  <text x="754" y="260" font-family="Arial, sans-serif" font-size="16" fill="#52605b">Project name</text>
+  <rect x="754" y="273" width="284" height="35" rx="8" fill="#fffdf8" stroke="#b9c5be"/>
+  <text x="754" y="343" font-family="Arial, sans-serif" font-size="16" fill="#52605b">Yarn &amp; hook</text>
+  <rect x="754" y="356" width="284" height="35" rx="8" fill="#fffdf8" stroke="#b9c5be"/>
+  <text x="754" y="426" font-family="Arial, sans-serif" font-size="16" fill="#52605b">Row progress &amp; notes</text>
+  <rect x="754" y="439" width="208" height="15" rx="7.5" fill="#d7ded9"/>
+  <rect x="754" y="439" width="129" height="15" rx="7.5" fill="#4d806e"/>
+  <text x="896" y="529" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#173f35">mycrochetkit.com</text>
+</svg>
