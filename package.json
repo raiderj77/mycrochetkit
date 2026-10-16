@@ -6,7 +6,9 @@
   "scripts": {
     "build": "node scripts/build-redirect-site.mjs",
     "test:redirects": "node scripts/validate-redirects.mjs",
-    "test": "npm run test:redirects && npm run build"
+    "test:unit": "node --test tests/*.test.mjs",
+    "test:site": "node scripts/validate-planner-site.mjs",
+    "test": "npm run test:unit && npm run test:redirects && npm run test:site && npm run build"
   },
   "engines": {
     "node": ">=20 <25"

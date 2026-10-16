@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# This recovery site intentionally has no sitemap. Legacy content is redirected
-# to the corresponding canonical FiberTools resource where one exists.
+Sitemap: https://mycrochetkit.com/sitemap.xml

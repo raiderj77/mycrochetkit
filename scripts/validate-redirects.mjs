@@ -7,7 +7,7 @@ const config = JSON.parse(await readFile(path.join(repositoryRoot, 'vercel.json'
 
 const requiredRedirects = new Map([
   ['/yarn-calculator', 'https://fibertools.app/yarn-calculator'],
-  ['/hook-converter', 'https://fibertools.app/blog/crochet-hook-size-chart'],
+  ['/hook-converter', 'https://fibertools.app/needle-converter'],
   ['/stitch-glossary', 'https://fibertools.app/abbreviation-glossary'],
   ['/quick-counter', 'https://fibertools.app/stitch-counter'],
   ['/blog/crochet-blanket-size-chart', 'https://fibertools.app/blanket-calculator'],
@@ -33,8 +33,8 @@ for (const destination of redirects.values()) {
   }
 }
 
-if (!config.rewrites?.some(({ source, destination }) => source === '/(.*)' && destination === '/')) {
-  throw new Error('Missing retirement-page fallback rewrite.')
+if (config.rewrites?.some(({ source }) => source === '/(.*)')) {
+  throw new Error('A catch-all rewrite would turn missing pages into soft 404s.')
 }
 
-console.log(`Validated ${redirects.size} permanent FiberTools redirects and the retirement fallback.`)
+console.log(`Validated ${redirects.size} permanent FiberTools redirects and true missing-page behavior.`)
