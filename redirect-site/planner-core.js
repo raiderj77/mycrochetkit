@@ -37,22 +37,30 @@ const textLimits = {
   notes: 8000,
 }
 
-const numberLimits = {
-  skeinsOnHand: 999,
-  yardsPerSkein: 99999,
-  gaugeStitches: 999,
-  gaugeRows: 999,
-  currentRow: 999999,
-  targetRows: 999999,
+const numberRules = {
+  skeinsOnHand: { maximum: 999, step: 0.1 },
+  yardsPerSkein: { maximum: 99999, step: 1 },
+  gaugeStitches: { maximum: 999, step: 0.1 },
+  gaugeRows: { maximum: 999, step: 0.1 },
+  currentRow: { maximum: 999999, step: 1 },
+  targetRows: { maximum: 999999, step: 1 },
 }
 
 const cleanText = (value, limit) => String(value ?? '').trim().slice(0, limit)
 
-const cleanNumber = (value, maximum) => {
+const cleanNumber = (value, { maximum, step }) => {
   if (value === '' || value === null || value === undefined) return ''
   const number = Number(value)
   if (!Number.isFinite(number)) return ''
-  return Math.min(Math.max(number, 0), maximum)
+  const clamped = Math.min(Math.max(number, 0), maximum)
+  const stepped = Math.round(clamped / step) * step
+  const decimalPlaces = String(step).split('.')[1]?.length ?? 0
+  return Number(stepped.toFixed(decimalPlaces))
+}
+
+export function sanitizeNumberField(field, value) {
+  const rule = numberRules[field]
+  return rule ? cleanNumber(value, rule) : ''
 }
 
 export function createProject(id, now = new Date().toISOString()) {
@@ -88,7 +96,7 @@ export function sanitizeProject(candidate, fallbackId, now = new Date().toISOStr
   }
 
   for (const field of numberFields) {
-    safe[field] = cleanNumber(candidate?.[field], numberLimits[field])
+    safe[field] = sanitizeNumberField(field, candidate?.[field])
   }
 
   safe.name = safe.name || 'Untitled project'
@@ -128,7 +136,22 @@ export function parseBackup(json, idFactory = (index) => `imported-${index + 1}`
   if (parsed.projects.length < 1 || parsed.projects.length > 100) {
     throw new Error('A backup must contain between 1 and 100 projects.')
   }
-  return parsed.projects.map((project, index) => sanitizeProject(project, idFactory(index), now))
+  const usedIds = new Set()
+  return parsed.projects.map((project, index) => {
+    const safe = sanitizeProject(project, idFactory(index), now)
+    if (usedIds.has(safe.id)) {
+      const baseId = cleanText(idFactory(index), 90) || `imported-${index + 1}`
+      let replacementId = baseId
+      let suffix = 2
+      while (usedIds.has(replacementId)) {
+        replacementId = `${baseId}-${suffix}`
+        suffix += 1
+      }
+      safe.id = replacementId
+    }
+    usedIds.add(safe.id)
+    return safe
+  })
 }
 
 export function createProjectSummary(project) {

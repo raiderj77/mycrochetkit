@@ -7,6 +7,7 @@ import {
   createProject,
   createProjectSummary,
   parseBackup,
+  sanitizeNumberField,
   sanitizeProject,
 } from '../redirect-site/planner-core.js'
 
@@ -43,6 +44,14 @@ test('sanitizes imported values and clamps numbers', () => {
   assert.equal(project.notes.length, 8000)
 })
 
+test('normalizes live numeric fields to their allowed range and step', () => {
+  assert.equal(sanitizeNumberField('currentRow', -4), 0)
+  assert.equal(sanitizeNumberField('currentRow', 8.7), 9)
+  assert.equal(sanitizeNumberField('skeinsOnHand', 4.56), 4.6)
+  assert.equal(sanitizeNumberField('yardsPerSkein', 100000), 99999)
+  assert.equal(sanitizeNumberField('unknown', 12), '')
+})
+
 test('round trips a versioned backup', () => {
   const project = createProject('project-one')
   project.name = 'Blanket'
@@ -54,6 +63,21 @@ test('round trips a versioned backup', () => {
 test('rejects unrelated or oversized backups', () => {
   assert.throws(() => parseBackup('{"projects":[]}'), /not a supported/)
   assert.throws(() => parseBackup(JSON.stringify({ application: 'MyCrochetKit', version: 1, projects: [] })), /between 1 and 100/)
+})
+
+test('replaces duplicate imported project ids', () => {
+  const backup = JSON.stringify({
+    application: 'MyCrochetKit',
+    version: 1,
+    projects: [
+      { id: 'duplicate', name: 'First' },
+      { id: 'duplicate', name: 'Second' },
+      { id: 'replacement', name: 'Third' },
+    ],
+  })
+  const projects = parseBackup(backup, (index) => index === 1 ? 'replacement' : `generated-${index}`)
+  assert.equal(new Set(projects.map(({ id }) => id)).size, 3)
+  assert.deepEqual(projects.map(({ name }) => name), ['First', 'Second', 'Third'])
 })
 
 test('creates a copyable summary without private identifiers', () => {

@@ -6,6 +6,7 @@ import {
   createProjectSummary,
   numberFields,
   parseBackup,
+  sanitizeNumberField,
   sanitizeProject,
   STORAGE_VERSION,
   textFields,
@@ -116,7 +117,7 @@ function updateFromForm() {
   for (const field of textFields) project[field] = String(form.elements.namedItem(field)?.value ?? '')
   for (const field of numberFields) {
     const value = form.elements.namedItem(field)?.value ?? ''
-    project[field] = value === '' ? '' : Number(value)
+    project[field] = sanitizeNumberField(field, value)
   }
   project.name = project.name.trim() || 'Untitled project'
   project.updatedAt = now()
