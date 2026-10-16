@@ -1,4 +1,4 @@
-name: Verify recovery site
+name: Verify private project planner
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: recovery-${{ github.workflow }}-${{ github.ref }}
+  group: planner-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Validate and build redirect site
+      - name: Validate and build planner site
         run: npm test
 
       - name: Confirm production dependency audit
