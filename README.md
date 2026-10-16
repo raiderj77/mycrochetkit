@@ -32,6 +32,8 @@ npm audit --omit=dev
 
 `npm test` runs planner-unit tests, validates the redirect map, checks privacy/SEO/security contracts, and creates the static `dist` output.
 
+Links from MyCrochetKit to FiberTools carry only fixed source, campaign, and placement labels. They never include project names, notes, progress, material details, or other planner data. The homepage also provides a user-triggered share action for the fixed public URL and a feedback email link; neither sends planner data automatically.
+
 ## Relaunch boundary
 
 Do not restore the previous Firebase application build until its Firestore authorization, account lifecycle, privacy controls, voice/offline claims, dependency audit, lint failures, route inventory, and end-to-end production behavior have been independently repaired and verified. Cloud sync, accounts, subscriptions, uploads, and paid infrastructure require fresh demand evidence and a separate reviewed design.

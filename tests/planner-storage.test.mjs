@@ -16,11 +16,17 @@ function launch(projects = [core.createProject('existing')], options = {}) {
   let saved = 'raw' in options ? options.raw : JSON.stringify({ version: 1, projects, currentId: projects[0].id })
   let writes = 0
   let exported
+  let shared
+  let clipboardText
   const windowListeners = {}
   let confirmed = true
   const context = vm.createContext({ ...core, console, Date, Intl, Math, JSON, Set, Number, String, Blob, TextEncoder, Error,
     URL: { createObjectURL: (blob) => { exported = blob; return 'blob:fixture' }, revokeObjectURL() {} },
     crypto: { randomUUID: () => 'replacement' },
+    navigator: {
+      share: async (details) => { shared = details },
+      clipboard: { writeText: async (text) => { clipboardText = text } },
+    },
     confirm: () => confirmed,
     localStorage: { getItem: () => { if (options.readFails) throw new Error('Unavailable'); return saved }, setItem: (k, value) => { writes++; if (options.writeFails) throw new Error('Quota exceeded'); assert.equal(k, key); saved = value } },
     document: { querySelector: element, createElement: () => ({ click() {} }), querySelectorAll: () => [] },
@@ -29,11 +35,26 @@ function launch(projects = [core.createProject('existing')], options = {}) {
   vm.runInContext(source, context)
   return { element, read: () => JSON.parse(saved), raw: () => saved, writes: () => writes, cancel: () => { confirmed = false },
     exported: async () => JSON.parse(await exported.text()),
+    shared: () => shared,
+    clipboardText: () => clipboardText,
     externalWrite: (raw) => { saved = raw; windowListeners.storage({ key }) },
     event: (selector, type, arg) => element(selector).listeners[type](arg),
     import: (text) => element('#import-projects').listeners.change({ target: { files: [{ size: new Blob([text]).size, text: async () => text }], value: 'backup.json' } }),
   }
 }
+
+test('site sharing uses only fixed public copy and never includes planner data', async () => {
+  const project = { ...core.createProject('private-id'), name: 'Secret gift', notes: 'Do not share this' }
+  const app = launch([project])
+  await app.event('#share-site', 'click')
+  assert.deepEqual(JSON.parse(JSON.stringify(app.shared())), {
+    title: 'MyCrochetKit',
+    text: 'A private, accountless crochet project planner that keeps project details in your browser.',
+    url: 'https://mycrochetkit.com/',
+  })
+  assert.doesNotMatch(JSON.stringify(app.shared()), /Secret gift|Do not share this|private-id/)
+  assert.equal(app.clipboardText(), undefined)
+})
 
 test('actual form handlers normalize edits before persistence and retain unrelated project data', () => {
   const first = { ...core.createProject('first'), name: 'Blanket', notes: 'Keep my notes', yarnName: 'Wool' }

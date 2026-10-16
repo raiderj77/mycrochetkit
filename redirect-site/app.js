@@ -210,6 +210,31 @@ async function copySummary() {
   }
 }
 
+async function shareSite() {
+  const shareDetails = {
+    title: 'MyCrochetKit',
+    text: 'A private, accountless crochet project planner that keeps project details in your browser.',
+    url: 'https://mycrochetkit.com/',
+  }
+
+  if (typeof navigator.share === 'function') {
+    try {
+      await navigator.share(shareDetails)
+      setStatus('MyCrochetKit share options opened. No project details were included.')
+      return
+    } catch (error) {
+      if (error?.name === 'AbortError') return
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(shareDetails.url)
+    setStatus('MyCrochetKit link copied. No project details were included.')
+  } catch {
+    setStatus('The browser blocked sharing and clipboard access. You can copy mycrochetkit.com from the address bar.', true)
+  }
+}
+
 form.addEventListener('input', updateFromForm)
 form.addEventListener('change', updateFromForm)
 projectSelect.addEventListener('change', () => {
@@ -225,6 +250,7 @@ document.querySelector('#export-projects').addEventListener('click', exportProje
 document.querySelector('#import-projects').addEventListener('change', importProjects)
 document.querySelector('#copy-summary').addEventListener('click', copySummary)
 document.querySelector('#print-project').addEventListener('click', () => window.print())
+document.querySelector('#share-site')?.addEventListener('click', shareSite)
 window.addEventListener('storage', (event) => {
   if (event.key !== storageKey) return
   state = loadState()
