@@ -6,8 +6,8 @@ import {
   createProjectSummary,
   numberFields,
   parseBackup,
+  restoreStoredState,
   sanitizeNumberField,
-  sanitizeProject,
   STORAGE_VERSION,
   textFields,
 } from './planner-core.js'
@@ -27,18 +27,16 @@ const savedSummary = document.querySelector('#saved-summary')
 const newId = () => globalThis.crypto?.randomUUID?.() ?? `project-${Date.now()}-${Math.random().toString(16).slice(2)}`
 const now = () => new Date().toISOString()
 
+let storageReadBlocked = false
 let state = loadState()
 
 function loadState() {
+  storageReadBlocked = false
   try {
-    const parsed = JSON.parse(localStorage.getItem(storageKey))
-    if (parsed?.version === STORAGE_VERSION && Array.isArray(parsed.projects) && parsed.projects.length) {
-      const projects = parsed.projects.slice(0, 100).map((project) => sanitizeProject(project, newId()))
-      const currentId = projects.some(({ id }) => id === parsed.currentId) ? parsed.currentId : projects[0].id
-      return { version: STORAGE_VERSION, projects, currentId }
-    }
+    const stored = localStorage.getItem(storageKey)
+    if (stored !== null) return restoreStoredState(stored, () => newId())
   } catch {
-    setStatus('The saved planner data could not be read. A new local project was opened instead.', true)
+    storageReadBlocked = true
   }
   const project = createProject(newId())
   return { version: STORAGE_VERSION, projects: [project], currentId: project.id }
@@ -49,6 +47,10 @@ function currentProject() {
 }
 
 function saveState(message = 'Saved on this device.') {
+  if (storageReadBlocked) {
+    setStatus('', true)
+    return false
+  }
   try {
     localStorage.setItem(storageKey, JSON.stringify(state))
     setStatus(message)
@@ -61,6 +63,10 @@ function saveState(message = 'Saved on this device.') {
 
 function setStatus(message, isError = false) {
   if (!status) return
+  if (storageReadBlocked) {
+    message = 'The existing saved data could not be read safely and has been left unchanged. Changes are temporary; export a backup before leaving.'
+    isError = true
+  }
   status.textContent = message
   status.dataset.error = isError ? 'true' : 'false'
 }

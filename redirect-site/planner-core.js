@@ -105,6 +105,39 @@ export function sanitizeProject(candidate, fallbackId, now = new Date().toISOStr
   return safe
 }
 
+// Stored projects are user data, not a new import: do not trim fields or drop
+// records during recovery. Reserve existing IDs before generating replacements.
+export function restoreStoredState(json, idFactory) {
+  const parsed = JSON.parse(json)
+  const isRecord = (value) => value !== null && typeof value === 'object' && !Array.isArray(value)
+  if (!isRecord(parsed) || parsed.version !== STORAGE_VERSION || !Array.isArray(parsed.projects) || !parsed.projects.length) {
+    throw new Error('The saved planner data is not supported.')
+  }
+  for (const project of parsed.projects) {
+    if (!isRecord(project)
+      || [...textFields, 'createdAt', 'updatedAt'].some(field => field in project && typeof project[field] !== 'string')
+      || numberFields.some(field => field in project && typeof project[field] !== 'number' && typeof project[field] !== 'string')) {
+      throw new Error('A saved project could not be read safely.')
+    }
+  }
+  const validId = (id) => typeof id === 'string' && id.trim().length > 0
+  const reservedIds = new Set(parsed.projects.map(project => project.id).filter(validId))
+  const usedIds = new Set()
+  const projects = parsed.projects.map((project, index) => {
+    let id = project.id
+    if (!validId(id) || usedIds.has(id)) {
+      const baseId = cleanText(idFactory(index), 90) || `recovered-${index + 1}`
+      id = baseId
+      let suffix = 2
+      while (reservedIds.has(id) || usedIds.has(id)) id = `${baseId}-${suffix++}`
+    }
+    usedIds.add(id)
+    return { ...createProject(id), ...project, id }
+  })
+  const currentId = usedIds.has(parsed.currentId) ? parsed.currentId : projects[0].id
+  return { ...parsed, projects, currentId }
+}
+
 export function calculateProgress(project) {
   const current = Number(project?.currentRow)
   const target = Number(project?.targetRows)
