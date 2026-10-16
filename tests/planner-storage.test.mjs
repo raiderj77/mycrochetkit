@@ -278,4 +278,3 @@ test('recovery limit is UTF-8 bytes and rejects overflow before replacing existi
   await app.import(overflow)
   assert.equal(app.raw(), before)
 })
-
