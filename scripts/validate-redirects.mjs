@@ -33,7 +33,7 @@ for (const destination of redirects.values()) {
   }
 }
 
-if (!config.rewrites?.some(({ source, destination }) => source === '/(.*)' && destination === '/index.html')) {
+if (!config.rewrites?.some(({ source, destination }) => source === '/(.*)' && destination === '/')) {
   throw new Error('Missing retirement-page fallback rewrite.')
 }
 
