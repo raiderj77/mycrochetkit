@@ -1,0 +1,62 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/yarn-calculator", "destination": "https://fibertools.app/yarn-calculator", "permanent": true },
+    { "source": "/hook-converter", "destination": "https://fibertools.app/blog/crochet-hook-size-chart", "permanent": true },
+    { "source": "/stitch-glossary", "destination": "https://fibertools.app/abbreviation-glossary", "permanent": true },
+    { "source": "/quick-counter", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
+    { "source": "/counter", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
+    { "source": "/counter/:projectId", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
+    { "source": "/tools/c2c-generator", "destination": "https://fibertools.app/c2c-calculator", "permanent": true },
+    { "source": "/blog/how-much-yarn-do-i-need", "destination": "https://fibertools.app/yarn-calculator", "permanent": true },
+    { "source": "/blog/crochet-blanket-size-chart", "destination": "https://fibertools.app/blanket-calculator", "permanent": true },
+    { "source": "/blog/crochet-gauge-calculator-guide", "destination": "https://fibertools.app/gauge-calculator", "permanent": true },
+    { "source": "/blog/crochet-hook-size-conversion-chart", "destination": "https://fibertools.app/blog/crochet-hook-size-chart", "permanent": true },
+    { "source": "/blog/yarn-weight-chart-guide", "destination": "https://fibertools.app/yarn-weight-chart", "permanent": true },
+    { "source": "/blog/crochet-abbreviations-glossary", "destination": "https://fibertools.app/abbreviation-glossary", "permanent": true },
+    { "source": "/blog/free-crochet-stitch-counter", "destination": "https://fibertools.app/blog/stitch-counter-guide", "permanent": true },
+    { "source": "/blog/crochet-project-cost-calculator", "destination": "https://fibertools.app/project-cost-calculator", "permanent": true },
+    { "source": "/blog/crochet-increase-decrease-calculator", "destination": "https://fibertools.app/increase-decrease-calculator", "permanent": true },
+    { "source": "/blog/crochet-stripe-pattern-generator", "destination": "https://fibertools.app/stripe-generator", "permanent": true },
+    { "source": "/blog/planned-pooling-crochet-guide", "destination": "https://fibertools.app/color-pooling-calculator", "permanent": true },
+    { "source": "/blog/spinning-wheel-ratio-calculator", "destination": "https://fibertools.app/spinning-ratio-calculator", "permanent": true },
+    { "source": "/blog/cross-stitch-fabric-calculator", "destination": "https://fibertools.app/cross-stitch-calculator", "permanent": true },
+    { "source": "/blog/weaving-sett-calculator-guide", "destination": "https://fibertools.app/weaving-sett-calculator", "permanent": true },
+    { "source": "/blog/embroidery-thread-conversion-chart", "destination": "https://fibertools.app/thread-converter", "permanent": true },
+    { "source": "/blog/how-to-never-lose-row-count-crochet", "destination": "https://fibertools.app/blog/stitch-counter-guide", "permanent": true },
+    { "source": "/blog/free-voice-activated-row-counter-crochet", "destination": "https://fibertools.app/blog/stitch-counter-guide", "permanent": true },
+    { "source": "/blog/real-cost-handmade-crochet-blanket", "destination": "https://fibertools.app/project-cost-calculator", "permanent": true },
+    { "source": "/blog/c2c-crochet-patterns-complete-guide", "destination": "https://fibertools.app/c2c-calculator", "permanent": true },
+    { "source": "/blog/tools/yarn-calculator", "destination": "https://fibertools.app/yarn-calculator", "permanent": true },
+    { "source": "/blog/tools/blanket-calculator", "destination": "https://fibertools.app/blanket-calculator", "permanent": true },
+    { "source": "/blog/tools/gauge-calculator", "destination": "https://fibertools.app/gauge-calculator", "permanent": true },
+    { "source": "/blog/tools/needle-converter", "destination": "https://fibertools.app/needle-converter", "permanent": true },
+    { "source": "/blog/tools/stitch-counter", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
+    { "source": "/blog/tools/project-cost-calculator", "destination": "https://fibertools.app/project-cost-calculator", "permanent": true },
+    { "source": "/blog/tools/yarn-weight-chart", "destination": "https://fibertools.app/yarn-weight-chart", "permanent": true },
+    { "source": "/blog/tools/increase-decrease-calculator", "destination": "https://fibertools.app/increase-decrease-calculator", "permanent": true },
+    { "source": "/blog/tools/abbreviation-glossary", "destination": "https://fibertools.app/abbreviation-glossary", "permanent": true },
+    { "source": "/blog/tools/stripe-generator", "destination": "https://fibertools.app/stripe-generator", "permanent": true },
+    { "source": "/blog/tools/color-pooling-calculator", "destination": "https://fibertools.app/color-pooling-calculator", "permanent": true },
+    { "source": "/blog/tools/spinning-calculator", "destination": "https://fibertools.app/spinning-ratio-calculator", "permanent": true },
+    { "source": "/blog/tools/cross-stitch-calculator", "destination": "https://fibertools.app/cross-stitch-calculator", "permanent": true },
+    { "source": "/blog/tools/weaving-sett-calculator", "destination": "https://fibertools.app/weaving-sett-calculator", "permanent": true },
+    { "source": "/blog/tools/thread-converter", "destination": "https://fibertools.app/thread-converter", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
