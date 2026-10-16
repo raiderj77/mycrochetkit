@@ -31,3 +31,4 @@ lighthouse-report.*
 *.njsproj
 *.sln
 *.sw?
+.vercel
