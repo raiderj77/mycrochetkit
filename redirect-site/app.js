@@ -1,13 +1,15 @@
 import {
   calculateProgress,
   calculateYardage,
-  createBackup,
+  createRecoveryBackup,
   createProject,
   createProjectSummary,
   numberFields,
-  parseBackup,
+  parseBackupState,
+  MAX_RECOVERY_BYTES,
+  MAX_RECOVERY_PROJECTS,
+  restoreStoredState,
   sanitizeNumberField,
-  sanitizeProject,
   STORAGE_VERSION,
   textFields,
 } from './planner-core.js'
@@ -27,18 +29,16 @@ const savedSummary = document.querySelector('#saved-summary')
 const newId = () => globalThis.crypto?.randomUUID?.() ?? `project-${Date.now()}-${Math.random().toString(16).slice(2)}`
 const now = () => new Date().toISOString()
 
+let storageReadBlocked = false
 let state = loadState()
 
 function loadState() {
+  storageReadBlocked = false
   try {
-    const parsed = JSON.parse(localStorage.getItem(storageKey))
-    if (parsed?.version === STORAGE_VERSION && Array.isArray(parsed.projects) && parsed.projects.length) {
-      const projects = parsed.projects.slice(0, 100).map((project) => sanitizeProject(project, newId()))
-      const currentId = projects.some(({ id }) => id === parsed.currentId) ? parsed.currentId : projects[0].id
-      return { version: STORAGE_VERSION, projects, currentId }
-    }
+    const stored = localStorage.getItem(storageKey)
+    if (stored !== null) return restoreStoredState(stored, () => newId())
   } catch {
-    setStatus('The saved planner data could not be read. A new local project was opened instead.', true)
+    storageReadBlocked = true
   }
   const project = createProject(newId())
   return { version: STORAGE_VERSION, projects: [project], currentId: project.id }
@@ -49,6 +49,10 @@ function currentProject() {
 }
 
 function saveState(message = 'Saved on this device.') {
+  if (storageReadBlocked) {
+    setStatus('', true)
+    return false
+  }
   try {
     localStorage.setItem(storageKey, JSON.stringify(state))
     setStatus(message)
@@ -61,6 +65,10 @@ function saveState(message = 'Saved on this device.') {
 
 function setStatus(message, isError = false) {
   if (!status) return
+  if (storageReadBlocked) {
+    message = 'The existing saved data could not be read safely and has been left unchanged. Changes are temporary; export a backup before leaving.'
+    isError = true
+  }
   status.textContent = message
   status.dataset.error = isError ? 'true' : 'false'
 }
@@ -158,7 +166,7 @@ function deleteProject() {
 }
 
 function exportProjects() {
-  const blob = new Blob([createBackup(state.projects)], { type: 'application/json' })
+  const blob = new Blob([createRecoveryBackup(state)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const anchor = document.createElement('a')
   const date = new Date().toISOString().slice(0, 10)
@@ -166,22 +174,26 @@ function exportProjects() {
   anchor.download = `mycrochetkit-backup-${date}.json`
   anchor.click()
   URL.revokeObjectURL(url)
-  setStatus(`Exported a backup of ${state.projects.length} project${state.projects.length === 1 ? '' : 's'}.`)
+  if (blob.size > MAX_RECOVERY_BYTES || state.projects.length > MAX_RECOVERY_PROJECTS) {
+    setStatus('Exported all data for safekeeping. This archive exceeds the 10 MB or 10,000-project recovery limits and needs separate recovery; it cannot be restored through Import backup.', true)
+  } else {
+    setStatus(`Exported a backup of ${state.projects.length} project${state.projects.length === 1 ? '' : 's'}.`)
+  }
 }
 
 async function importProjects(event) {
   const file = event.target.files?.[0]
   event.target.value = ''
   if (!file) return
-  if (file.size > 1_000_000) {
-    setStatus('That backup is larger than the 1 MB safety limit.', true)
+  if (file.size > MAX_RECOVERY_BYTES) {
+    setStatus('That backup is larger than the 10 MB recovery safety limit. The existing projects were not replaced.', true)
     return
   }
 
   try {
-    const projects = parseBackup(await file.text(), () => newId())
-    if (!confirm(`Replace the projects saved in this browser with ${projects.length} project${projects.length === 1 ? '' : 's'} from this backup?`)) return
-    state = { version: STORAGE_VERSION, projects, currentId: projects[0].id }
+    const restored = parseBackupState(await file.text(), () => newId())
+    if (!confirm(`Replace the projects saved in this browser with ${restored.projects.length} project${restored.projects.length === 1 ? '' : 's'} from this backup?`)) return
+    state = restored
     saveState('Backup imported and saved on this device.')
     render()
   } catch (error) {
