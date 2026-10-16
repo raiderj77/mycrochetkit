@@ -5,7 +5,7 @@
   "cleanUrls": true,
   "redirects": [
     { "source": "/yarn-calculator", "destination": "https://fibertools.app/yarn-calculator", "permanent": true },
-    { "source": "/hook-converter", "destination": "https://fibertools.app/blog/crochet-hook-size-chart", "permanent": true },
+    { "source": "/hook-converter", "destination": "https://fibertools.app/needle-converter", "permanent": true },
     { "source": "/stitch-glossary", "destination": "https://fibertools.app/abbreviation-glossary", "permanent": true },
     { "source": "/quick-counter", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
     { "source": "/counter", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
@@ -14,10 +14,10 @@
     { "source": "/blog/how-much-yarn-do-i-need", "destination": "https://fibertools.app/yarn-calculator", "permanent": true },
     { "source": "/blog/crochet-blanket-size-chart", "destination": "https://fibertools.app/blanket-calculator", "permanent": true },
     { "source": "/blog/crochet-gauge-calculator-guide", "destination": "https://fibertools.app/gauge-calculator", "permanent": true },
-    { "source": "/blog/crochet-hook-size-conversion-chart", "destination": "https://fibertools.app/blog/crochet-hook-size-chart", "permanent": true },
+    { "source": "/blog/crochet-hook-size-conversion-chart", "destination": "https://fibertools.app/needle-converter", "permanent": true },
     { "source": "/blog/yarn-weight-chart-guide", "destination": "https://fibertools.app/yarn-weight-chart", "permanent": true },
     { "source": "/blog/crochet-abbreviations-glossary", "destination": "https://fibertools.app/abbreviation-glossary", "permanent": true },
-    { "source": "/blog/free-crochet-stitch-counter", "destination": "https://fibertools.app/blog/stitch-counter-guide", "permanent": true },
+    { "source": "/blog/free-crochet-stitch-counter", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
     { "source": "/blog/crochet-project-cost-calculator", "destination": "https://fibertools.app/project-cost-calculator", "permanent": true },
     { "source": "/blog/crochet-increase-decrease-calculator", "destination": "https://fibertools.app/increase-decrease-calculator", "permanent": true },
     { "source": "/blog/crochet-stripe-pattern-generator", "destination": "https://fibertools.app/stripe-generator", "permanent": true },
@@ -26,8 +26,8 @@
     { "source": "/blog/cross-stitch-fabric-calculator", "destination": "https://fibertools.app/cross-stitch-calculator", "permanent": true },
     { "source": "/blog/weaving-sett-calculator-guide", "destination": "https://fibertools.app/weaving-sett-calculator", "permanent": true },
     { "source": "/blog/embroidery-thread-conversion-chart", "destination": "https://fibertools.app/thread-converter", "permanent": true },
-    { "source": "/blog/how-to-never-lose-row-count-crochet", "destination": "https://fibertools.app/blog/stitch-counter-guide", "permanent": true },
-    { "source": "/blog/free-voice-activated-row-counter-crochet", "destination": "https://fibertools.app/blog/stitch-counter-guide", "permanent": true },
+    { "source": "/blog/how-to-never-lose-row-count-crochet", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
+    { "source": "/blog/free-voice-activated-row-counter-crochet", "destination": "https://fibertools.app/stitch-counter", "permanent": true },
     { "source": "/blog/real-cost-handmade-crochet-blanket", "destination": "https://fibertools.app/project-cost-calculator", "permanent": true },
     { "source": "/blog/c2c-crochet-patterns-complete-guide", "destination": "https://fibertools.app/c2c-calculator", "permanent": true },
     { "source": "/blog/tools/yarn-calculator", "destination": "https://fibertools.app/yarn-calculator", "permanent": true },
@@ -50,13 +50,11 @@
     {
       "source": "/(.*)",
       "headers": [
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
   ]
 }

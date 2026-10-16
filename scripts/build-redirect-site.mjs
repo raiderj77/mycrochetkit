@@ -10,4 +10,4 @@ await rm(outputDirectory, { recursive: true, force: true })
 await mkdir(outputDirectory, { recursive: true })
 await cp(staticDirectory, outputDirectory, { recursive: true })
 
-console.log('Built the MyCrochetKit redirect-only recovery site.')
+console.log('Built the dependency-free MyCrochetKit private project planner.')

@@ -3,69 +3,141 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex, follow" />
-    <title>MyCrochetKit is currently unavailable</title>
-    <meta
-      name="description"
-      content="MyCrochetKit is currently unavailable. Free fiber-craft calculators remain available at FiberTools."
-    />
-    <style>
-      :root {
-        color-scheme: light dark;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: #fff8f0;
-        color: #2c1810;
-      }
-      body {
-        min-height: 100vh;
-        margin: 0;
-        display: grid;
-        place-items: center;
-        padding: 1.5rem;
-        box-sizing: border-box;
-      }
-      main {
-        width: min(38rem, 100%);
-        background: white;
-        border: 1px solid #eadfd5;
-        border-radius: 1rem;
-        padding: clamp(1.5rem, 5vw, 3rem);
-        box-shadow: 0 1rem 3rem rgb(44 24 16 / 10%);
-      }
-      h1 { margin-top: 0; line-height: 1.15; }
-      p { line-height: 1.65; }
-      a {
-        display: inline-block;
-        margin-top: 0.75rem;
-        padding: 0.8rem 1rem;
-        border-radius: 0.65rem;
-        background: #54765e;
-        color: white;
-        font-weight: 700;
-        text-decoration: none;
-      }
-      a:hover, a:focus-visible { background: #3f5b47; }
-      a:focus-visible { outline: 3px solid #d58b54; outline-offset: 3px; }
-      small { display: block; margin-top: 1.5rem; color: #6f5a50; }
-      @media (prefers-color-scheme: dark) {
-        :root { background: #18120f; color: #f8eee8; }
-        main { background: #241b17; border-color: #59483f; box-shadow: none; }
-        small { color: #d3c1b7; }
-      }
-    </style>
+    <meta name="theme-color" content="#173f35" />
+    <link rel="canonical" href="https://mycrochetkit.com/" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>MyCrochetKit | A private crochet project planner</title>
+    <meta name="description" content="Plan and track crochet projects privately in your browser. Record yarn, hook, gauge, rows, measurements, and notes without creating an account." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MyCrochetKit — Private crochet project planner" />
+    <meta property="og:description" content="Keep project details, yarn, gauge, progress, and notes together—stored only in your browser." />
+    <meta property="og:url" content="https://mycrochetkit.com/" />
   </head>
   <body>
+    <a class="skip-link" href="#planner">Skip to project planner</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="MyCrochetKit home"><span class="brand-mark" aria-hidden="true">M</span><span>MyCrochetKit</span></a>
+      <nav aria-label="Primary navigation">
+        <a href="#planner">Planner</a>
+        <a href="https://fibertools.app/crochet-tools">Calculators</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+      </nav>
+    </header>
+
     <main>
-      <h1>MyCrochetKit is currently unavailable</h1>
-      <p>
-        The project-tracking app is not accepting accounts or storing new project data right now.
-        We would rather say that plainly than send you into a broken app and pretend everything is fine.
-      </p>
-      <p>
-        FiberTools still has free crochet and fiber-craft calculators you can use without creating an account.
-      </p>
-      <a href="https://fibertools.app/crochet-tools">Use the free FiberTools calculators</a>
-      <small>Existing MyCrochetKit application data has not been changed by this temporary page.</small>
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <p class="eyebrow">YOUR PROJECT. YOUR DEVICE. NO ACCOUNT.</p>
+          <h1 id="hero-title">Keep the crochet details your future self will swear you never wrote down.</h1>
+          <p class="hero-copy">Track the yarn, hook, gauge, rows, measurements, and notes for each project. Everything stays in this browser unless you choose to export it.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#planner">Open the planner</a>
+            <a class="button secondary" href="https://fibertools.app/crochet-tools">Use FiberTools calculators</a>
+          </div>
+        </div>
+        <aside class="privacy-card" aria-label="Privacy summary">
+          <strong>Actually private by default</strong>
+          <ul><li>No sign-in</li><li>No cloud database</li><li>No tracking scripts</li><li>Export a backup whenever you want</li></ul>
+        </aside>
+      </section>
+
+      <section class="planner-shell" id="planner" aria-labelledby="planner-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">PROJECT WORKSPACE</p><h2 id="planner-title">Crochet project planner</h2></div>
+          <p class="storage-note">Saved locally on this device as you type.</p>
+        </div>
+        <noscript><div class="notice error">JavaScript is required for the local project planner. The FiberTools links still work.</div></noscript>
+
+        <div class="project-toolbar" data-app-hidden hidden>
+          <label class="project-picker"><span>Current project</span><select id="project-select" aria-label="Choose a project"></select></label>
+          <div class="toolbar-actions">
+            <button class="button secondary compact" id="new-project" type="button">New project</button>
+            <button class="button danger compact" id="delete-project" type="button">Delete project</button>
+          </div>
+        </div>
+
+        <form id="project-form" data-app-hidden hidden>
+          <section class="form-section" aria-labelledby="project-details-title">
+            <h3 id="project-details-title">Project details</h3>
+            <div class="form-grid">
+              <label class="field span-2"><span>Project name</span><input name="name" maxlength="80" autocomplete="off" placeholder="Charcoal couch blanket" /></label>
+              <label class="field"><span>Pattern or source</span><input name="pattern" maxlength="160" autocomplete="off" placeholder="Pattern name or URL" /></label>
+              <label class="field"><span>Started</span><input name="startedOn" type="date" /></label>
+            </div>
+          </section>
+
+          <section class="form-section" aria-labelledby="materials-title">
+            <h3 id="materials-title">Materials and gauge</h3>
+            <div class="form-grid">
+              <label class="field span-2"><span>Yarn</span><input name="yarnName" maxlength="120" autocomplete="off" placeholder="Brand, line, and color" /></label>
+              <label class="field"><span>Yarn weight</span><select name="yarnWeight"><option value="">Choose weight</option><option>Lace (0)</option><option>Super fine (1)</option><option>Fine (2)</option><option>Light (3)</option><option>Medium (4)</option><option>Bulky (5)</option><option>Super bulky (6)</option><option>Jumbo (7)</option></select></label>
+              <label class="field"><span>Hook size</span><input name="hookSize" maxlength="40" autocomplete="off" placeholder="6.5 mm / K-10.5" /></label>
+              <label class="field"><span>Dye lot</span><input name="dyeLot" maxlength="60" autocomplete="off" placeholder="Optional" /></label>
+              <label class="field"><span>Skeins on hand</span><input name="skeinsOnHand" type="number" min="0" max="999" step="0.1" inputmode="decimal" /></label>
+              <label class="field"><span>Yards per skein</span><input name="yardsPerSkein" type="number" min="0" max="99999" step="1" inputmode="decimal" /></label>
+              <label class="field"><span>Gauge stitches</span><input name="gaugeStitches" type="number" min="0" max="999" step="0.1" inputmode="decimal" /></label>
+              <label class="field"><span>Gauge rows</span><input name="gaugeRows" type="number" min="0" max="999" step="0.1" inputmode="decimal" /></label>
+              <label class="field"><span>Gauge measured over</span><input name="gaugeSize" maxlength="40" autocomplete="off" placeholder="4 in / 10 cm" /></label>
+            </div>
+            <div class="tool-links" aria-label="Related FiberTools calculators">
+              <a href="https://fibertools.app/yarn-calculator">Estimate yarn</a><a href="https://fibertools.app/gauge-calculator">Adjust gauge</a><a href="https://fibertools.app/needle-converter">Convert hook size</a>
+            </div>
+          </section>
+
+          <section class="form-section" aria-labelledby="progress-title">
+            <h3 id="progress-title">Size and progress</h3>
+            <div class="form-grid">
+              <label class="field"><span>Target width</span><input name="targetWidth" maxlength="40" autocomplete="off" placeholder="50 in" /></label>
+              <label class="field"><span>Target length</span><input name="targetLength" maxlength="40" autocomplete="off" placeholder="60 in" /></label>
+              <label class="field"><span>Current row</span><input name="currentRow" type="number" min="0" max="999999" step="1" inputmode="numeric" /></label>
+              <label class="field"><span>Target rows</span><input name="targetRows" type="number" min="0" max="999999" step="1" inputmode="numeric" /></label>
+            </div>
+            <div class="counter" aria-label="Row counter controls">
+              <button class="counter-button" id="decrement-row" type="button" aria-label="Subtract one row">−</button><output id="row-output" aria-live="polite">Row 0</output><button class="counter-button" id="increment-row" type="button" aria-label="Add one row">+</button>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="Project row progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-bar"></span></div>
+            <p class="progress-copy" id="progress-copy">Add a target row count to see progress.</p>
+            <div class="tool-links"><a href="https://fibertools.app/stitch-counter">Open the full stitch counter</a><a href="https://fibertools.app/blanket-calculator">Check blanket sizing</a></div>
+          </section>
+
+          <section class="form-section" aria-labelledby="notes-title">
+            <h3 id="notes-title">Notes</h3>
+            <label class="field"><span class="sr-only">Project notes</span><textarea name="notes" maxlength="8000" rows="8" placeholder="Changes, repeat instructions, where you stopped, and the thing you are certain you will remember later but absolutely will not."></textarea></label>
+          </section>
+        </form>
+
+        <section class="summary" data-app-hidden hidden aria-labelledby="summary-title">
+          <div><p class="eyebrow">AT A GLANCE</p><h3 id="summary-title">Project summary</h3></div>
+          <div class="summary-grid">
+            <div><span>Estimated yarn on hand</span><strong id="yardage-summary">—</strong></div>
+            <div><span>Current progress</span><strong id="progress-summary">—</strong></div>
+            <div><span>Last saved</span><strong id="saved-summary">—</strong></div>
+          </div>
+        </section>
+
+        <div class="data-actions" data-app-hidden hidden>
+          <button class="button secondary" id="export-projects" type="button">Export backup</button>
+          <label class="button secondary file-button">Import backup<input id="import-projects" type="file" accept="application/json,.json" /></label>
+          <button class="button secondary" id="copy-summary" type="button">Copy summary</button>
+          <button class="button secondary" id="print-project" type="button">Print project</button>
+        </div>
+        <p class="status" id="app-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="division-of-labor" aria-labelledby="two-sites-title">
+        <p class="eyebrow">TWO SITES, TWO JOBS</p><h2 id="two-sites-title">Plan here. Calculate there.</h2>
+        <div class="role-grid">
+          <article><h3>MyCrochetKit</h3><p>Your private workspace for individual projects, materials, progress, and notes.</p></article>
+          <article><h3>FiberTools</h3><p>Free calculators, formulas, conversion tools, and fiber-craft references.</p><a href="https://fibertools.app/crochet-tools">Browse FiberTools</a></article>
+        </div>
+      </section>
     </main>
+
+    <footer>
+      <p>MyCrochetKit stores planner data in your browser. Clearing browser storage can remove it, so export backups for projects you care about.</p>
+      <nav aria-label="Footer navigation"><a href="/about">About</a><a href="/privacy">Privacy</a><a href="https://fibertools.app/">FiberTools</a></nav>
+    </footer>
+    <script type="module" src="/app.js"></script>
   </body>
 </html>
